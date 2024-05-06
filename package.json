@@ -14,5 +14,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "knex": "^3.1.0",
+    "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
 }
