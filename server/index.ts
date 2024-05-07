@@ -1,5 +1,5 @@
 require('dotenv').config();
-import path = require('path');
+import * as path from 'path';
 import express = require('express');
 
 import {handleCookieSessions} from './middleware/handleCookieSessions';
