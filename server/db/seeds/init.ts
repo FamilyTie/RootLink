@@ -1,4 +1,4 @@
-const User = require('../models/User');
+import User from '../models/User';
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
