@@ -7,6 +7,7 @@ import {logRoutes} from './middleware/logRoutes'
 
 import authRouter from './routers/authRouter'
 import userRouter from './routers/userRouter';
+import postRouter from './routers/postRouter';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.static(path.join(__dirname, '../frontend/dist'))); // Serve stat
 
 app.use('/api', authRouter);
 app.use('/api/users', userRouter);
+app.use('/api', postRouter);
 
 // Requests meant for the API will be sent along to the router.
 // For all other requests, send back the index.html file in the dist folder.
