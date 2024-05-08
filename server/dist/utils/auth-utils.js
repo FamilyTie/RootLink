@@ -18,6 +18,7 @@ exports.hashPassword = hashPassword;
  */
 const ValidPassword = async (password, hash) => {
     try {
+        console.log(password, hash);
         const isValid = await bcrypt.compare(String(password), String(hash));
         console.log(isValid);
         return isValid;
