@@ -1,5 +1,5 @@
 
-import ReactDOM from '../node_modules/react-dom';
+import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
 import App from './App.js';
 import UserContextProvider from './contexts/CurrentUserContextProvider.jsx';

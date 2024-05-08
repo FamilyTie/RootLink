@@ -11,7 +11,7 @@ export const loginUser = async (req, res) => {
   if (!user) return res.sendStatus(404)
 
   const isPasswordValid = await user.isValidPassword(password)
-  if (!isPasswordValid) return res.sendStatus(401)
+  if (!isPasswordValid) return res.sendStatus(404)
 
   req.session.userId = user.id
   res.send(user)

@@ -24,7 +24,7 @@ export default class User {
   constructor({ id, username, password_hash }: UserConstructor) {
     this.id = id
     this.username = username
-    this.passwordHash = password_hash
+    this.#passwordHash = password_hash
   }
 
   // This instance method takes in a plain-text password and returns true if it matches
