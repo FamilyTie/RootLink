@@ -2,8 +2,6 @@ import { Response, Request } from "express"
 import Profile from "../db/models/Profile"
 import { ProfileData } from "../db/models/Profile"
 export interface ProfileReqBody {
-  id: number
-  user_id: number
   username: string
   full_name: string
   bio?: string
@@ -20,7 +18,6 @@ export const createProfile = async (req: Request, res: Response) => {
   }
 
   const profile = await Profile.create({
-    id: user_id,
     user_id,
     username,
     full_name,
@@ -52,10 +49,7 @@ export const showProfile = async (req: Request, res: Response) => {
 
 export const updateProfile = async (req: Request, res: Response) => {
   const { id } = req.params
-  const data: Partial<ProfileReqBody> & {
-    created_at?: Date
-    updated_at?: Date
-  } = req.body
+  const data: Partial<ProfileReqBody> = req.body
 
   const updatedProfile = await Profile.update(Number(id), data as ProfileData)
   if (!updatedProfile) return res.sendStatus(404)
