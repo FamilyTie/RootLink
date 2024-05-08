@@ -17,7 +17,7 @@ class User {
         _User_passwordHash.set(this, null); // a private property
         // This instance method takes in a plain-text password and returns true if it matches
         // the User instance's hashed password.
-        this.isValidPassword = async (password) => ((0, auth_utils_1.ValidPassword)(password, __classPrivateFieldGet(this, _User_passwordHash, "f")));
+        this.isValidPassword = async (password) => (0, auth_utils_1.ValidPassword)(password, __classPrivateFieldGet(this, _User_passwordHash, "f"));
         this.id = id;
         this.username = username;
         this.passwordHash = password_hash;
@@ -51,6 +51,7 @@ class User {
     }
     // this is an instance method that we can use to update
     static async update(id, username) {
+        // dynamic queries are easier if you add more properties
         const query = `
       UPDATE users
       SET username=?
@@ -61,9 +62,8 @@ class User {
         const updatedUser = rows[0];
         return updatedUser ? new User(updatedUser) : null;
     }
-    ;
     static async deleteAll() {
-        return (0, knex_1.knex)('users').del();
+        return (0, knex_1.knex)("users").del();
     }
 }
 _User_passwordHash = new WeakMap();
