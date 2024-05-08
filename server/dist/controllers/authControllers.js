@@ -18,7 +18,7 @@ const loginUser = async (req, res) => {
     res.send(user);
 };
 exports.loginUser = loginUser;
-// This controller sets `req.session` to null, destroying the cookie 
+// This controller sets `req.session` to null, destroying the cookie
 // which is the thing that keeps them logged in.
 const logoutUser = (req, res) => {
     req.session = null;
