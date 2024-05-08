@@ -1,7 +1,7 @@
 import { knex } from "../knex"
 
 export interface ProfileData {
-  id: number
+  id?: number
   user_id: number
   username: string
   full_name: string
@@ -13,7 +13,7 @@ export interface ProfileData {
 }
 
 class Profile {
-  id: number
+  id?: number
   userId: number
   username: string
   fullName: string
@@ -48,11 +48,10 @@ class Profile {
     return profile ? new Profile(profile) : null
   }
 
-  static async create(data: ProfileData) {
-    const query = `INSERT INTO profiles (id, user_id, username, full_name, bio, account_type, data, created_at, updated_at)
+  static async create(data :Omit<ProfileData, "id">) {
+    const query = `INSERT INTO profiles (user_id, username, full_name, bio, account_type, data, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
     const values = [
-      data.id,
       data.user_id,
       data.username,
       data.full_name,

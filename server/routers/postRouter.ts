@@ -1,9 +1,10 @@
 const express = require('express')
-import { getRecentPost } from "../controllers/postController"
+import { getRecentPost, getRecentPostByProfile  } from "../controllers/postController"
 
 export const postRouter = express.Router()
 
 
-postRouter.get('/posts', getRecentPost)
+postRouter.get('/', getRecentPost)
+postRouter.get('/:profileId', getRecentPostByProfile)
 
 export default postRouter
