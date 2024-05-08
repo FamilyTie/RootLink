@@ -7,7 +7,7 @@ import { logRoutes } from "./middleware/logRoutes"
 import authRouter from './routers/authRouter'
 import userRouter from './routers/userRouter';
 import postRouter from './routers/postRouter';
-
+import { profileRouter } from "./routers/profileRouter"
 const app = express();
 
 // // middleware
@@ -19,7 +19,8 @@ app.use(express.static(path.join(__dirname, '../frontend/dist'))); // Serve stat
 app.use('/api', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/posts', postRouter);
-app.get("/api/profiles/:id", getProfileById)
+app.use('/api/profiles', profileRouter);
+
 // Requests meant for the API will be sent along to the router.
 // For all other requests, send back the index.html file in the dist folder.
 app.get("*", (req, res, next) => {
