@@ -71,6 +71,7 @@ export async function up(knex: Knex): Promise<void> {
             read BOOLEAN
         );
     `);
+
 }
 
 export async function down(knex: Knex): Promise<void> {
