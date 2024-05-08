@@ -4,6 +4,6 @@ import { getRecentPost } from "../controllers/postController"
 export const postRouter = express.Router()
 
 
-postRouter.get('/posts', getRecentPost)
+postRouter.get('/api/posts', getRecentPost)
 
 export default postRouter
