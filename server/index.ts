@@ -1,14 +1,13 @@
-require('dotenv').config();
-import * as path from 'path';
-import express = require('express');
 
-import {handleCookieSessions} from './middleware/handleCookieSessions';
-import {logRoutes} from './middleware/logRoutes'
-
+require("dotenv").config()
+import path = require("path")
+import express = require("express")
+import { handleCookieSessions } from "./middleware/handleCookieSessions"
+import { logRoutes } from "./middleware/logRoutes"
 import authRouter from './routers/authRouter'
 import userRouter from './routers/userRouter';
 import postRouter from './routers/postRouter';
-
+import { profileRouter } from "./routers/profileRouter"
 const app = express();
 
 // // middleware
@@ -20,15 +19,16 @@ app.use(express.static(path.join(__dirname, '../frontend/dist'))); // Serve stat
 app.use('/api', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/posts', postRouter);
+app.use('/api/profiles', profileRouter);
 
 // Requests meant for the API will be sent along to the router.
 // For all other requests, send back the index.html file in the dist folder.
-app.get('*', (req, res, next) => {
-  if (req.originalUrl.startsWith('/api')) return next();
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-});
+app.get("*", (req, res, next) => {
+  if (req.originalUrl.startsWith("/api")) return next()
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"))
+})
 
-const port = process.env.PORT || 1090;
+const port = process.env.PORT || 1090
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
-});
+  console.log(`Server running at http://localhost:${port}/`)
+})
