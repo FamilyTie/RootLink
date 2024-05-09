@@ -34,7 +34,7 @@ class Post {
         const { rows } = await knex.raw(query, [last_id])
         return rows.map((post: PostData) => new Post(post))
     }
-
+US
     static async listByProfile(last_id: number, profile_id: number) {
         const query = `SELECT * FROM posts WHERE profile_id = ? SORT BY id DESC LIMIT 20`
         const { rows } = await knex.raw(query, [profile_id])
@@ -50,7 +50,7 @@ class Post {
 
     static async create(data: Omit<PostData, 'id'>) {
         const query = `INSERT INTO posts (user_id, title, body, profile_id, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *`
+            VALUES (?, ?, ?, ?, ?, ?) RETURNING *`
         const values = [
             data.user_id,
             data.title,

@@ -6,7 +6,13 @@ const User_1 = require("../db/models/User");
 const createUser = async (req, res) => {
     const { username, password } = req.body;
     // TODO: check if username is taken, and if it is what should you return?
-    const user = await User_1.default.create(username, password);
+    const user = await User_1.default.create({
+        username: username,
+        password_hash: password,
+        email: 'example@email.com',
+        role: 'user',
+        created_at: new Date()
+    });
     if (!user)
         return res.sendStatus(409);
     req.session.userId = user.id;
@@ -20,7 +26,7 @@ const listUsers = async (req, res) => {
 exports.listUsers = listUsers;
 const showUser = async (req, res) => {
     const { id } = req.params;
-    const user = await User_1.default.find(Number(id));
+    const user = await User_1.default.findById(Number(id));
     if (!user)
         return res.sendStatus(404);
     res.send(user);

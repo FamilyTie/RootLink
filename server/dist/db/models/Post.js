@@ -29,7 +29,7 @@ class Post {
     }
     static async create(data) {
         const query = `INSERT INTO posts (user_id, title, body, profile_id, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *`;
+            VALUES (?, ?, ?, ?, ?, ?) RETURNING *`;
         const values = [
             data.user_id,
             data.title,

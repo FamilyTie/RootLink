@@ -2,31 +2,31 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
 async function up(knex) {
-    // Profiles Table
-    await knex.raw(`
-        CREATE TABLE profiles (
-            id SERIAL PRIMARY KEY,
-            user_id INTEGER REFERENCES users(id),
-            username TEXT,
-            full_name TEXT,
-            bio TEXT,
-            account_type TEXT,
-            data JSON,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-    `);
-    // Posts Table
-    await knex.raw(`
-        CREATE TABLE posts (
-            id SERIAL PRIMARY KEY,
-            title TEXT,
-            body TEXT,
-            profile_id INTEGER REFERENCES profiles(id),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-    `);
+    // // Profiles Table
+    // await knex.raw(`
+    //     CREATE TABLE profiles (
+    //         id SERIAL PRIMARY KEY,
+    //         user_id INTEGER REFERENCES users(id),
+    //         username TEXT,
+    //         full_name TEXT,
+    //         bio TEXT,
+    //         account_type TEXT,
+    //         data JSON,
+    //         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    //         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    //     );
+    // `);
+    // // Posts Table
+    // await knex.raw(`
+    //     CREATE TABLE posts (
+    //         id SERIAL PRIMARY KEY,
+    //         title TEXT,
+    //         body TEXT,
+    //         profile_id INTEGER REFERENCES profiles(id),
+    //         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    //         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    //     );
+    // `);
     // Comments Table
     await knex.raw(`
         CREATE TABLE comments (
