@@ -30,7 +30,7 @@ exports.logoutUser = logoutUser;
 const showMe = async (req, res) => {
     if (!req.session.userId)
         return res.sendStatus(401);
-    const user = await User_1.default.find(req.session.userId);
+    const user = await User_1.default.findById(req.session.userId);
     res.send(user);
 };
 exports.showMe = showMe;
