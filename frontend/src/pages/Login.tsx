@@ -25,9 +25,9 @@ export default function LoginPage() {
     <>
     
       <div className="overflow-hidden h-screen relative">
-        <div className="absolute w-full flex font-semibold text-[36px] p-10 px-[6rem] z-[20]" >
+        <div className="absolute w-full flex align-center font-semibold text-[30px] p-10 px-[6rem] z-[20]" >
            <p>RootLink</p>
-           <img src='/tree2.png' width='26.15px' height='32.33px'></img>
+           <img  className='w-[26.15px] h-[32.33px] self-center' src='/tree2.png' ></img>
         </div>
         {/* White Background (Base Layer) */}
         <div className="absolute bg-white z-[1] w-screen h-screen"></div>
