@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.down = exports.up = void 0;
 async function up(knex) {
-    // // Profiles Table
+    // Profiles Table
     // await knex.raw(`
     //     CREATE TABLE profiles (
     //         id SERIAL PRIMARY KEY,

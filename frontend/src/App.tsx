@@ -17,7 +17,7 @@ export default function App() {
   }, [setCurrentUser]);
 
   return <>
-    <SiteHeadingAndNav />
+    {/* <SiteHeadingAndNav /> */}
     <main>
       <Routes>
         <Route path='/' element={<Home />} />
