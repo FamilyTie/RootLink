@@ -44,16 +44,15 @@ nav a {
   color: #FFF;
 }
 
-form {
-  padding: 1rem;
-  border: 1px solid #CCC;
-  width: 15rem;
-  margin: 1rem auto;
-}
+
 
 /* automatically added by NavLink component */
 .active {
   color: #EEBC32;
   font-weight: bold;
   font-style: italic;
+}
+
+.grad-blue1{
+  background: linear-gradient(to-bottom, #000000 0%, #000000 100%);
 }

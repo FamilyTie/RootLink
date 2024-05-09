@@ -138,23 +138,7 @@ static async findByUsername(username: string) {
   const user = rows[0]
   return user ? new User(user) : null
 }
-<<<<<<< HEAD
-=======
-export default class User {
-  #passwordHash = null // a private property
-  public id: number // Explicitly defining the public fields
-  public username: string
-  private passwordHash: string
-  // This constructor is NOT how a controller creates a new user in the database.
-  // Instead, it is used by each of the User static methods to hide the hashed
-  // password of users before sending user data to the client. Since #passwordHash
-  // is private, only the isValidPassword instance method can access that value.
-  constructor({ id, username, password_hash }: UserConstructor) {
-    this.id = id
-    this.username = username
-    this.#passwordHash = password_hash
-  }
->>>>>>> f3dc0eb8540e6cb4af9ae80e976483f1bcd50eea
+
 
 static async create(data: Omit<UserConstructor, 'id'>) {
   const passwordHash = await hashPassword(data.password_hash)

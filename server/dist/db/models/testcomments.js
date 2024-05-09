@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const comment_1 = require("./comment"); // Adjust the path to your Comment class
-const knex_1 = require("../knex"); // Ensure you have the correct path to your Knex configuration
+const comment_1 = require("./comment");
+const knex_1 = require("../knex");
 // run : npx ts-node testComments.ts
 // to test
 // Must have a post in db for it to work
 async function runTests() {
     console.log("Starting Comment Model Tests...");
-    // Testing create method
+    // testing create method
     console.log("Testing Create Comment...");
     const commentData = {
-        profile_id: 1, // Example profile ID
-        post_id: 1, // Example post ID
-        body: "This is a test comment", // Example comment body
+        profile_id: 1,
+        post_id: 1,
+        body: "This is a test comment",
     };
     try {
         const createdComment = await comment_1.default.create(commentData);

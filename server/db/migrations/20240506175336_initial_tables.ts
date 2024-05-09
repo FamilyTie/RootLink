@@ -2,7 +2,7 @@ import { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-    // // Profiles Table
+    // Profiles Table
     // await knex.raw(`
     //     CREATE TABLE profiles (
     //         id SERIAL PRIMARY KEY,
