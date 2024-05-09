@@ -22,7 +22,7 @@ await knex.raw('ALTER SEQUENCE profiles_id_seq RESTART WITH 1')
 await knex('users').insert([
   { username: 'kelvin_melvin', password_hash: '123', email: 'kev@gmail.com', role: 'adoptee', created_at: new Date() },
   { username: 'maya', password_hash: '123', email: 'maya@gmail.com', role: 'family', created_at: new Date() },
-  { username: 'tyrone', password_hash: '123', email: 'tyty@gmail.com', role: 'adoptee', created_at: new Date() }
+  { username: 'tyrone', password_hash: '123', email: 'tyty@gmail.com', role: 'both', created_at: new Date() }
 ]);
 
 

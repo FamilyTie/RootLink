@@ -10,7 +10,7 @@ exports.seed = async (knex) => {
     await knex('users').insert([
         { username: 'kelvin_melvin', password_hash: '123', email: 'kev@gmail.com', role: 'adoptee', created_at: new Date() },
         { username: 'maya', password_hash: '123', email: 'maya@gmail.com', role: 'family', created_at: new Date() },
-        { username: 'tyrone', password_hash: '123', email: 'tyty@gmail.com', role: 'adoptee', created_at: new Date() }
+        { username: 'tyrone', password_hash: '123', email: 'tyty@gmail.com', role: 'both', created_at: new Date() }
     ]);
     const profileInserts = await knex('profiles').insert([
         { user_id: 1, username: 'profile_kelvin', fullName: 'Kelvin Melvin', accountType: 'adoptee', data: 'Profile Data', created_at: new Date() },
