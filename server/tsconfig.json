@@ -1,4 +1,4 @@
-{
+ {
   "compilerOptions": {
     "skipLibCheck": true,
     "target": "es2018",

@@ -29,6 +29,7 @@ await knex('users').insert([
 const profileInserts = await knex('profiles').insert([
   { user_id: 1, username: 'profile_kelvin', fullName: 'Kelvin Melvin', accountType: 'adoptee', data: 'Profile Data', created_at: new Date() },
   { user_id: 2, username: 'profile_maya', fullName: 'Maya Example', accountType: 'family', data: 'Profile Data', created_at: new Date() },
+  { user_id: 3, username: 'profile_ben', fullName: 'Ben Spector', accountType: 'family', data: 'Profile Data', created_at: new Date()}
 ]).returning('id');
 
 
