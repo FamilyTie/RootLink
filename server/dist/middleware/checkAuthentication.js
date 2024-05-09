@@ -5,8 +5,9 @@ exports.checkAuthentication = void 0;
 // Not specific user, just ANY user
 const checkAuthentication = (req, res, next) => {
     const { userId } = req.session;
-    if (!userId)
+    if (!userId) {
         return res.sendStatus(401);
+    }
     return next();
 };
 exports.checkAuthentication = checkAuthentication;

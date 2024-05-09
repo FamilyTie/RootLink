@@ -1,6 +1,9 @@
 "use strict";
+<<<<<<< HEAD
 // import { knex } from "../knex"
 // import { ValidPassword, hashPassword } from "../../utils/auth-utils"
+=======
+>>>>>>> f3dc0eb8540e6cb4af9ae80e976483f1bcd50eea
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -89,6 +92,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const knex_1 = require("../knex");
 const auth_utils_1 = require("../../utils/auth-utils");
 class User {
+<<<<<<< HEAD
     constructor(data) {
         _User_passwordHash.set(this, null);
         this.id = data.id;
@@ -100,6 +104,20 @@ class User {
     }
     async isValidPassword(password) {
         return (0, auth_utils_1.ValidPassword)(password, __classPrivateFieldGet(this, _User_passwordHash, "f"));
+=======
+    // This constructor is NOT how a controller creates a new user in the database.
+    // Instead, it is used by each of the User static methods to hide the hashed
+    // password of users before sending user data to the client. Since #passwordHash
+    // is private, only the isValidPassword instance method can access that value.
+    constructor({ id, username, password_hash }) {
+        _User_passwordHash.set(this, null); // a private property
+        // This instance method takes in a plain-text password and returns true if it matches
+        // the User instance's hashed password.
+        this.isValidPassword = async (password) => (0, auth_utils_1.ValidPassword)(password, __classPrivateFieldGet(this, _User_passwordHash, "f"));
+        this.id = id;
+        this.username = username;
+        __classPrivateFieldSet(this, _User_passwordHash, password_hash, "f");
+>>>>>>> f3dc0eb8540e6cb4af9ae80e976483f1bcd50eea
     }
     static async list() {
         const query = `SELECT * FROM users`;
