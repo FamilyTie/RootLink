@@ -1,5 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Darker Grotesque";
   margin: 0;
 }
 
