@@ -5,12 +5,20 @@ import User from '../db/models/User';
 export interface UserReqBody {
   username: string;
   password: string;
+  email: string;
+  role: string
 }
 export const createUser = async (req: Request, res: Response) => {
   const { username, password }: UserReqBody = req.body;
 
   // TODO: check if username is taken, and if it is what should you return?
-  const user = await User.create(username, password);
+  const user = await User.create({
+    username: username,
+    password_hash: password, 
+    email: 'example@email.com', 
+    role: 'user', 
+    created_at: new Date()
+  });
   if (!user) return res.sendStatus(409);
   (req.session as any).userId = user.id;
   res.send(user);
@@ -23,7 +31,7 @@ export const listUsers = async (req: Request, res: Response) => {
 
 export const showUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = await User.find(Number(id));
+  const user = await User.findById(Number(id));
   if (!user) return res.sendStatus(404);
 
   res.send(user);

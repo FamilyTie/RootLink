@@ -26,6 +26,15 @@
       "name": "connections ",
       "database": "postgres",
       "username": "ahmad"
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "test comment",
+      "database": "postgres",
+      "username": "ahmad"
     }
   ],
   "files.exclude": {

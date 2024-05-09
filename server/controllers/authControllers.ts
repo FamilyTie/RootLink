@@ -29,6 +29,6 @@ export const logoutUser = (req, res) => {
 export const showMe = async (req, res) => {
   if (!req.session.userId) return res.sendStatus(401)
 
-  const user = await User.find(req.session.userId)
+  const user = await User.findById(req.session.userId)
   res.send(user)
 }
