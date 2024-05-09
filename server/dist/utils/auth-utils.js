@@ -16,9 +16,17 @@ exports.hashPassword = hashPassword;
  * @param {string} hash Salted hash
  * @returns {Promise<true|false|undefined>} Bool of whether password matches hash
  */
-const ValidPassword = async (password, hash) => bcrypt
-    .compare(password, hash)
-    .catch((err) => console.error(err.message));
+const ValidPassword = async (password, hash) => {
+    try {
+        console.log(password, hash);
+        const isValid = await bcrypt.compare(String(password), String(hash));
+        console.log(isValid);
+        return isValid;
+    }
+    catch (err) {
+        console.error(err.message);
+    }
+};
 exports.ValidPassword = ValidPassword;
 const isAuthorized = (userId, session) => {
     if (!userId || !session || !session.userId)

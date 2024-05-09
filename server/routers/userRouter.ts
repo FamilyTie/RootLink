@@ -5,6 +5,7 @@ import {checkAuthentication} from '../middleware/checkAuthentication'
 export const userRouter = express.Router();
 userRouter.post('/', createUser);
 
+
 userRouter.get('/', checkAuthentication, listUsers);
 userRouter.get('/:id', checkAuthentication, showUser);
 userRouter.patch('/:id', checkAuthentication, updateUser);
