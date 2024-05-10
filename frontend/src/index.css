@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,7 +8,8 @@ body {
   margin: 0;
 }
 
-input, label {
+input,
+label {
   display: block;
 }
 
@@ -28,7 +29,7 @@ header {
   font-size: 1.5rem;
   font-weight: bold;
   text-decoration: none;
-  color: #FFF;
+  color: #fff;
 }
 
 nav ul {
@@ -41,18 +42,16 @@ nav ul {
 
 nav a {
   display: block;
-  color: #FFF;
+  color: #fff;
 }
-
-
 
 /* automatically added by NavLink component */
 .active {
-  color: #EEBC32;
+  color: #eebc32;
   font-weight: bold;
   font-style: italic;
 }
 
-.grad-blue1{
+.grad-blue1 {
   background: linear-gradient(to-bottom, #000000 0%, #000000 100%);
 }
