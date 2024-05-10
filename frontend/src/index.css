@@ -60,7 +60,7 @@ nav a {
   background: linear-gradient(360deg, #FFFFFF 23.5%, #CEEAFD 100%);
 }
 .grad-blue1{
-  background: #0A69AE;
+  background: radial-gradient(ellipse 50% 100% at center, #0A69AE 0%, #0A69AE 50%, #042B48 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent
@@ -87,6 +87,9 @@ nav a {
 .card-shadow {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
+
+/* Your Roots. */
+
 
 
 
