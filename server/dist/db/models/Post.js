@@ -28,15 +28,15 @@ class Post {
         return post ? new Post(post) : null;
     }
     static async create(data) {
-        const query = `INSERT INTO posts (user_id, title, body, profile_id, created_at, updated_at)
+        const query = `INSERT INTO posts (user_id, profile_id, title, body, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?) RETURNING *`;
         const values = [
             data.user_id,
+            data.profile_id,
             data.title,
             data.body,
-            data.profile_id,
             data.created_at || new Date(),
-            data.updated_at || new Date()
+            data.updated_at || new Date(),
         ];
         const { rows } = await knex_1.knex.raw(query, values);
         return new Post(rows[0]);
