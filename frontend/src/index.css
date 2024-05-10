@@ -53,14 +53,45 @@ nav a {
   font-style: italic;
 }
 
+.back-blue1 {
+  background: linear-gradient(180deg, #FFFFFF 23.5%, #CEEAFD 100%);
+}
+.back-blue2 {
+  background: linear-gradient(360deg, #FFFFFF 23.5%, #CEEAFD 100%);
+}
 .grad-blue1{
-  background: radial-gradient(50% 50% at 50% 50%, #0A69AE 0%, #0A69AE 50%, #042B48 100%);
+  background: #0A69AE;
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent
 }
 
 .grad-blue2 {
-  background: linear-gradient(to right, #0A69AE 0%, #0A69AE 50%, #042B48 100%);
+  background: linear-gradient(to top, #0A69AE 0%, #0A69AE 10%, #042B48 100%);
 }
+
+
+.text-shadow {
+  background: linear-gradient(0deg, #000000, #000000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.20);
+}
+
+.box-shadow_custom {
+  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+.card-shadow {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+
+
+
+
+
+
 
