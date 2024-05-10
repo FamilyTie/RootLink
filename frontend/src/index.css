@@ -60,3 +60,7 @@ nav a {
       color: transparent
 }
 
+.grad-blue2 {
+  background: linear-gradient(to right, #0A69AE 0%, #0A69AE 50%, #042B48 100%);
+}
+
