@@ -20,10 +20,10 @@ await knex.raw('ALTER SEQUENCE posts_id_seq RESTART WITH 1')
 await knex.raw('ALTER SEQUENCE profiles_id_seq RESTART WITH 1')
 
 await knex('users').insert([
-  { username: 'kelvin_melvin', password_hash: '123', email: 'kev@gmail.com', role: 'adoptee', created_at: new Date() },
-  { username: 'maya', password_hash: '123', email: 'maya@gmail.com', role: 'family', created_at: new Date() },
-  { username: 'tyrone', password_hash: '123', email: 'tyty@gmail.com', role: 'both', created_at: new Date() }
-]);
+  { email: 'bee@gmail.com', password_hash: '123', img: 'profile_kev.jpg', created_at: new Date(), updated_at: new Date() },
+      { email: 'mad@gmail.com', password_hash: '123', img: 'profile_maya.jpg', created_at: new Date(), updated_at: new Date() },
+      { email: 'bry@gmail.com', password_hash: '123', img: 'profile_ty.jpg', created_at: new Date(), updated_at: new Date() }
+    ]);
 
 
 const profileInserts = await knex('profiles').insert([
@@ -52,17 +52,3 @@ await knex('posts').insert([
 
 
 
-// /**
-//  * @param { import("knex").Knex } knex
-//  * @returns { Promise<void> }
-//  */
-// exports.seed = async (knex) => {
-//   // Before you have models you can always just do `await knex('table_name').del`
-//   await knex('users').del();
-
-//   await knex.raw('ALTER SEQUENCE users_id_seq RESTART WITH 1');
-
-//   await User.create('cool_cat', '1234');
-//   await User.create('l33t-guy', '1234');
-//   await User.create('wowow', '1234');
-// };

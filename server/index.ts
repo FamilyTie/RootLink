@@ -28,7 +28,7 @@ app.get("*", (req, res, next) => {
   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"))
 })
 
-const port = process.env.PORT || 1090
+const port = process.env.PORT || 5432
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`)
 })
