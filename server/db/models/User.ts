@@ -1,7 +1,7 @@
 
-
 import { knex } from "../knex";
 import { ValidPassword, hashPassword } from "../../utils/auth-utils";
+const multer = require('multer')
 
    export interface UserConstructor {
     id: number
@@ -67,7 +67,7 @@ static async create(data: Omit<UserConstructor, 'id'>) {
 
     data.email,
     passwordHash,
-    data.img,
+    '../..',
     data.created_at || new Date(),
     data.updated_at || new Date()
   ]
@@ -77,6 +77,30 @@ static async create(data: Omit<UserConstructor, 'id'>) {
   return new User(user)
 
 }
+static async createWithImage(data: Omit<UserConstructor, 'id'>, imagePath: string) {
+  try {
+    const passwordHash = await hashPassword(data.password_hash);
+
+    const query = `INSERT INTO users (email, password_hash, img, created_at, updated_at)
+      VALUES (?,?,?,?,? ) RETURNING *`;
+
+    const values = [
+      data.email,
+      passwordHash,
+      imagePath,
+      data.created_at || new Date(),
+      data.updated_at || new Date()
+    ];
+
+    const { rows } = await knex.raw(query, values);
+    const user = rows[0];
+    return new User(user);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw new Error("Failed to create user");
+  }
+}
+
 
 static async update(id:number, data: Partial<UserConstructor> ) {
  const query = `UPDATE users SET username = ?, email = ?, role= ?, created_at =? WHERE id = ?  RETURNING *`
