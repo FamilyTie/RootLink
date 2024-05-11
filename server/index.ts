@@ -43,14 +43,14 @@ app.get("*", (req, res, next) => {
   res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 
-app.get('/api/upload', (req, res) => {
-  res.send('This is the upload endpoint.');
-});
+// app.get('/api/upload', (req, res) => {
+//   res.send('This is the upload endpoint.');
+// });
 
 app.post('/api/upload', userImg.single('userImg'), async (req, res) => {
   try {
     // Handle file upload
-    const imagePath = path.join(req.file.path); // Assuming req.file.path is the correct file path
+    const imagePath = req.file.path; // Assuming req.file.path is the correct file path
 
     // Create user with the image path
     const newUser = await User.createWithImage(req.body, imagePath);
@@ -62,7 +62,7 @@ app.post('/api/upload', userImg.single('userImg'), async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 1234;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
