@@ -11,15 +11,15 @@ export interface UserReqBody {
 }
 
 const isEmailInUse = async (email: string): Promise<boolean> => {
-  const users = await User.list(); // Assuming User.list() returns all users
+  const users = await User.list(); 
 
   for (const user of users) {
     if (user.email === email) {
-      return true; // Email already exists
+      return true; 
     }
   }
 
-  return false; // Email not found
+  return false; 
 };
 
 export const createUser = async (req: Request, res: Response) => {

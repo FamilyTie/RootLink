@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProfile = exports.updateProfile = exports.showProfile = exports.listProfiles = exports.createProfile = void 0;
-const Profile_1 = require("../db/models/Profile");
+const Profile_1 = __importDefault(require("../db/models/Profile"));
 const createProfile = async (req, res) => {
     const { user_id, username, full_name, bio, account_type, data } = req.body;
     if (!user_id || !username || !full_name || !account_type) {
