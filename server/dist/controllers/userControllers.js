@@ -1,22 +1,41 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUser = exports.showUser = exports.listUsers = exports.createUser = void 0;
 const auth_utils_1 = require("../utils/auth-utils");
-const User_1 = require("../db/models/User");
+const User_1 = __importDefault(require("../db/models/User"));
+const isEmailInUse = async (email) => {
+    const users = await User_1.default.list();
+    for (const user of users) {
+        if (user.email === email) {
+            return true;
+        }
+    }
+    return false;
+};
 const createUser = async (req, res) => {
-    const { username, password } = req.body;
-    // TODO: check if username is taken, and if it is what should you return?
-    const user = await User_1.default.create({
-        username: username,
-        password_hash: password,
-        email: 'example@email.com',
-        role: 'user',
-        created_at: new Date()
-    });
-    if (!user)
-        return res.sendStatus(409);
-    req.session.userId = user.id;
-    res.send(user);
+    const { email, password, img } = req.body;
+    try {
+        const emailInUse = await isEmailInUse(email);
+        if (emailInUse) {
+            return res.status(409).send("Email already exists");
+        }
+        const user = await User_1.default.create({
+            email,
+            password_hash: password,
+            img,
+            created_at: new Date(),
+            updated_at: new Date()
+        });
+        req.session.userId = user.id;
+        res.send(user);
+    }
+    catch (error) {
+        console.error("Error creating user:", error);
+        res.sendStatus(409);
+    }
 };
 exports.createUser = createUser;
 const listUsers = async (req, res) => {
@@ -33,16 +52,19 @@ const showUser = async (req, res) => {
 };
 exports.showUser = showUser;
 const updateUser = async (req, res) => {
-    const { username } = req.body;
+    const { email } = req.body;
     const { id } = req.params;
-    // Not only do users need to be logged in to update a user, they
-    // need to be authorized to perform this action for this particular
-    // user (users should only be able to change their own profiles)
     if (!(0, auth_utils_1.isAuthorized)(Number(id), req.session))
         return res.sendStatus(403);
-    const updatedUser = await User_1.default.update(Number(id), username);
+    const updatedUser = await User_1.default.update(Number(id), email);
     if (!updatedUser)
         return res.sendStatus(404);
     res.send(updatedUser);
 };
 exports.updateUser = updateUser;
+const newUser = {
+    email: 'b@mail.com',
+    password: 'ssx',
+    img: 'src/images'
+};
+console.log(newUser);

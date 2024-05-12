@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
+    "formik": "^2.4.6",
+    "react": "^18.3.1",
+=======
     "@blocknote/core": "^0.13.0",
     "@blocknote/mantine": "^0.13.1",
     "@blocknote/react": "^0.13.1",
@@ -30,9 +34,11 @@
     "@yoopta/toolbar": "^4.2.0",
     "@yoopta/video": "^4.2.0",
     "react": "^18.2.0",
+>>>>>>> 586e5a448759ef991c2d4d9b71c113a49b56220f
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.11.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
