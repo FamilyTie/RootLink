@@ -45,58 +45,7 @@ export default function LoginPage() {
         ></div>
 
         {/* Form Layer */}
-        <form
-          className="absolute z-[4] bg-white inset-0 mx-[66.42%] mt-[200px] w-[337px] h-[435px] rounded-[1px]"
-          onSubmit={handleSubmit}
-          aria-labelledby="login-heading"
-        >
-          <h2
-            id="login-heading"
-            className="font-400 text-[36px] m-auto text-center pt-10"
-          >
-            Welcome back!
-          </h2>
-
-          <label
-            htmlFor="username"
-            className="text-[18px] pt-[3rem] ml-[63px] m-auto font-500"
-          >
-            Username:
-          </label>
-          <input
-            type="text"
-            className="border border-[#0A69AE] m-auto rounded-sm w-[210px]"
-            autoComplete="username"
-            id="username"
-            name="username"
-          />
-
-          <label
-            htmlFor="password"
-            className="text-[18px] pt-[8px] ml-[63px] m-auto font-500"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            className="border border-[#0A69AE] m-auto rounded-sm w-[210px]"
-            autoComplete="current-password"
-            id="password"
-            name="password"
-          />
-
-          <button
-            type="submit"
-            className="w-[102px] h-[33px] ml-[35%] mt-[43px] bg-[#042B48] text-white"
-          >
-            Log-In
-          </button>
-          <p className="text-center pt-5">
-            Don't have an account?{' '}
-            <span className="underline">Sign up</span>
-          </p>
-          
-        </form>
+        <LoginPage />
         <p className="z-[5] absolute left-[27%] bottom-[3.5rem] text-[32px] font-medium">Rediscover Your Roots: Connecting Hearts, Uniting Families </p>
       </div>
 
