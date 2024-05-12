@@ -3,25 +3,34 @@ import { isAuthorized } from '../utils/auth-utils'
 import User from '../db/models/User';
 
 export interface UserReqBody {
-  username: string;
+  username?: string;
   password: string;
   email: string;
-  role: string
 }
 export const createUser = async (req: Request, res: Response) => {
-  const { username, password }: UserReqBody = req.body;
+  const { email, password }: UserReqBody = req.body;
 
-  // TODO: check if username is taken, and if it is what should you return?
-  const user = await User.create({
-    username: username,
-    password_hash: password, 
-    email: 'example@email.com', 
-    role: 'user', 
-    created_at: new Date()
-  });
-  if (!user) return res.sendStatus(409);
-  (req.session as any).userId = user.id;
-  res.send(user);
+  try {
+    // Create the user
+    const user = await User.create({
+      email: email,
+      password: password,
+    });
+    
+    // Handle if user creation failed
+    if (!user) {
+      return res.sendStatus(409);
+    }
+
+    // Set userId in session
+    (req.session as any).userId = user.id;
+
+    // Send the created user in response
+    res.send(user);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.sendStatus(500);
+  }
 };
 
 export const listUsers = async (req: Request, res: Response) => {
@@ -50,3 +59,6 @@ export const updateUser = async (req: Request, res: Response) => {
   if (!updatedUser) return res.sendStatus(404)
   res.send(updatedUser);
 };
+// const newUser = createUser(bfaurelus@gmail.com,  '12345')
+
+// console.log(newUser)
