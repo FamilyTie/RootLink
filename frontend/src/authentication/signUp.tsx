@@ -1,6 +1,4 @@
 import * as yup from 'yup'
-
-
 export const signUpValidation = yup.object({
     name: yup
     .string()
@@ -17,7 +15,6 @@ export const signUpValidation = yup.object({
     .required("Required"),
     cpassword: yup
     .string()
-    .oneOf([yup.ref("password"), null], "Password not matched")
-    .required("Required")
+    .oneOf([yup.ref("password")], "Password not matched")
+  .required("Required")
 })
-

@@ -3,6 +3,7 @@ import { Response, Request } from 'express';
 import User from '../db/models/User';
 
 export interface UserReqBody {
+<<<<<<< HEAD
   email: string;
   password: string;
   img: string;
@@ -45,6 +46,35 @@ export const createUser = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error creating user:", error);
     res.sendStatus(409);
+=======
+  username?: string;
+  password: string;
+  email: string;
+}
+export const createUser = async (req: Request, res: Response) => {
+  const { email, password }: UserReqBody = req.body;
+
+  try {
+    // Create the user
+    const user = await User.create({
+      email: email,
+      password: password,
+    });
+    
+    // Handle if user creation failed
+    if (!user) {
+      return res.sendStatus(409);
+    }
+
+    // Set userId in session
+    (req.session as any).userId = user.id;
+
+    // Send the created user in response
+    res.send(user);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.sendStatus(500);
+>>>>>>> dc6f485a831311d9d52a9229046301cd176f7fc2
   }
 };
 
@@ -71,6 +101,7 @@ export const updateUser = async (req: Request, res: Response) => {
   if (!updatedUser) return res.sendStatus(404)
   res.send(updatedUser);
 };
+<<<<<<< HEAD
 
 const newUser = {
   email: 'b@mail.com',
@@ -79,3 +110,8 @@ const newUser = {
 };
 
 console.log(newUser)
+=======
+// const newUser = createUser(bfaurelus@gmail.com,  '12345')
+
+// console.log(newUser)
+>>>>>>> dc6f485a831311d9d52a9229046301cd176f7fc2
