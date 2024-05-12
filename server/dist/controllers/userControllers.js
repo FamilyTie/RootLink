@@ -1,22 +1,32 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUser = exports.showUser = exports.listUsers = exports.createUser = void 0;
 const auth_utils_1 = require("../utils/auth-utils");
-const User_1 = require("../db/models/User");
+const User_1 = __importDefault(require("../db/models/User"));
 const createUser = async (req, res) => {
-    const { username, password } = req.body;
-    // TODO: check if username is taken, and if it is what should you return?
-    const user = await User_1.default.create({
-        username: username,
-        password_hash: password,
-        email: 'example@email.com',
-        role: 'user',
-        created_at: new Date()
-    });
-    if (!user)
-        return res.sendStatus(409);
-    req.session.userId = user.id;
-    res.send(user);
+    const { email, password } = req.body;
+    try {
+        // Create the user
+        const user = await User_1.default.create({
+            email: email,
+            password: password,
+        });
+        // Handle if user creation failed
+        if (!user) {
+            return res.sendStatus(409);
+        }
+        // Set userId in session
+        req.session.userId = user.id;
+        // Send the created user in response
+        res.send(user);
+    }
+    catch (error) {
+        console.error('Error creating user:', error);
+        res.sendStatus(500);
+    }
 };
 exports.createUser = createUser;
 const listUsers = async (req, res) => {
@@ -46,3 +56,5 @@ const updateUser = async (req, res) => {
     res.send(updatedUser);
 };
 exports.updateUser = updateUser;
+// const newUser = createUser(bfaurelus@gmail.com,  '12345')
+// console.log(newUser)
