@@ -63,6 +63,7 @@ import { schema } from "./configs/Utility"
 
 function GetPosts() {
   const [posts, setPosts] = useState([])
+  const [commentFormsVisibility, setCommentFormsVisibility] = useState({})
 
   useEffect(() => {
     async function fetchPosts() {
@@ -71,7 +72,8 @@ function GetPosts() {
       const postsData = await response.json()
 
       // Reverse the array of posts here to correct the order
-      const reversedPosts = postsData.reverse()
+      // this was .reverse but needed
+      const reversedPosts = postsData
 
       // Simulated comment data
       const comments = [
@@ -192,6 +194,8 @@ function GetPosts() {
 
 function IndividualPostEditor({ post }) {
   const [initialContent, setInitialContent] = useState(undefined)
+  const [comments, setComments] = useState(post.comments) // Manage comments state locally
+  const [commentFormsVisibility, setCommentFormsVisibility] = useState({})
 
   useEffect(() => {
     setInitialContent(JSON.parse(post.body))
@@ -205,6 +209,31 @@ function IndividualPostEditor({ post }) {
     return BlockNoteEditor.create(options)
   }, [initialContent])
 
+  const toggleCommentForm = (commentId) => {
+    setCommentFormsVisibility((prev) => ({
+      ...prev,
+      [commentId]: !prev[commentId],
+    }))
+  }
+
+  const handleSubmit = (event, commentId) => {
+    event.preventDefault()
+    const newText = event.target.elements.textarea.value // Access the textarea input by name or index
+
+    const newComment = {
+      id: comments.length + 1, // Increment ID based on the length for simplicity
+      comment_id: commentId, // This is the ID of the comment being replied to
+      post_id: post.id, // The ID of the post where the comment belongs
+      profile_id: Math.floor(Math.random() * 5) + 1, // Random profile ID for the example
+      text: newText,
+    }
+
+    setComments([...comments, newComment]) // Add the new comment to the state
+    setCommentFormsVisibility({}) // Reset or close all comment forms
+
+    console.log("New Comment Added:", newComment)
+  }
+
   const renderComments = (comments, parentId = null, level = 0) => {
     return comments
       .filter((comment) => comment.comment_id === parentId)
@@ -216,6 +245,27 @@ function IndividualPostEditor({ post }) {
           } pl-4 my-2`}
         >
           <p className="text-sm text-gray-700">{comment.text}</p>
+          <button
+            onClick={() => toggleCommentForm(comment.id)}
+            className="text-blue-500 hover:text-blue-700 text-sm"
+          >
+            Reply
+          </button>
+          {commentFormsVisibility[comment.id] && (
+            <form onSubmit={(e) => handleSubmit(e, comment.id)}>
+              <textarea
+                name="textarea"
+                className="mt-2 p-2 border rounded w-full"
+                placeholder="Write a comment..."
+              ></textarea>
+              <button
+                type="submit"
+                className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
+              >
+                Post Comment
+              </button>
+            </form>
+          )}
           {renderComments(comments, comment.id, level + 1)}
         </div>
       ))
