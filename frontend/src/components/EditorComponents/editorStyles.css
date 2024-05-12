@@ -1,0 +1,175 @@
+.slash-menu {
+  z-index: 9999;
+  background-color: white;
+  border: 1px solid #e0e0e0; /* Softer border color */
+  border-radius: 8px; /* Larger border-radius for a smoother look */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Softer shadow */
+
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+
+  padding: 10px; /* Increased padding for better spacing */
+  top: 8px;
+
+  overflow-x: auto; /* Allows horizontal scrolling if many items */
+  white-space: nowrap; /* Ensures the menu doesn't wrap */
+}
+
+.slash-menu-item {
+  background-color: white;
+  border: 1px solid transparent; /* Transparent borders for a cleaner look */
+  border-radius: 6px; /* Rounded corners */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500; /* Slightly bolder text */
+  letter-spacing: 0.5px; /* Space out letters slightly */
+
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  padding: 8px;
+
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.slash-menu-item:hover,
+.slash-menu-item.selected {
+  background-color: #f0f0f0; /* Softer hover/selected color */
+  border-color: #d0d0d0; /* Visible border on hover/select */
+}
+
+.bn-container .bn-block-group {
+  margin-inline: -35px;
+}
+
+.bn-container[data-theming-css-variables-demo][data-color-scheme] {
+  --bn-colors-editor-text: #3f3f3f;
+  --bn-colors-editor-background: #ffffff;
+  --bn-colors-menu-text: #3f3f3f;
+  --bn-colors-menu-background: #ffffff;
+  --bn-colors-tooltip-text: #3f3f3f;
+  --bn-colors-tooltip-background: #efefef;
+  --bn-colors-hovered-text: #3f3f3f;
+  --bn-colors-hovered-background: #efefef;
+  --bn-colors-selected-text: #ffffff;
+  --bn-colors-selected-background: #3f3f3f;
+  --bn-colors-disabled-text: #afafaf;
+  --bn-colors-disabled-background: #efefef;
+
+  --bn-colors-shadow: #cfcfcf;
+  --bn-colors-border: #efefef;
+  --bn-colors-side-menu: #cfcfcf;
+
+  --bn-colors-highlights-gray-text: #9b9a97;
+  --bn-colors-highlights-gray-background: #ebeced;
+  --bn-colors-highlights-brown-text: #64473a;
+  --bn-colors-highlights-brown-background: #e9e5e3;
+  --bn-colors-highlights-red-text: #e03e3e;
+  --bn-colors-highlights-red-background: #fbe4e4;
+  --bn-colors-highlights-orange-text: #d9730d;
+  --bn-colors-highlights-orange-background: #f6e9d9;
+  --bn-colors-highlights-yellow-text: #dfab01;
+  --bn-colors-highlights-yellow-background: #fbf3db;
+  --bn-colors-highlights-green-text: #4d6461;
+  --bn-colors-highlights-green-background: #ddedea;
+  --bn-colors-highlights-blue-text: #0b6e99;
+  --bn-colors-highlights-blue-background: #ddebf1;
+  --bn-colors-highlights-purple-text: #6940a5;
+  --bn-colors-highlights-purple-background: #eae4f2;
+  --bn-colors-highlights-pink-text: #ad1a72;
+  --bn-colors-highlights-pink-background: #f4dfeb;
+
+  --bn-font-family: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont,
+    "Open Sans", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --bn-border-radius: 6px;
+}
+.ProseMirror ::selection {
+  background-color: #b3d7ff;
+  color: #000;
+}
+input.ProseMirror::selection {
+  background-color: #b3d7ff !important;
+  color: black !important;
+}
+
+.alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  border-radius: 4px;
+  height: 48px;
+  padding: 4px;
+}
+
+.alert[data-alert-type="warning"] {
+  background-color: #fff6e6;
+}
+
+.alert[data-alert-type="error"] {
+  background-color: #ffe6e6;
+}
+
+.alert[data-alert-type="info"] {
+  background-color: #e6ebff;
+}
+
+.alert[data-alert-type="success"] {
+  background-color: #e6ffe6;
+}
+
+[data-color-scheme="dark"] .alert[data-alert-type="warning"] {
+  background-color: #805d20;
+}
+
+[data-color-scheme="dark"] .alert[data-alert-type="error"] {
+  background-color: #802020;
+}
+
+[data-color-scheme="dark"] .alert[data-alert-type="info"] {
+  background-color: #203380;
+}
+
+[data-color-scheme="dark"] .alert[data-alert-type="success"] {
+  background-color: #208020;
+}
+
+.alert-icon-wrapper {
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 12px;
+  margin-right: 12px;
+  height: 18px;
+  width: 18px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.alert-icon[data-alert-icon-type="warning"] {
+  color: #e69819;
+}
+
+.alert-icon[data-alert-icon-type="error"] {
+  color: #d80d0d;
+}
+
+.alert-icon[data-alert-icon-type="info"] {
+  color: #507aff;
+}
+
+.alert-icon[data-alert-icon-type="success"] {
+  color: #0bc10b;
+}
+
+.inline-content {
+  flex-grow: 1;
+}
+.non-interactive-editor {
+  pointer-events: none;
+}
