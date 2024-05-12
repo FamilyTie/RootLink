@@ -21,6 +21,7 @@ declare module "@blocknote/core" {
   }
 
   export class BlockNoteEditor {
+    document: any
     getTextCursorPosition(): number {
       throw new Error("Method not implemented.")
     }
