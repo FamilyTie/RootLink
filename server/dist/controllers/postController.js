@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRecentPostByProfile = exports.getRecentPost = exports.createPost = void 0;
-const Post_1 = require("../db/models/Post");
+const Post_1 = __importDefault(require("../db/models/Post"));
 const createPost = async (req, res) => {
     try {
         const { user_id, title, body, profile_id } = req.body;

@@ -1,6 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const comment_1 = require("./comment");
+const comment_1 = __importDefault(require("./comment"));
 const knex_1 = require("../knex");
 // run : npx ts-node testComments.ts
 // to test
