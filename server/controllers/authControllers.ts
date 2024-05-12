@@ -5,9 +5,9 @@ import User from "../db/models/User"
 // is valid, it adds the userId to the cookie (allowing them to stay logged in)
 // and sends back the user object.
 export const loginUser = async (req, res) => {
-  const { username, password } = req.body // the req.body value is provided by the client
+  const { email, password } = req.body // the req.body value is provided by the client
 
-  const user = await User.findByUsername(username)
+  const user = await User.findByEmail(email)
   if (!user) return res.sendStatus(404)
 
   const isPasswordValid = await user.isValidPassword(password)

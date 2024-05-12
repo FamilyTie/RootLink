@@ -1,6 +1,7 @@
 
 import { knex } from "../knex";
 import { ValidPassword, hashPassword } from "../../utils/auth-utils";
+const multer = require('multer')
 
    export interface UserConstructor {
     id: number
@@ -15,14 +16,12 @@ import { ValidPassword, hashPassword } from "../../utils/auth-utils";
    class User {
     #passwordHash = null
     public id?: number 
-    public username: string
     public email: string
     public created_at: Date
     public updated_at: Date
 
     constructor(data: UserConstructor){
       this.id = data.id
-      this.username = data.username
       this.email = data.email
       this.#passwordHash = data.password_hash
       this.created_at = data.created_at
@@ -48,18 +47,13 @@ static async findById(id: number) {
   return user ? new User(user) : null
 }
 
-static async findByUsername(username: string) {
-  const query =  `SELECT * FROM users WHERE username = ?`
-  const { rows } = await knex.raw(query, [username])
-  const user = rows[0]
-  return user ? new User(user) : null
-}
 static async findByEmail(email: string) {
   const query = `SELECT * FROM users WHERE email = ?`
   const { rows } = await knex.raw(query, [email])
   const user = rows[0]
   return user ? new User(user) : null
 }
+
 
 // static async create(data: Omit<UserConstructor, 'id'>) {
 //   const passwordHash = await hashPassword(data.password_hash)
@@ -106,7 +100,6 @@ static async create(data: { email: string; password: string }) {
 static async update(id:number, data: Partial<UserConstructor> ) {
  const query = `UPDATE users SET username = ?, email = ?, updated_at, created_at =? WHERE id = ?  RETURNING *`
   const values = [
-    data.username,
     data.email,
     data.created_at || new Date(),
     data.updated_at || new Date()

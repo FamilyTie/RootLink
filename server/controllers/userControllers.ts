@@ -1,8 +1,52 @@
+import { isAuthorized } from '../utils/auth-utils';
 import { Response, Request } from 'express';
-import { isAuthorized } from '../utils/auth-utils'
 import User from '../db/models/User';
 
 export interface UserReqBody {
+<<<<<<< HEAD
+  email: string;
+  password: string;
+  img: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+const isEmailInUse = async (email: string): Promise<boolean> => {
+  const users = await User.list(); 
+
+  for (const user of users) {
+    if (user.email === email) {
+      return true; 
+    }
+  }
+
+  return false; 
+};
+
+export const createUser = async (req: Request, res: Response) => {
+  const { email, password, img }: UserReqBody = req.body;
+
+  try {
+    const emailInUse = await isEmailInUse(email);
+
+    if (emailInUse) {
+      return res.status(409).send("Email already exists");
+    }
+
+    const user = await User.create({
+      email,
+      password_hash: password,
+      img,
+      created_at: new Date(),
+      updated_at: new Date()
+    });
+
+    (req.session as any).userId = user.id;
+    res.send(user);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.sendStatus(409);
+=======
   username?: string;
   password: string;
   email: string;
@@ -30,6 +74,7 @@ export const createUser = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error creating user:', error);
     res.sendStatus(500);
+>>>>>>> 12e28b12790531c2e450b501a7bc987fa348b4f7
   }
 };
 
@@ -47,18 +92,26 @@ export const showUser = async (req: Request, res: Response) => {
 };
 
 export const updateUser = async (req: Request, res: Response) => {
-  const { username } = req.body;
+  const { email } = req.body;
   const { id } = req.params;
 
-  // Not only do users need to be logged in to update a user, they
-  // need to be authorized to perform this action for this particular
-  // user (users should only be able to change their own profiles)
   if (!isAuthorized(Number(id), req.session)) return res.sendStatus(403);
 
-  const updatedUser = await User.update(Number(id), username);
+  const updatedUser = await User.update(Number(id), email);
   if (!updatedUser) return res.sendStatus(404)
   res.send(updatedUser);
 };
+<<<<<<< HEAD
+
+const newUser = {
+  email: 'b@mail.com',
+  password: 'ssx',
+  img: 'src/images'
+};
+
+console.log(newUser)
+=======
 // const newUser = createUser(bfaurelus@gmail.com,  '12345')
 
 // console.log(newUser)
+>>>>>>> 12e28b12790531c2e450b501a7bc987fa348b4f7

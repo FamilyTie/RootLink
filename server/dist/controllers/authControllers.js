@@ -10,8 +10,8 @@ const User_1 = __importDefault(require("../db/models/User"));
 // is valid, it adds the userId to the cookie (allowing them to stay logged in)
 // and sends back the user object.
 const loginUser = async (req, res) => {
-    const { username, password } = req.body; // the req.body value is provided by the client
-    const user = await User_1.default.findByUsername(username);
+    const { email, password } = req.body; // the req.body value is provided by the client
+    const user = await User_1.default.findByEmail(email);
     if (!user)
         return res.sendStatus(404);
     const isPasswordValid = await user.isValidPassword(password);
