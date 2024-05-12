@@ -1,5 +1,8 @@
-import SignUpFormValidation from "../authentication/signUpForm";
 import { Link } from "react-router-dom";
+import SignUpFormValidation from "../authentication/signUpForm";
+
+
+
 
 export default function signUpPage() {
   return (
