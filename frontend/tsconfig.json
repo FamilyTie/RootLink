@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "build": "tsc"
+  },
   "compilerOptions": {
     "skipLibCheck": true,
     "target": "esnext",
