@@ -3,6 +3,7 @@ import HeroSection from "../components/layout/HeroSection";
 import Form from "../components/layout/ProfileForm";
 import HomeNav from "../components/ui/HomeNav";
 
+
 export default function HomePage() {
   
   return (

@@ -21,9 +21,13 @@ class User {
         this.id = data.id;
         this.email = data.email;
         __classPrivateFieldSet(this, _User_passwordHash, data.password_hash, "f");
+<<<<<<< HEAD
         this.img = data.img;
         this.updated_at = data.updated_at;
+=======
+>>>>>>> dc6f485a831311d9d52a9229046301cd176f7fc2
         this.created_at = data.created_at;
+        this.updated_at = data.updated_at;
     }
     async isValidPassword(password) {
         return (0, auth_utils_1.ValidPassword)(password, __classPrivateFieldGet(this, _User_passwordHash, "f"));
@@ -45,7 +49,29 @@ class User {
         const user = rows[0];
         return user ? new User(user) : null;
     }
+    static async findByEmail(email) {
+        const query = `SELECT * FROM users WHERE email = ?`;
+        const { rows } = await knex_1.knex.raw(query, [email]);
+        const user = rows[0];
+        return user ? new User(user) : null;
+    }
+    // static async create(data: Omit<UserConstructor, 'id'>) {
+    //   const passwordHash = await hashPassword(data.password_hash)
+    //   const query = `INSERT INTO users ( username, password_hash, email, created_at, updated_at)
+    //   VALUES (?,?,?,?,? ) RETURNING *`
+    //   const values = [
+    //     data.username,
+    //     passwordHash,
+    //     data.email,
+    //     data.created_at || new Date(),
+    //     data.updated_at || new Date()
+    //   ]
+    //   const {rows} = await knex.raw(query, values)
+    //   const user = rows[0]
+    //   return new User(user)
+    // }
     static async create(data) {
+<<<<<<< HEAD
         const passwordHash = await (0, auth_utils_1.hashPassword)(data.password_hash);
         const query = `INSERT INTO users (email, password_hash, img, created_at, updated_at)
   VALUES (?,?,?,?,? ) RETURNING *`;
@@ -55,6 +81,19 @@ class User {
             '../..',
             data.created_at || new Date(),
             data.updated_at || new Date()
+=======
+        const passwordHash = await (0, auth_utils_1.hashPassword)(data.password);
+        const query = `
+    INSERT INTO users (password_hash, email, created_at, updated_at)
+    VALUES (?, ?, ?, ?)
+    RETURNING *
+  `;
+        const values = [
+            data.email,
+            passwordHash,
+            new Date(),
+            new Date()
+>>>>>>> dc6f485a831311d9d52a9229046301cd176f7fc2
         ];
         const { rows } = await knex_1.knex.raw(query, values);
         const user = rows[0];
@@ -82,10 +121,13 @@ class User {
         }
     }
     static async update(id, data) {
-        const query = `UPDATE users SET username = ?, email = ?, role= ?, created_at =? WHERE id = ?  RETURNING *`;
+        const query = `UPDATE users SET username = ?, email = ?, updated_at, created_at =? WHERE id = ?  RETURNING *`;
         const values = [
             data.email,
+<<<<<<< HEAD
             data.img,
+=======
+>>>>>>> dc6f485a831311d9d52a9229046301cd176f7fc2
             data.created_at || new Date(),
             data.updated_at || new Date()
         ];

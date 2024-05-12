@@ -1,36 +1,27 @@
-import { useFormik } from "formik";
+import { useFormik } from 'formik'
 import { signUpValidation } from "./signUp";
-import React from "react";
+import * as React from 'react';
+
+
+
 
 interface FormValues {
-  name: string;
-  age: string;
-  username: string;
   email: string;
   password: string;
   cpassword: string;
 }
 
 interface FormErrors {
-  name?: string;
-  age?: string;
-  username?: string;
   email?: string;
   password?: string;
   cpassword?: string;
 }
 
 const initialValues: FormValues = {
-  name: "",
-  age: "",
-  username: "",
   email: "",
   password: "",
   cpassword: "",
 };
-
-
-
 
 function SignUpFormValidation() {
   const {
@@ -50,7 +41,6 @@ function SignUpFormValidation() {
 
   return (
     <>
-      <div className="signUpAuthentication">
         <form
           className="absolute z-[4] bg-white inset-0 mx-[66.42%] mt-[200px] w-[337px] rounded-[1px]"
           onSubmit={handleSubmit}
@@ -60,43 +50,18 @@ function SignUpFormValidation() {
             Sign Up
           </h2>
           <div className="flex flex-col items-start ml-6 mt-12">
-            <label htmlFor="name" className="text-[18px] pt-[3rem] ml-[63px] m-auto font-500">
-              Name
-            </label>
-            <input
-              type="text"
-              className="border border-[#0A69AE] m-auto rounded-sm w-[210px]"
-              name="name"
-              value={values.name}
-              onBlur={handleBlur}
-              onChange={handleChange}
-              autoComplete="name"
-            />
-            {errors.name && <small>{errors.name}</small>}
-            <label htmlFor="username" className="text-[18px] pt-[3rem] ml-[63px] m-auto font-500">
-              Username
-            </label>
-            <input
-              type="text"
-              className="border border-[#0A69AE] m-auto rounded-sm w-[210px]"
-              name="username"
-              value={values.username}
-              onBlur={handleBlur}
-              onChange={handleChange}
-              autoComplete="username"
-            />
-            {errors.username && <small>{errors.username}</small>}
             <label htmlFor="email" className="text-[18px] pt-[3rem] ml-[63px] m-auto font-500">
               Email
             </label>
             <input
               type="text"
+              id="email"
               className="border border-[#0A69AE] m-auto rounded-sm w-[210px]"
               name="email"
               value={values.email}
               onBlur={handleBlur}
               onChange={handleChange}
-              autoComplete="email"
+              autoComplete="on"
             />
             {errors.email && <small>{errors.email}</small>}
             <label htmlFor="password" className="text-[18px] pt-[3rem] ml-[63px] m-auto font-500">
@@ -104,12 +69,14 @@ function SignUpFormValidation() {
             </label>
             <input
               type="password"
+              id="password"
               className="border border-[#0A69AE] m-auto rounded-sm w-[210px]"
               name="password"
               value={values.password}
               onBlur={handleBlur}
               onChange={handleChange}
-              autoComplete="password"
+              autoComplete="off"
+              
             />
             {errors.password && <small>{errors.password}</small>}
             <label htmlFor="cpassword" className="text-[18px] pt-[3rem] ml-[63px] m-auto font-500">
@@ -117,20 +84,26 @@ function SignUpFormValidation() {
             </label>
             <input
               type="password"
+              id="cpassword"
               className="border border-[#0A69AE] m-auto rounded-sm w-[210px]"
               name="cpassword"
               value={values.cpassword}
               onBlur={handleBlur}
               onChange={handleChange}
-              autoComplete="cpassword"
+              autoComplete="off"
+            
             />
             {errors.cpassword && <small>{errors.cpassword}</small>}
-            <button className="w-[102px] h-[33px] ml-[35%] mt-[43px] bg-[#042B48] text-white" type="submit">
+            <button type="submit"
+             className="w-[102px] h-[33px] ml-[35%] mt-[43px] bg-[#042B48] text-white" >
               Sign Up
             </button>
+            <p className="text-center pt-5">
+            Already have an aacount? {' '}
+            <span className="underline">Log-in</span>
+          </p>
           </div>
         </form>
-      </div>
     </>
   );
 }

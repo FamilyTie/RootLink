@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUser = exports.showUser = exports.listUsers = exports.createUser = void 0;
 const auth_utils_1 = require("../utils/auth-utils");
 const User_1 = __importDefault(require("../db/models/User"));
+<<<<<<< HEAD
 const isEmailInUse = async (email) => {
     const users = await User_1.default.list();
     for (const user of users) {
@@ -35,6 +36,28 @@ const createUser = async (req, res) => {
     catch (error) {
         console.error("Error creating user:", error);
         res.sendStatus(409);
+=======
+const createUser = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        // Create the user
+        const user = await User_1.default.create({
+            email: email,
+            password: password,
+        });
+        // Handle if user creation failed
+        if (!user) {
+            return res.sendStatus(409);
+        }
+        // Set userId in session
+        req.session.userId = user.id;
+        // Send the created user in response
+        res.send(user);
+    }
+    catch (error) {
+        console.error('Error creating user:', error);
+        res.sendStatus(500);
+>>>>>>> dc6f485a831311d9d52a9229046301cd176f7fc2
     }
 };
 exports.createUser = createUser;
@@ -62,9 +85,14 @@ const updateUser = async (req, res) => {
     res.send(updatedUser);
 };
 exports.updateUser = updateUser;
+<<<<<<< HEAD
 const newUser = {
     email: 'b@mail.com',
     password: 'ssx',
     img: 'src/images'
 };
 console.log(newUser);
+=======
+// const newUser = createUser(bfaurelus@gmail.com,  '12345')
+// console.log(newUser)
+>>>>>>> dc6f485a831311d9d52a9229046301cd176f7fc2
