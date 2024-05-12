@@ -1,6 +1,10 @@
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core"
+import {
+  BlockNoteEditor,
+  PartialBlock,
+  insertOrUpdateBlock,
+} from "@blocknote/core"
 import { HiOutlineGlobeAlt } from "react-icons/hi"
-
+import { RiAlertFill } from "react-icons/ri"
 // everything in editor kept its shortcuts so this will have those as text
 export const insertCommandsItem = (editor: BlockNoteEditor) => ({
   title: "Commands",
@@ -41,4 +45,26 @@ export const insertCommandsItem = (editor: BlockNoteEditor) => ({
   group: "Other",
   icon: <HiOutlineGlobeAlt size={18} />,
   subtext: "Shows All Commands",
+})
+
+export const insertAlert = (editor: BlockNoteEditor) => ({
+  title: "Alert",
+  onItemClick: () => {
+    // @ts-ignore
+    insertOrUpdateBlock(editor, {
+      type: "alert",
+    })
+  },
+  aliases: [
+    "alert",
+    "notification",
+    "emphasize",
+    "warning",
+    "error",
+    "info",
+    "success",
+  ],
+  group: "Other",
+
+  icon: <RiAlertFill />,
 })

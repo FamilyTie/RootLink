@@ -2,20 +2,43 @@ import {
   DefaultReactSuggestionItem,
   getDefaultReactSlashMenuItems,
 } from "@blocknote/react"
-import { insertCommandsItem } from "./insertCommandItem"
+import { insertCommandsItem, insertAlert } from "./insertCommandItem"
 import {
   BlockNoteEditor,
   BlockNoteSchema,
   defaultBlockSpecs,
+  insertOrUpdateBlock,
 } from "@blocknote/core"
+import { ChecklistItem } from "./checkToggle"
 import { Alert } from "./Alert"
-// customization 
+import { MdChecklist } from "react-icons/md"
+
+// customization
 
 export const getCustomSlashMenuItems = (
   editor: BlockNoteEditor
 ): DefaultReactSuggestionItem[] => [
   ...getDefaultReactSlashMenuItems(editor),
+  insertAlert(editor),
+  // insertChecklistItem(editor)
   insertCommandsItem(editor),
+  {
+    title: "Checklist Item",
+    icon: <MdChecklist />, // Ensure this icon is imported
+    onItemClick: () => {
+      const newChecklistItem = {
+        type: "checklistItem",
+        content: [{ type: "text", text: "", styles: {} }],
+        props: { checked: false },
+      }
+
+      // Insert the new block at the current cursor position or at the end
+      // @ts-ignore
+      insertOrUpdateBlock(editor, {
+        type: "checklistItem",
+      })
+    },
+  },
 ]
 
 export const theme = {
@@ -27,7 +50,6 @@ export const theme = {
     borderRadius: 5,
     fontFamily: "Arial, sans-serif",
   },
-  outerHeight: "500px",
 }
 
 export const placeholders = {
@@ -42,8 +64,10 @@ export const placeholders = {
 export const schema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
-    // custom 
-    alert: Alert, 
+    // custom
+    alert: Alert,
+    checklistItem: ChecklistItem,
+    // checklistItem: checklistItem,
   },
 })
 // each one is a empty paragraph - can't be fully empty due to placeholder

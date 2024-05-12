@@ -64,6 +64,7 @@ function CreateAPost() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     const postData = { title, body, user_id: 1, profile_id: 1 }
+    console.log("body for postman", body)
     const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
