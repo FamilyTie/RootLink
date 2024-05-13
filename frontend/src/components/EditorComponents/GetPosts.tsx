@@ -6,138 +6,46 @@ import "@blocknote/mantine/style.css"
 import "./editorStyles.css"
 import { schema } from "./configs/Utility"
 import CreateAPost from "./CreatePost"
-
-const comments = [
-  {
-    id: 1,
-    comment_id: null,
-    post_id: 1,
-    profile_id: 1,
-    body: "This is a fascinating post about technology advancements!",
-  },
-  {
-    id: 2,
-    comment_id: 1,
-    post_id: 1,
-    profile_id: 2,
-    body: "Absolutely agree! The rapid development in AI is quite astounding.",
-  },
-  {
-    id: 3,
-    comment_id: 2,
-    post_id: 1,
-    profile_id: 3,
-    body: "It's not just AI, even quantum computing is breaking new grounds.",
-  },
-  {
-    id: 4,
-    comment_id: 3,
-    post_id: 1,
-    profile_id: 2,
-    body: "True, the synergy between quantum computing and AI will define the next decade.",
-  },
-  {
-    id: 5,
-    comment_id: null,
-    post_id: 2,
-    profile_id: 3,
-    body: "Great insights on sustainable energy sources. Thanks for sharing!",
-  },
-  {
-    id: 6,
-    comment_id: 5,
-    post_id: 2,
-    profile_id: 4,
-    body: "No problem! Glad you found it useful. What's your take on solar vs. wind energy?",
-  },
-  {
-    id: 7,
-    comment_id: null,
-    post_id: 3,
-    profile_id: 1,
-    body: "Interesting perspective on modern education systems.",
-  },
-  {
-    id: 8,
-    comment_id: 7,
-    post_id: 3,
-    profile_id: 4,
-    body: "It's a complex issue, but reform is certainly needed.",
-  },
-  {
-    id: 9,
-    comment_id: 8,
-    post_id: 3,
-    profile_id: 1,
-    body: "Definitely. It's about finding the right balance between technology and traditional methods.",
-  },
-  {
-    id: 10,
-    comment_id: 8,
-    post_id: 3,
-    profile_id: 3,
-    body: "True, and also integrating global perspectives to provide a well-rounded education.",
-  },
-  {
-    id: 11,
-    comment_id: null,
-    post_id: 4,
-    profile_id: 2,
-    body: "This has been a great discussion on the future of urban transport.",
-  },
-  {
-    id: 12,
-    comment_id: 11,
-    post_id: 4,
-    profile_id: 1,
-    body: "Indeed, urban mobility solutions have to be sustainable yet practical.",
-  },
-  {
-    id: 13,
-    comment_id: 1,
-    post_id: 1,
-    profile_id: 1,
-    body: "Indeed, very cool !!!",
-  },
-  {
-    id: 14,
-    comment_id: 10,
-    post_id: 3,
-    profile_id: 3,
-    body: "right",
-  },
-  {
-    id: 15,
-    comment_id: null,
-    post_id: 2,
-    profile_id: 3,
-    body: "worddd",
-  },
-]
+import handleFetch from "./configs/Fetching"
+import { ToastContainer, toast } from "react-toastify"
 function GetPosts() {
   const [posts, setPosts] = useState([])
+  const [comments, setComments] = useState([])
 
   useEffect(() => {
-    async function fetchPosts() {
+    fetchComments()
+  }, [])
+
+  async function fetchComments() {
+    try {
+      const response = await fetch("http://localhost:1090/api/comments")
+      if (!response.ok) throw new Error("Failed to fetch comments")
+      const commentsData = await response.json()
+      setComments(commentsData) // Set fetched comments into state
+      fetchPosts(commentsData) // Call fetchPosts here after comments are loaded
+    } catch (error) {
+      console.error("Error fetching comments:", error)
+    }
+  }
+
+  async function fetchPosts(comments) {
+    try {
       const response = await fetch("http://localhost:1090/api/posts")
       if (!response.ok) throw new Error("Failed to fetch posts")
       const postsData = await response.json()
       const reversedPosts = postsData.reverse()
-
       const postsWithComments = reversedPosts.map((post) => ({
         ...post,
         comments: buildCommentTree(
-          comments.filter((comment) => comment.post_id === post.id)
+          comments.filter((comment) => comment.postId === post.id)
         ),
         showComments: false,
       }))
-
-      console.log(postsWithComments)
       setPosts(postsWithComments)
+    } catch (error) {
+      console.error("Error fetching posts:", error)
     }
-
-    fetchPosts()
-  }, [])
+  }
 
   function buildCommentTree(comments) {
     const commentMap = {}
@@ -148,7 +56,9 @@ function GetPosts() {
     const rootComments = []
     comments.forEach((comment) => {
       if (comment.comment_id) {
-        commentMap[comment.comment_id].children.push(commentMap[comment.id])
+        if (commentMap[comment.comment_id]) {
+          commentMap[comment.comment_id].children.push(commentMap[comment.id])
+        }
       } else {
         rootComments.push(commentMap[comment.id])
       }
@@ -158,12 +68,11 @@ function GetPosts() {
 
   const toggleCommentsVisibility = (postId) => {
     setPosts((currentPosts) =>
-      currentPosts.map((post) => {
-        if (post.id === postId) {
-          return { ...post, showComments: !post.showComments }
-        }
-        return post
-      })
+      currentPosts.map((post) => ({
+        ...post,
+        showComments:
+          post.id === postId ? !post.showComments : post.showComments,
+      }))
     )
   }
 
@@ -184,6 +93,7 @@ function GetPosts() {
             key={post.id}
             post={post}
             toggleCommentsVisibility={toggleCommentsVisibility}
+            fetchComments={fetchComments}
           />
         ))}
       </div>
@@ -191,15 +101,14 @@ function GetPosts() {
   )
 }
 
-function IndividualPostEditor({ post, toggleCommentsVisibility }) {
+function IndividualPostEditor({
+  post,
+  toggleCommentsVisibility,
+  fetchComments,
+}) {
   const [initialContent, setInitialContent] = useState(undefined)
   const [commentFormsVisibility, setCommentFormsVisibility] = useState({})
-  const toggleCommentForm = (commentId) => {
-    setCommentFormsVisibility((prev) => ({
-      ...prev,
-      [commentId]: !prev[commentId],
-    }))
-  }
+
   useEffect(() => {
     if (post.body) {
       try {
@@ -230,22 +139,65 @@ function IndividualPostEditor({ post, toggleCommentsVisibility }) {
     return <div>Loading editor...</div>
   }
 
-  const handleCommentSubmit = (event, commentId, postId) => {
-    event.preventDefault()
-    const newCommentBody = event.target.elements.commentBody.value
-    console.log({
-      id: comments.length + 1,
-      comment_id: commentId,
+  const toggleCommentForm = (commentId) => {
+    setCommentFormsVisibility((prev) => ({
+      ...prev,
+      [commentId]: !prev[commentId],
+    }))
+  }
+
+  const handleCommentSubmit = async (e, postId, commentId, isTopLevel) => {
+    e.preventDefault()
+    const newCommentBody = e.target.elements.commentBody.value
+
+    const newComment = {
       post_id: postId,
       body: newCommentBody,
       profile_id: 1, // Assuming a static profile ID for example
-    })
-    // Reset the textarea visibility state
+    }
+
+    // Assign comment_id only if it's a reply to a non-top-level comment
+    if (!isTopLevel) {
+      // @ts-ignore
+      newComment.comment_id = commentId
+    }
+
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newComment),
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:1090/api/comments",
+        options
+      )
+      if (!response.ok) throw new Error("Failed to post comment")
+      await response.json()
+      toast.success("Comment sent successfully!")
+      fetchComments()
+    } catch (error) {
+      console.error("Sending Comment Failed", error)
+      toast.error("Failed to send comment!")
+    }
+
     setCommentFormsVisibility((prev) => ({ ...prev, [commentId]: false }))
   }
 
   return (
     <div className="max-w-xl w-full rounded overflow-hidden shadow-lg bg-white p-5 border-2 border-gray-300 my-4">
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <h2 className="font-semibold text-purple-700 mb-2 text-6xl">
         {post.title}
       </h2>
@@ -256,7 +208,7 @@ function IndividualPostEditor({ post, toggleCommentsVisibility }) {
         theme={"light"}
       />
       <div className="mt-4 space-y-2">
-        {post.showComments && post.comments && renderComments(post.comments)}
+        {post.showComments && post.comments && renderComments(post.comments, 0)}
       </div>
       <button
         onClick={() => toggleCommentsVisibility(post.id)}
@@ -267,7 +219,7 @@ function IndividualPostEditor({ post, toggleCommentsVisibility }) {
     </div>
   )
 
-  function renderComments(comments, level = 0) {
+  function renderComments(comments, level) {
     return comments.map((comment) => (
       <div
         key={comment.id}
@@ -283,7 +235,16 @@ function IndividualPostEditor({ post, toggleCommentsVisibility }) {
           Reply
         </button>
         {commentFormsVisibility[comment.id] && (
-          <form onSubmit={(e) => handleCommentSubmit(e, comment.id, post.id)}>
+          <form
+            onSubmit={(e) =>
+              handleCommentSubmit(
+                e,
+                post.id,
+                comment.id,
+                comment.comment_id === null
+              )
+            }
+          >
             <textarea
               name="commentBody"
               className="border p-2 mt-2 w-full"
