@@ -81,13 +81,24 @@ exports.seed = async (knex) => {
             body: `[{"id":"b774c317-fb12-418f-a0f8-0723a784b598","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"fsafasfas","styles":{}}],"children":[]},{"id":"d51966a5-da9e-4784-b411-559daf842227","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":" ","styles":{}}],"children":[]},{"id":"de9682e2-bfdb-41cd-8270-c1012759ebd8","type":"table","props":{"textColor":"default","backgroundColor":"default"},"content":{"type":"tableContent","rows":[{"cells":[[{"type":"text","text":"sfssff","styles":{}}],[{"type":"text","text":"sfsdfdf","styles":{}}],[{"type":"text","text":"safasfs","styles":{}}]]},{"cells":[[],[{"type":"text","text":"sffad","styles":{}}],[{"type":"text","text":"safasfssfd","styles":{}}]]}]},"children":[]},{"id":"28348f86-84cf-4db5-a6bd-c361fdaa3252","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":" ","styles":{}}],"children":[]},{"id":"aa7eb0f8-775b-4ee5-9919-c2d9bef375e0","type":"heading","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left","level":2},"content":[{"type":"text","text":"fsafsdafasdsdfdfs","styles":{}}],"children":[]},{"id":"4db65524-39eb-41c0-8531-6e481e351872","type":"numberedListItem","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"sfasfsdfsdsdfsdaf","styles":{}}],"children":[]},{"id":"6de00b45-ae15-4db4-86f9-034a579ef909","type":"bulletListItem","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"sdfafasdfasdf","styles":{}}],"children":[]},{"id":"425c0954-28d2-4553-b632-885e496ff31b","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":" ","styles":{}}],"children":[]}]`,
             created_at: new Date(),
         },
-        // {
-        //   user_id: 1,
-        //   profile_id: profiles[1],
-        //   title: "Looking for my brother",
-        //   body: "Hello, I have a brother that was adopted 5 years ago from Jacksonville, Florida",
-        //   created_at: new Date(),
-        // },
+    ]);
+    await knex("comments").insert([
+        {
+            post_id: "1",
+            comment_id: null,
+            profile_id: 1,
+            created_at: new Date(),
+            updated_at: new Date(),
+            body: "heyyy",
+        },
+        {
+            post_id: "1",
+            comment_id: null,
+            profile_id: 1,
+            created_at: new Date(),
+            updated_at: new Date(),
+            body: "seeding reply to heyy",
+        },
     ]);
 };
 // /**

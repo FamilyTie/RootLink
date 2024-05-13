@@ -1,23 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateComment = exports.getCommentsByPost = exports.createComment = void 0;
+exports.updateComment = exports.getCommentsByPost = exports.getAllComments = exports.createComment = void 0;
 const comment_1 = require("../db/models/comment");
 const knex_1 = require("../db/knex");
 const createComment = async (req, res) => {
     const { post_id, comment_id, profile_id, body } = req.body;
-    console.log(req.body);
-    try {
-        // code to insert a comment
-    }
-    catch (error) {
-        if (error.code === "23503") {
-            // PostgreSQL error code for foreign key violation
-            return res.status(400).json({ message: "Post does not exist." });
-        }
-        console.error(error);
-        return res.status(500).json({ message: "Internal server error" });
-    }
-    // Check if the post exists
+    // First, check if the post exists to ensure the foreign key relation will hold.
     const postExists = await (0, knex_1.knex)("posts").where("id", post_id).first();
     if (!postExists) {
         return res.status(404).json({ message: "Post not found" });
@@ -33,10 +21,12 @@ const createComment = async (req, res) => {
     }
     catch (error) {
         if (error.code === "23503") {
-            // PostgreSQL foreign key violation error code
-            res.status(400).json({ message: "Invalid post_id: No such post exists." });
+            res.status(400).json({
+                message: "Invalid post_id or profile_id: No such post or profile exists.",
+            });
         }
         else {
+            console.error(error);
             res
                 .status(500)
                 .json({ message: "Failed to create comment", error: error.toString() });
@@ -44,19 +34,30 @@ const createComment = async (req, res) => {
     }
 };
 exports.createComment = createComment;
-const getCommentsByPost = async (req, res) => {
-    // Extract query parameters with defaults
-    let { lastId = "0", post_Id } = req.query;
-    // Handle missing postId
-    if (!post_Id) {
-        return res.status(400).json({
-            message: "Missing 'postId': 'postId' must be provided.",
-        });
+const getAllComments = async (req, res) => {
+    try {
+        const comments = await comment_1.Comment.findAll();
+        res.status(200).json(comments);
     }
-    // Convert to numbers
-    let numericLastId = Number(lastId);
-    let numericPostId = Number(post_Id);
-    // Validate numeric values
+    catch (error) {
+        console.error("Failed to fetch all comments:", error);
+        res
+            .status(500)
+            .json({ message: "Internal server error", error: error.toString() });
+    }
+};
+exports.getAllComments = getAllComments;
+const getCommentsByPost = async (req, res) => {
+    const { lastId = "0", postId } = req.query;
+    if (!postId) {
+        return res
+            .status(400)
+            .json({ message: "Missing 'postId': 'postId' must be provided." });
+    }
+    // @ts-ignore
+    const numericLastId = parseInt(lastId, 10);
+    // @ts-ignore
+    const numericPostId = parseInt(postId, 10);
     if (isNaN(numericLastId) || isNaN(numericPostId)) {
         return res.status(400).json({
             message: "Invalid input: 'lastId' and 'postId' must be valid integers.",
@@ -64,14 +65,13 @@ const getCommentsByPost = async (req, res) => {
     }
     try {
         const comments = await comment_1.Comment.listByPost(numericLastId, numericPostId);
-        res.send(comments);
+        res.status(200).json(comments);
     }
     catch (error) {
         console.error("Failed to fetch comments:", error);
-        res.status(500).json({
-            message: "Failed to fetch comments",
-            error: error.toString(),
-        });
+        res
+            .status(500)
+            .json({ message: "Failed to fetch comments", error: error.toString() });
     }
 };
 exports.getCommentsByPost = getCommentsByPost;

@@ -43,18 +43,24 @@ export class Comment {
   }
 
   static async create(data: Omit<CommentData, "id">) {
-    const query = `INSERT INTO comments (post_id, comment_id, profile_id, created_at, updated_at, body)
-                   VALUES (?, ?, ?, ?, ?, ?) RETURNING *`
-    const values = [
-      data.post_id,
-      data.comment_id || null, // Assuming comment_id is optional and can be null
-      data.profile_id,
-      data.created_at || new Date(), // Default to current time if undefined
-      data.updated_at || new Date(), // Default to current time if undefined
-      data.body,
-    ]
-    const { rows } = await knex.raw(query, values)
-    return new Comment(rows[0])
+    try {
+      const query = `INSERT INTO comments (post_id, comment_id, profile_id, created_at, updated_at, body)
+                     VALUES (?, ?, ?, ?, ?, ?) RETURNING *`
+      const values = [
+        data.post_id,
+        data.comment_id || null,
+        data.profile_id,
+        data.created_at || new Date(),
+        data.updated_at || new Date(),
+        data.body,
+      ]
+      const { rows } = await knex.raw(query, values)
+      return new Comment(rows[0])
+    } catch (error) {
+      console.error("Failed to create a comment:", error)
+      // Optionally throw the error further up if handling errors globally
+      throw error
+    }
   }
 
   static async update(id: number, data: Partial<CommentData>) {
@@ -70,6 +76,12 @@ export class Comment {
     ]
     const { rows } = await knex.raw(query, values)
     return rows[0] ? new Comment(rows[0]) : null
+  }
+
+  static async findAll(limit: number = 20) {
+    const query = `SELECT * FROM comments ORDER BY created_at DESC LIMIT ?`
+    const { rows } = await knex.raw(query, [limit])
+    return rows.map((comment: CommentData) => new Comment(comment))
   }
 }
 

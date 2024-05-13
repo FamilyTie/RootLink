@@ -5,6 +5,7 @@ const express = require("express");
 const commentController_1 = require("../controllers/commentController");
 exports.commentRouter = express.Router();
 exports.commentRouter.post("/", commentController_1.createComment);
-exports.commentRouter.get("/", commentController_1.getCommentsByPost);
+exports.commentRouter.get("/", commentController_1.getAllComments);
+exports.commentRouter.post("/", commentController_1.createComment);
 exports.commentRouter.patch("/:id", commentController_1.updateComment);
 exports.default = exports.commentRouter;
