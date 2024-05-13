@@ -35,7 +35,9 @@ import "react-toastify/dist/ReactToastify.css"
 // The serialized content is the body that must be seeded for get posts editor to work / recognize
 // language in the dictionary section - docs
 // will make it force blocks to stay minimum - rn u can take them off
-// default placeholder color i will fix a bit later
+// placeholder color in css
+// editor height in css
+//
 function CreateAPost() {
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
@@ -49,7 +51,7 @@ function CreateAPost() {
     placeholders: placeholders,
     trailingBlock: false,
     // @ts-ignore
-    initialContent: defaultBlockAmount,
+    // initialContent: defaultBlockAmount,
     // dictionary: locales.nl
   })
 
@@ -85,16 +87,11 @@ function CreateAPost() {
 
   useEffect(() => {
     const unsubscribe = editor.onChange(() => {
+      console.log(editor.document.length)
       if (editor.document.length > MAX_BLOCKS) {
         // Remove the last added block if the limit is exceeded
         editor.removeBlocks([editor.document[editor.document.length - 1].id])
         toast.error(`Maximum limit of ${MAX_BLOCKS} blocks reached.`)
-      } else if (editor.document.length < defaultBlockAmount.length) {
-        // Add default blocks if the number of blocks is less than defaultBlockAmount.length
-        editor.addBlocks(defaultBlockAmount.slice(editor.document.length))
-        toast.info(
-          `Minimum limit of ${defaultBlockAmount.length} blocks reached.`
-        )
       }
       const contentAsString = JSON.stringify(editor.document)
       setBody(contentAsString)
@@ -103,7 +100,6 @@ function CreateAPost() {
 
     return () => unsubscribe()
   }, [editor])
-
   console.dir(editor)
   return (
     <div className="bg-[rgb(294, 124, 204)]">
@@ -167,15 +163,13 @@ function CreateAPost() {
                     formattingToolbar={() => (
                       <FormattingToolbar
                         blockTypeSelectItems={[
-                          ...blockTypeSelectItems(editor.dictionary).filter(
-                            (item) => item.name.toLowerCase() !== "heading"
-                          ),
+                          ...blockTypeSelectItems(editor.dictionary),
                           {
                             name: "Alert",
                             type: "alert",
                             icon: RiAlertFill,
                             isSelected: (block) => block.type === "alert",
-                          },
+                          } satisfies BlockTypeSelectItem,
                         ]}
                       />
                     )}
