@@ -55,25 +55,6 @@ static async findByEmail(email: string) {
 }
 
 
-// static async create(data: Omit<UserConstructor, 'id'>) {
-//   const passwordHash = await hashPassword(data.password_hash)
-
-//   const query = `INSERT INTO users ( username, password_hash, email, created_at, updated_at)
-//   VALUES (?,?,?,?,? ) RETURNING *`
-
-//   const values = [
-//     data.username,
-//     passwordHash,
-//     data.email,
-//     data.created_at || new Date(),
-//     data.updated_at || new Date()
-//   ]
-
-//   const {rows} = await knex.raw(query, values)
-//   const user = rows[0]
-//   return new User(user)
-
-// }
 
 static async create(data: { email: string; password: string }) {
   const passwordHash = await hashPassword(data.password);
@@ -85,8 +66,8 @@ static async create(data: { email: string; password: string }) {
   `;
 
   const values = [
-    data.email,
     passwordHash,
+    data.email,
     new Date(),
     new Date()
   ];
@@ -98,7 +79,7 @@ static async create(data: { email: string; password: string }) {
 
 
 static async update(id:number, data: Partial<UserConstructor> ) {
- const query = `UPDATE users SET username = ?, email = ?, updated_at, created_at =? WHERE id = ?  RETURNING *`
+ const query = `UPDATE users SET email = ?, updated_at, created_at =? WHERE id = ?  RETURNING *`
   const values = [
     data.email,
     data.created_at || new Date(),

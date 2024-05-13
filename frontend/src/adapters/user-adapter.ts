@@ -6,8 +6,8 @@ import { UserCredentials } from "./auth-adapter";
 
 const baseUrl = '/api/users';
 
-export const createUser = async ({ username, password }: UserCredentials) => (
-  fetchHandler(baseUrl, getPostOptions({ username, password }))
+export const createUser = async ({ email, password }: UserCredentials) => (
+  fetchHandler(baseUrl, getPostOptions({ email, password }))
 );
 
 export const getAllUsers = async () => {

@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { UserCredentials, logUserIn } from "../adapters/auth-adapter";
 import CurrentUserContext, { User } from "../contexts/current-user-context";
-import { UserConfig } from "vite";
+
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function LoginPage() {
   return (
     <>
     
-      <div className="overflow-hidden h-screen relative">
+      <div className="overflow-hidden  h-screen relative">
         <div className="absolute w-full flex align-center font-semibold text-[30px] p-10 px-[6rem] z-[20]" >
            <p>RootLink</p>
            <img  className='w-[26.15px] h-[32.33px] self-center' src='/tree2.png' ></img>
@@ -46,7 +46,7 @@ export default function LoginPage() {
 
         {/* Form Layer */}
         <form
-          className="absolute z-[4] bg-white inset-0 mx-[66.42%] mt-[200px] w-[337px] h-[435px] rounded-[1px]"
+          className="absolute z-[4] scale-[1.1] bg-white inset-0 mx-[66.42%] mt-[200px] w-[337px] h-[435px] rounded-[1px]"
           onSubmit={handleSubmit}
           aria-labelledby="login-heading"
         >
