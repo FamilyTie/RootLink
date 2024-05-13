@@ -3,7 +3,7 @@ import { fetchHandler, getPostOptions, deleteOptions } from "../utils";
 const baseUrl = '/api';
 
 export interface UserCredentials {
-  username: string;
+  email: string;
   password: string;
 
 }
@@ -14,8 +14,8 @@ export const checkForLoggedInUser = async () => {
 
 
 
-export const logUserIn = async ({ username, password }: UserCredentials) => (
-  fetchHandler(`${baseUrl}/login`, getPostOptions({ username, password }))
+export const logUserIn = async ({ email, password }: UserCredentials) => (
+  fetchHandler(`${baseUrl}/login`, getPostOptions({ email, password }))
 );
 
 // the logout route pretty much can't fail with our setup, but if yours can, change this
