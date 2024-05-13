@@ -167,13 +167,15 @@ function CreateAPost() {
                     formattingToolbar={() => (
                       <FormattingToolbar
                         blockTypeSelectItems={[
-                          ...blockTypeSelectItems(editor.dictionary),
+                          ...blockTypeSelectItems(editor.dictionary).filter(
+                            (item) => item.name.toLowerCase() !== "heading"
+                          ),
                           {
                             name: "Alert",
                             type: "alert",
                             icon: RiAlertFill,
                             isSelected: (block) => block.type === "alert",
-                          } satisfies BlockTypeSelectItem,
+                          },
                         ]}
                       />
                     )}

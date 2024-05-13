@@ -18,27 +18,32 @@ import { MdChecklist } from "react-icons/md"
 export const getCustomSlashMenuItems = (
   editor: BlockNoteEditor
 ): DefaultReactSuggestionItem[] => [
-  ...getDefaultReactSlashMenuItems(editor),
+  // ...getDefaultReactSlashMenuItems(editor).filter(
+  //   (item) => !item.title.toLowerCase().startsWith("heading")
+  // ),
+  ...getDefaultReactSlashMenuItems(editor).filter(
+    (item) => item.title.toLowerCase() !== "heading 1"
+  ),
   insertAlert(editor),
   // insertChecklistItem(editor)
   insertCommandsItem(editor),
-  {
-    title: "Checklist Item",
-    icon: <MdChecklist />, // Ensure this icon is imported
-    onItemClick: () => {
-      const newChecklistItem = {
-        type: "checklistItem",
-        content: [{ type: "text", text: "", styles: {} }],
-        props: { checked: false },
-      }
+  // {
+  //   title: "Checklist Item",
+  //   icon: <MdChecklist />, // Ensure this icon is imported
+  //   onItemClick: () => {
+  //     const newChecklistItem = {
+  //       type: "checklistItem",
+  //       content: [{ type: "text", text: "", styles: {} }],
+  //       props: { checked: false },
+  //     }
 
-      // Insert the new block at the current cursor position or at the end
-      // @ts-ignore
-      insertOrUpdateBlock(editor, {
-        type: "checklistItem",
-      })
-    },
-  },
+  //     // Insert the new block at the current cursor position or at the end
+  //     // @ts-ignore
+  //     insertOrUpdateBlock(editor, {
+  //       type: "checklistItem",
+  //     })
+  //   },
+  // },
 ]
 
 export const theme = {
