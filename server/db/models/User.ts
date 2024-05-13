@@ -5,7 +5,6 @@ const multer = require('multer')
 
    export interface UserConstructor {
     id: number
-    username?: string
     email: string
     password_hash: string
     created_at: Date
@@ -14,15 +13,13 @@ const multer = require('multer')
 
 
    class User {
-    #passwordHash = null
+    #passwordHash : string
     public id?: number 
-    public email: string
     public created_at: Date
     public updated_at: Date
 
     constructor(data: UserConstructor){
       this.id = data.id
-      this.email = data.email
       this.#passwordHash = data.password_hash
       this.created_at = data.created_at
       this.updated_at = data.updated_at
@@ -53,50 +50,8 @@ static async findByEmail(email: string) {
   const user = rows[0]
   return user ? new User(user) : null
 }
-static async createWithImage(data: Omit<UserConstructor, 'id'>, imagePath: string) {
-  try {
-    const passwordHash = await hashPassword(data.password_hash);
-
-    const query = `INSERT INTO users (email, password_hash, img, created_at, updated_at)
-      VALUES (?,?,?,?,? ) RETURNING *`;
-
-    const values = [
-      data.email,
-      passwordHash,
-      imagePath,
-      data.created_at || new Date(),
-      data.updated_at || new Date()
-    ];
-
-    const { rows } = await knex.raw(query, values);
-    const user = rows[0];
-    return new User(user);
-  } catch (error) {
-    console.error("Error creating user:", error);
-    throw new Error("Failed to create user");
-  }
-}
 
 
-// static async create(data: Omit<UserConstructor, 'id'>) {
-//   const passwordHash = await hashPassword(data.password_hash)
-
-//   const query = `INSERT INTO users ( username, password_hash, email, created_at, updated_at)
-//   VALUES (?,?,?,?,? ) RETURNING *`
-
-//   const values = [
-//     data.username,
-//     passwordHash,
-//     data.email,
-//     data.created_at || new Date(),
-//     data.updated_at || new Date()
-//   ]
-
-//   const {rows} = await knex.raw(query, values)
-//   const user = rows[0]
-//   return new User(user)
-
-// }
 
 static async create(data: { email: string; password: string }) {
   const passwordHash = await hashPassword(data.password);
@@ -108,8 +63,8 @@ static async create(data: { email: string; password: string }) {
   `;
 
   const values = [
-    data.email,
     passwordHash,
+    data.email,
     new Date(),
     new Date()
   ];
@@ -121,7 +76,7 @@ static async create(data: { email: string; password: string }) {
 
 
 static async update(id:number, data: Partial<UserConstructor> ) {
- const query = `UPDATE users SET username = ?, email = ?, updated_at, created_at =? WHERE id = ?  RETURNING *`
+ const query = `UPDATE users SET email = ?, updated_at, created_at =? WHERE id = ?  RETURNING *`
   const values = [
     data.email,
     data.created_at || new Date(),
