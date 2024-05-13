@@ -37,7 +37,9 @@ import "react-toastify/dist/ReactToastify.css"
 // will make it force blocks to stay minimum - rn u can take them off
 // placeholder color in css
 // editor height in css
-//
+// upload file needs to be changed to imgur instead of temp or something else
+// image in editor in css
+// inspect editor and blocks to edit styling etc as well as theme in utility
 function CreateAPost() {
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
