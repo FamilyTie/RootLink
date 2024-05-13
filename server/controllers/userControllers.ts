@@ -3,10 +3,23 @@ import { Response, Request } from 'express';
 import User from '../db/models/User';
 
 export interface UserReqBody {
-  username?: string;
-  password: string;
   email: string;
+  password: string;
+  created_at: Date;
+  updated_at: Date;
 }
+
+const isEmailInUse = async (email: string): Promise<boolean> => {
+  const users = await User.list(); 
+  for (const user of users) {
+    if (user.email === email) {
+      return true; 
+    }
+  }
+  return false; 
+};
+
+
 export const createUser = async (req: Request, res: Response) => {
   const { email, password }: UserReqBody = req.body;
 
@@ -56,6 +69,6 @@ export const updateUser = async (req: Request, res: Response) => {
   if (!updatedUser) return res.sendStatus(404)
   res.send(updatedUser);
 };
-// const newUser = createUser(bfaurelus@gmail.com,  '12345')
 
-// console.log(newUser)
+
+

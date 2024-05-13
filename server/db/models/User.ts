@@ -5,7 +5,6 @@ const multer = require('multer')
 
    export interface UserConstructor {
     id: number
-    username?: string
     email: string
     password_hash: string
     created_at: Date
@@ -14,15 +13,13 @@ const multer = require('multer')
 
 
    class User {
-    #passwordHash = null
+    #passwordHash : string
     public id?: number 
-    public email: string
     public created_at: Date
     public updated_at: Date
 
     constructor(data: UserConstructor){
       this.id = data.id
-      this.email = data.email
       this.#passwordHash = data.password_hash
       this.created_at = data.created_at
       this.updated_at = data.updated_at
