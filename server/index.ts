@@ -1,6 +1,7 @@
 require("dotenv").config()
 import path = require("path")
 import express = require("express")
+import cors = require("cors")
 import { handleCookieSessions } from "./middleware/handleCookieSessions"
 import { logRoutes } from "./middleware/logRoutes"
 import authRouter from "./routers/authRouter"
@@ -11,6 +12,7 @@ import commentRouter from "./routers/commentRouter"
 const app = express()
 
 // // middleware
+app.use(cors())
 app.use(handleCookieSessions) // adds a session property to each request representing the cookie
 app.use(logRoutes) // print information about each incoming request
 app.use(express.json()) // parse incoming request bodies as JSON

@@ -181,3 +181,8 @@ input.ProseMirror::selection {
   color: #a3a3a3;
   pointer-events: none;
 }
+
+#image-wrapper {
+  width: 100px;
+  height: 100px;
+}
