@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
 const path = require("path");
 const express = require("express");
+const cors = require("cors");
 const handleCookieSessions_1 = require("./middleware/handleCookieSessions");
 const logRoutes_1 = require("./middleware/logRoutes");
 const authRouter_1 = require("./routers/authRouter");
@@ -12,6 +13,7 @@ const profileRouter_1 = require("./routers/profileRouter");
 const commentRouter_1 = require("./routers/commentRouter");
 const app = express();
 // // middleware
+app.use(cors());
 app.use(handleCookieSessions_1.handleCookieSessions); // adds a session property to each request representing the cookie
 app.use(logRoutes_1.logRoutes); // print information about each incoming request
 app.use(express.json()); // parse incoming request bodies as JSON

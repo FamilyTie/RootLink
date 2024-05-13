@@ -29,15 +29,15 @@ export function handleLocation(setLocation) {
     alert("Geolocation is not supported by this browser.")
   }
 }
-
+// can't figure out how to change image height in the editor might add it to posts db and make it look like its in editor instead
 export const insertImageBlock = (editor) => {
-    const imageBlock = {
-      type: "image",
-      content: "",
-    }
-    editor.insertBlocks(
-      [imageBlock],
-      editor.document[editor.document.length - 1],
-      "after"
-    )
+  const imageBlock = {
+    type: "image",
+    content: "",
   }
+  editor.insertBlocks(
+    [imageBlock],
+    editor.document[editor.document.length - 1],
+    "after"
+  )
+}

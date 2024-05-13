@@ -1,58 +1,3 @@
-// import { useState, useEffect, useMemo } from "react"
-// import "@blocknote/core/fonts/inter.css"
-// import { BlockNoteView } from "@blocknote/mantine"
-// import { useBlockNoteEditor } from "@blocknote/react"
-// import "@blocknote/mantine/style.css"
-// import "./editorStyles.css"
-
-// function GetPostsPage() {
-//   const [posts, setPosts] = useState([])
-
-//   // Fetch posts from the API
-
-//   return (
-//     <div className="bg-[rgb(294, 124, 204)]">
-//       <h1>View Posts</h1>
-//       {posts.map((post) => (
-//         <IndividualPostEditor
-//           key={post.id}
-//           post={post}
-//         />
-//       ))}
-//     </div>
-//   )
-// }
-
-// function IndividualPostEditor({ post }) {
-//   const [initialContent, setInitialContent] = useState(undefined)
-
-//   useEffect(() => {
-//     // Simulate loading content for each post
-//     // Here, we assume post.body is already in the expected format.
-//     // Convert from JSON string to object if necessary.
-//     setInitialContent(JSON.parse(post.body))
-//   }, [post.body])
-
-//   const editor = useMemo(() => {
-//     if (!initialContent) {
-//       return undefined
-//     }
-//     return useBlockNoteEditor.create({ initialContent })
-//   }, [initialContent])
-
-//   if (!editor) {
-//     return <div>Loading...</div>
-//   }
-
-//   return (
-//     <div>
-//       <h2>{post.title}</h2>
-//       <BlockNoteView editor={editor} />
-//     </div>
-//   )
-// }
-
-// export default GetPostsPage
 import { useState, useEffect, useMemo } from "react"
 import "@blocknote/core/fonts/inter.css"
 import { BlockNoteView } from "@blocknote/mantine"
@@ -60,20 +5,18 @@ import { BlockNoteEditor } from "@blocknote/core"
 import "@blocknote/mantine/style.css"
 import "./editorStyles.css"
 import { schema } from "./configs/Utility"
-
+import CreateAPost from "./CreatePost"
 function GetPosts() {
   const [posts, setPosts] = useState([])
-  const [commentFormsVisibility, setCommentFormsVisibility] = useState({})
 
   useEffect(() => {
     async function fetchPosts() {
-      const response = await fetch("/api/posts")
+      const response = await fetch("http://localhost:1090/api/posts")
       if (!response.ok) throw new Error("Failed to fetch posts")
       const postsData = await response.json()
 
       // Reverse the array of posts here to correct the order
-      // this was .reverse but needed
-      const reversedPosts = postsData
+      const reversedPosts = postsData.reverse()
 
       // Simulated comment data
       const comments = [
@@ -161,6 +104,13 @@ function GetPosts() {
           profile_id: 1,
           text: "Indeed, urban mobility solutions have to be sustainable yet practical.",
         },
+        {
+          id: 13,
+          comment_id: 1,
+          post_id: 1,
+          profile_id: 1,
+          text: "Indeed, very cool !!!",
+        },
       ]
 
       // Assign comments to their respective posts
@@ -178,6 +128,12 @@ function GetPosts() {
   return (
     <div className="bg-gray-100 min-h-screen py-10">
       <h1 className="text-center text-3xl font-bold text-purple-600 mb-10">
+        Create a Post
+      </h1>
+      <div className="max-w-xl w-full rounded overflow-hidden shadow-lg bg-white p-5 border-2 border-gray-300 my-4 mx-auto">
+        <CreateAPost />
+      </div>
+      <h1 className="text-center text-3xl font-bold text-purple-600 mb-10">
         View Posts
       </h1>
       <div className="flex flex-col items-center space-y-4">
@@ -194,8 +150,6 @@ function GetPosts() {
 
 function IndividualPostEditor({ post }) {
   const [initialContent, setInitialContent] = useState(undefined)
-  const [comments, setComments] = useState(post.comments) // Manage comments state locally
-  const [commentFormsVisibility, setCommentFormsVisibility] = useState({})
 
   useEffect(() => {
     setInitialContent(JSON.parse(post.body))
@@ -209,6 +163,8 @@ function IndividualPostEditor({ post }) {
     return BlockNoteEditor.create(options)
   }, [initialContent])
 
+  const [commentFormsVisibility, setCommentFormsVisibility] = useState({})
+
   const toggleCommentForm = (commentId) => {
     setCommentFormsVisibility((prev) => ({
       ...prev,
@@ -218,20 +174,9 @@ function IndividualPostEditor({ post }) {
 
   const handleSubmit = (event, commentId) => {
     event.preventDefault()
-    const newText = event.target.elements.textarea.value // Access the textarea input by name or index
-
-    const newComment = {
-      id: comments.length + 1, // Increment ID based on the length for simplicity
-      comment_id: commentId, // This is the ID of the comment being replied to
-      post_id: post.id, // The ID of the post where the comment belongs
-      profile_id: Math.floor(Math.random() * 5) + 1, // Random profile ID for the example
-      text: newText,
-    }
-
-    setComments([...comments, newComment]) // Add the new comment to the state
-    setCommentFormsVisibility({}) // Reset or close all comment forms
-
-    console.log("New Comment Added:", newComment)
+    // Handle the submission logic here
+    // You might need to call an API to post the new comment
+    console.log("Form submitted for comment ID:", commentId)
   }
 
   const renderComments = (comments, parentId = null, level = 0) => {
@@ -240,8 +185,8 @@ function IndividualPostEditor({ post }) {
       .map((comment) => (
         <div
           key={comment.id}
-          className={`ml-${4 * level} border-l-2 ${
-            level === 0 ? "border-gray-200" : "border-gray-300"
+          className={`ml-${4 * level} ${
+            level !== 0 ? "border-l-2 border-gray-300" : ""
           } pl-4 my-2`}
         >
           <p className="text-sm text-gray-700">{comment.text}</p>
@@ -254,7 +199,6 @@ function IndividualPostEditor({ post }) {
           {commentFormsVisibility[comment.id] && (
             <form onSubmit={(e) => handleSubmit(e, comment.id)}>
               <textarea
-                name="textarea"
                 className="mt-2 p-2 border rounded w-full"
                 placeholder="Write a comment..."
               ></textarea>
@@ -277,7 +221,7 @@ function IndividualPostEditor({ post }) {
 
   return (
     <div className="max-w-xl w-full rounded overflow-hidden shadow-lg bg-white p-5 border-2 border-gray-300 my-4">
-      <h2 className="text-xl font-semibold text-purple-700 mb-2">
+      <h2 className="font-semibold text-purple-700 mb-2 text-6xl">
         {post.title}
       </h2>
       <BlockNoteView
