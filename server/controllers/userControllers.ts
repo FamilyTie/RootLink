@@ -3,50 +3,6 @@ import { Response, Request } from 'express';
 import User from '../db/models/User';
 
 export interface UserReqBody {
-<<<<<<< HEAD
-  email: string;
-  password: string;
-  img: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-const isEmailInUse = async (email: string): Promise<boolean> => {
-  const users = await User.list(); 
-
-  for (const user of users) {
-    if (user.email === email) {
-      return true; 
-    }
-  }
-
-  return false; 
-};
-
-export const createUser = async (req: Request, res: Response) => {
-  const { email, password, img }: UserReqBody = req.body;
-
-  try {
-    const emailInUse = await isEmailInUse(email);
-
-    if (emailInUse) {
-      return res.status(409).send("Email already exists");
-    }
-
-    const user = await User.create({
-      email,
-      password_hash: password,
-      img,
-      created_at: new Date(),
-      updated_at: new Date()
-    });
-
-    (req.session as any).userId = user.id;
-    res.send(user);
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.sendStatus(409);
-=======
   username?: string;
   password: string;
   email: string;
@@ -74,7 +30,6 @@ export const createUser = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error creating user:', error);
     res.sendStatus(500);
->>>>>>> 12e28b12790531c2e450b501a7bc987fa348b4f7
   }
 };
 
@@ -101,17 +56,6 @@ export const updateUser = async (req: Request, res: Response) => {
   if (!updatedUser) return res.sendStatus(404)
   res.send(updatedUser);
 };
-<<<<<<< HEAD
-
-const newUser = {
-  email: 'b@mail.com',
-  password: 'ssx',
-  img: 'src/images'
-};
-
-console.log(newUser)
-=======
 // const newUser = createUser(bfaurelus@gmail.com,  '12345')
 
 // console.log(newUser)
->>>>>>> 12e28b12790531c2e450b501a7bc987fa348b4f7

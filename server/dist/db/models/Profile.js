@@ -12,6 +12,7 @@ class Profile {
         this.data = data.data;
         this.createdAt = data.created_at || new Date();
         this.updatedAt = data.updated_at || new Date();
+        this.settings = data.settings;
     }
     static async list() {
         const query = `SELECT * FROM profiles`;
@@ -25,15 +26,16 @@ class Profile {
         return profile ? new Profile(profile) : null;
     }
     static async create(data) {
-        const query = `INSERT INTO profiles (user_id, username, full_name, bio, account_type, data, created_at, updated_at)
+        const query = `INSERT INTO profiles (user_id, username, full_name, bio, settings, account_type, data, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`;
         const values = [
             data.user_id,
             data.username,
             data.full_name,
             data.bio,
+            data.settings || {},
             data.account_type,
-            data.data,
+            data.data || {},
             new Date(),
             new Date(),
         ];

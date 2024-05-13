@@ -1,19 +1,34 @@
 import { Knex } from "knex";
-
+import User from "../models/User";
+import Profile from "../models/Profile";
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
     await knex("users").del();
     await knex("profiles").del()
 
     // Inserts seed entries
-    await knex("users").insert([
-        { username: "user1", email: "user1@example.com", password_hash: "hashed_password1" },
-        { username: "user2", email: "user2@example.com", password_hash: "hashed_password2" },
-        { username: "user3", email: "user3@example.com", password_hash: "hashed_password3" }
-    ]);
-    await knex("profiles").insert([
-        { user_id: 1, username: "user1", fullName: "User One",  accountType: "regular", img: "profile_image1.jpg", data: {} },
-        { user_id: 2, username: "user2", fullName: "User Two", accountType: "regular", img: "profile_image2.jpg", data: {} },
-        { user_id: 3, username: "user3", fullName: "User Three", accountType: "regular", img: "profile_image3.jpg", data: {} }
-    ]);
+
+    await User.create({
+        email: "user1@gmail.com",
+        password: "hashed_password1"
+    })
+    await User.create({
+        email: "user2@gmail.com",
+        password: "hashed_password2"})
+
+    await Profile.create({
+        user_id: 1,
+        username: "user1",
+        full_name: "User One",
+        account_type: "regular",
+        bio: "I am user"
+    })
+    await Profile.create({
+        user_id: 2,
+        username: "user2",
+        full_name: "User Two",
+        account_type: "",
+        bio: "I am user"
+    })
+
 };
