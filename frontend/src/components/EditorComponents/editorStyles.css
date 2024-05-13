@@ -183,5 +183,10 @@ input.ProseMirror::selection {
 }
 
 .ProseMirror.bn-editor.bn-default-styles {
-  min-height: 7rem; /* or any other value */
+  min-height: 7rem;
+}
+
+/* change image styling within the editor also saves like this   */
+.bn-image {
+  max-height: 1rem;
 }
