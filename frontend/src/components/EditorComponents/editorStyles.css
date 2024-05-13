@@ -182,7 +182,6 @@ input.ProseMirror::selection {
   pointer-events: none;
 }
 
-#image-wrapper {
-  width: 100px;
-  height: 100px;
+.ProseMirror.bn-editor.bn-default-styles {
+  min-height: 7rem; /* or any other value */
 }

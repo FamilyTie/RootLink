@@ -59,11 +59,12 @@ export const theme = {
 
 export const placeholders = {
   bulletListItem: "Enter list item...",
-  default: "Type...",
+  default: "Your Story...",
   heading: "Enter a heading...",
   image: "Click to add an image...",
   numberedListItem: "Enter numbered item...",
-  paragraph: "Your Story...",
+  // this glitches block to duplicate
+  // paragraph: "Enter paragraph...",
 }
 
 export const schema = BlockNoteSchema.create({
