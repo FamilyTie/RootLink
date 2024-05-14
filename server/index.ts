@@ -1,37 +1,33 @@
-require("dotenv").config()
-import path = require("path")
-import express = require("express")
-import cors = require("cors")
-import { handleCookieSessions } from "./middleware/handleCookieSessions"
-import { logRoutes } from "./middleware/logRoutes"
-import authRouter from "./routers/authRouter"
-import userRouter from "./routers/userRouter"
-import postRouter from "./routers/postRouter"
+import * as path from "path";
+import express, { Application, Request, Response } from 'express';
+import { handleCookieSessions } from "./middleware/handleCookieSessions";
+import { logRoutes } from "./middleware/logRoutes";
+import authRouter from './routers/authRouter';
+import userRouter from './routers/userRouter';
+import postRouter from './routers/postRouter';
 import { profileRouter } from "./routers/profileRouter"
-import commentRouter from "./routers/commentRouter"
-const app = express()
+import User from "./db/models/User"
 
-// // middleware
-app.use(cors())
-app.use(handleCookieSessions) // adds a session property to each request representing the cookie
-app.use(logRoutes) // print information about each incoming request
-app.use(express.json()) // parse incoming request bodies as JSON
-app.use(express.static(path.join(__dirname, "../frontend/dist"))) // Serve static assets from the dist folder of the frontend
+const app = express();
 
-app.use("/api", authRouter)
-app.use("/api/users", userRouter)
-app.use("/api/posts", postRouter)
-app.use("/api/profiles", profileRouter)
-app.use("/api/comments", commentRouter)
+// Middleware
+app.use(handleCookieSessions); // Adds a session property to each request representing the cookie
+app.use(logRoutes); // Print information about each incoming request
+app.use(express.json()); // Parse incoming request bodies as JSON
+app.use(express.static(path.join(__dirname, '../frontend/dist'))); // Serve static assets from the dist folder of the frontend
 
-// Requests meant for the API will be sent along to the router.
-// For all other requests, send back the index.html file in the dist folder.
-app.get("*", (req, res, next) => {
-  if (req.originalUrl.startsWith("/api")) return next()
-  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"))
-})
+// Routers
+app.use('/api', authRouter);
+app.use('/api/users', userRouter);
+app.use('/api/posts', postRouter);
+app.use('/api/profiles', profileRouter);
+app.use('/api/comments', profileRouter);
 
-const port = process.env.PORT || 1090
+app.get(/^(?!\/api).*/, function(request: Request, response: Response) {
+  response.sendFile(path.resolve(__dirname, '../frontend/dist', 'index.html'));
+});
+
+const port = process.env.PORT || 3761;
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`)
-})
+  console.log(`Server running on port ${port}`);
+});

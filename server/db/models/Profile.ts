@@ -1,6 +1,8 @@
 import { knex } from "../knex"
 
 export interface ProfileData {
+  img?: string
+
   id?: number
   user_id: number
   username: string
@@ -10,6 +12,7 @@ export interface ProfileData {
   data?: any
   created_at?: Date
   updated_at?: Date
+  settings?: any
 }
 
 class Profile {
@@ -20,11 +23,14 @@ class Profile {
   bio?: string
   accountType: string
   data?: any
+  img?: string
   createdAt: Date
   updatedAt: Date
+  settings?: any
 
   constructor(data: ProfileData) {
     this.id = data.id
+    this.img = data.img
     this.userId = data.user_id
     this.username = data.username
     this.fullName = data.full_name
@@ -33,6 +39,7 @@ class Profile {
     this.data = data.data
     this.createdAt = data.created_at || new Date()
     this.updatedAt = data.updated_at || new Date()
+    this.settings = data.settings
   }
 
   static async list() {
@@ -49,15 +56,17 @@ class Profile {
   }
 
   static async create(data :Omit<ProfileData, "id">) {
-    const query = `INSERT INTO profiles (user_id, username, full_name, bio, account_type, data, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
+    const query = `INSERT INTO profiles (img, user_id, username, full_name, bio, settings, account_type, data, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
     const values = [
+      data.img || '',
       data.user_id,
       data.username,
       data.full_name,
       data.bio,
+      data.settings || {},
       data.account_type,
-      data.data,
+      data.data || {},
       new Date(),
       new Date(),
     ]
