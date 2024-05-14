@@ -3,8 +3,9 @@ import User from "../models/User";
 import Profile from "../models/Profile";
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
-    await knex("users").del();
     await knex("profiles").del()
+    await knex("users").del();
+    
 
     // Inserts seed entries
 
