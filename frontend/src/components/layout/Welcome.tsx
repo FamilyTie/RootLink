@@ -1,17 +1,5 @@
-
-
-interface WelcomeProps {
-    formData: {
-        firstName: string;
-        lastName: string;
-        userName: string;
-        email: string;
-    };
-    
-}
-
-
 function Welcome({ formData }) {
+  console.log(formData);
   return (
     <>
       <h4 className="text-center mt-2">Registration was successful for...</h4>

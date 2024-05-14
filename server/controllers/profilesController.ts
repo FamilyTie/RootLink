@@ -2,16 +2,18 @@ import { Response, Request } from "express"
 import Profile from "../db/models/Profile"
 import { ProfileData } from "../db/models/Profile"
 export interface ProfileReqBody {
+  user_id: number
+  img: string
   username: string
   full_name: string
   bio?: string
   account_type: string
+  settings?: any
   data?: any
 }
 
 export const createProfile = async (req: Request, res: Response) => {
-  const { user_id, username, full_name, bio, account_type, data }: ProfileData =
-    req.body
+  const { user_id, img, username, full_name, bio, account_type, settings, data }: ProfileData = req.body
 
   if (!user_id || !username || !full_name || !account_type) {
     return res.status(400).send("Required fields are missing.")
@@ -24,13 +26,15 @@ export const createProfile = async (req: Request, res: Response) => {
     bio,
     account_type,
     data,
+    settings,
+    img
   })
 
   if (!profile)
     return res
       .status(409)
       .send("Could not create profile, possibly due to a conflict.")
-
+  console.log(profile)
   res.send(profile)
 }
 
