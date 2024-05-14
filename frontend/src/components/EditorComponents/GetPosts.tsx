@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect } from "react"
 import "@blocknote/core/fonts/inter.css"
 import { BlockNoteView } from "@blocknote/mantine"
 import { BlockNoteEditor } from "@blocknote/core"
@@ -37,7 +37,8 @@ function GetPosts() {
       const response = await fetch("http://localhost:1090/api/posts")
       if (!response.ok) throw new Error("Failed to fetch posts")
       const postsData = await response.json()
-      const reversedPosts = postsData.reverse()
+      // too lazy change names
+      const reversedPosts = postsData
 
       const postsWithComments = reversedPosts.map((post) => ({
         ...post,
@@ -65,13 +66,17 @@ function GetPosts() {
     )
   }
 
+  const refetchPosts = () => {
+    fetchComments()
+  }
+
   return (
     <div className="bg-gray-100 min-h-screen py-10">
       <h1 className="text-center text-3xl font-bold text-purple-600 mb-10">
         Create a Post
       </h1>
       <div className="max-w-xl w-full rounded overflow-hidden shadow-lg bg-white p-5 border-2 border-gray-300 my-4 mx-auto">
-        <CreateAPost />
+        <CreateAPost refetchPosts={refetchPosts} />
       </div>
       <h1 className="text-center text-3xl font-bold text-purple-600 mb-10">
         View Posts
@@ -89,4 +94,5 @@ function GetPosts() {
     </div>
   )
 }
+
 export default GetPosts

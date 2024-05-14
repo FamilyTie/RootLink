@@ -44,7 +44,7 @@ export default function App() {
           />
           <Route
             path="/create-post"
-            element={<CreatePost />}
+            element={<CreatePost refetchPosts={undefined} />}
           />
           <Route
             path="/get-posts"
