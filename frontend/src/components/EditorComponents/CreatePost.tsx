@@ -1,19 +1,19 @@
 import { useState, useEffect, FC } from "react"
 import { BlockNoteView } from "@blocknote/mantine"
-import CustomSlashMenu from "./configs/SlashMenu"
+import CustomSlashMenu from "./Editor-Configs/SlashMenu"
 import {
   uploadFile,
   handleLocation,
   insertImageBlock,
-} from "./configs/Services"
+} from "./Editor-Configs/Services"
 import {
   getCustomSlashMenuItems,
   theme,
   schema,
   placeholders,
   defaultBlockAmount,
-} from "./configs/Utility"
-import handleFetch from "./configs/Fetching"
+} from "./Editor-Configs/Utility"
+import handleFetch from "./Editor-Configs/Fetching"
 import {
   DefaultReactSuggestionItem,
   SuggestionMenuController,
