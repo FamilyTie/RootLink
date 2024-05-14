@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.profileRouter = void 0;
+const express = require('express');
+const profilesController_1 = require("../controllers/profilesController");
+exports.profileRouter = express.Router();
+exports.profileRouter.get('/:id', profilesController_1.showProfile);
+exports.profileRouter.get('/', profilesController_1.listProfiles);
+exports.profileRouter.post('/', profilesController_1.createProfile);
+exports.profileRouter.patch('/:id', profilesController_1.updateProfile);
+exports.profileRouter.delete('/:id', profilesController_1.deleteProfile);

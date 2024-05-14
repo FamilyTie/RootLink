@@ -12,7 +12,7 @@ export default function HomePage() {
       <HeroSection />
       <FeaturesSection />
       <div className="h-screen w-screen">
-      <Form />
+      
       </div>
       
     </div>

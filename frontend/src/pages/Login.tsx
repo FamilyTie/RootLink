@@ -3,7 +3,6 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { UserCredentials, logUserIn } from "../adapters/auth-adapter";
 import CurrentUserContext, { User } from "../contexts/current-user-context";
 
-
 export default function LoginPage() {
   const navigate = useNavigate();
   const [errorText, setErrorText] = useState("");
@@ -23,15 +22,17 @@ export default function LoginPage() {
 
   return (
     <>
-    
       <div className="overflow-hidden  h-screen relative">
-        <div className="absolute w-full flex align-center font-semibold text-[30px] p-10 px-[6rem] z-[20]" >
-           <p>RootLink</p>
-           <img  className='w-[26.15px] h-[32.33px] self-center' src='/tree2.png' ></img>
+        <div className="absolute w-full flex align-center font-semibold text-[30px] p-10 px-[6rem] z-[20]">
+          <p>RootLink</p>
+          <img
+            className="w-[26.15px] h-[32.33px] self-center"
+            src="/tree2.png"
+          ></img>
         </div>
         {/* White Background (Base Layer) */}
         <div className="absolute bg-white z-[1] w-screen h-screen"></div>
-        
+
         {/* Image Layer */}
         <img
           className="absolute opacity-[20%]  z-[2]  w-[995px]"
@@ -40,9 +41,7 @@ export default function LoginPage() {
         />
 
         {/* Blue Gradient Layer */}
-        <div
-          className="absolute bg-gradient-to-b z-[3] from-[#A0D9FF] to-white h-full w-screen opacity-[85%]"
-        ></div>
+        <div className="absolute bg-gradient-to-b z-[3] from-[#A0D9FF] to-white h-full w-screen opacity-[85%]"></div>
 
         {/* Form Layer */}
         <form
@@ -61,14 +60,14 @@ export default function LoginPage() {
             htmlFor="username"
             className="text-[18px] pt-[3rem] ml-[63px] m-auto font-500"
           >
-            Username:
+            Email-Adress:
           </label>
           <input
             type="text"
             className="border border-[#0A69AE] m-auto rounded-sm w-[210px]"
-            autoComplete="username"
-            id="username"
-            name="username"
+            autoComplete="email"
+            id="email"
+            name="email"
           />
 
           <label
@@ -92,16 +91,15 @@ export default function LoginPage() {
             Log-In
           </button>
           <p className="text-center pt-5">
-            Don't have an account?{' '}
-            <span className="underline">Sign up</span>
+            Don't have an account? <span className="underline">Sign up</span>
           </p>
-          
         </form>
-        <p className="z-[5] absolute left-[27%] bottom-[3.5rem] text-[32px] font-medium">Rediscover Your Roots: Connecting Hearts, Uniting Families </p>
+        <p className="z-[5] absolute left-[27%] bottom-[3.5rem] text-[32px] font-medium">
+          Rediscover Your Roots: Connecting Hearts, Uniting Families{" "}
+        </p>
       </div>
 
       {!!errorText && <p>{errorText}</p>}
-    
     </>
   );
 }

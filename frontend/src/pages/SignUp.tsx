@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SignUpForm from "../authentication/signUpForm";
-
+import Form from "../components/layout/ProfileForm";
 
 
 
@@ -21,7 +21,7 @@ export default function signUpPage() {
         {/* Blue Gradient Layer */}
         <div className="absolute bg-gradient-to-b z-[3] from-[#A0D9FF] to-white h-full w-screen opacity-[85%]"></div>
         <li>
-          <SignUpForm />
+        <Form />
         </li>
       
       </div>

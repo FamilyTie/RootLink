@@ -1,34 +1,65 @@
 import { useState } from "react";
 import SingUp from "./Signup";
 import PersonalInfo from "./Personalnfo";
-import Address from "./Adress";
+import Address from "./ProfileCreation";
 import Button from "../ui/Button";
 import Welcome from "./Welcome";
+import ProfileCreation from "./ProfileCreation";
 
+export const FormTitle = [
+  "Sign Up",
+  "Personal Info",
+  "Profile Creation",
+  "Done",
+];
 function Form() {
   const [page, setPage] = useState(0);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirmPassword: "",
     firstName: "",
     lastName: "",
-    userName: "",
-    street: "",
-    city: "",
+    username: "",
+    status: "",
+    img: "",
+    bio: "",
+    adoptionYear: "",
+    ethicity: "",
   });
-  const FormTitle = ["Sing Up", "Personal Info", "Address", "Done"];
 
   const PageDisplay = () => {
     if (page === 0) {
       //   console.log(page);
-      return <SingUp formData={formData} setFormData={setFormData} />;
+      return (
+        <SingUp
+          page={page}
+          setPage={setPage}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      );
     } else if (page === 1) {
       //   console.log(page);
-      return <PersonalInfo formData={formData} setFormData={setFormData} />;
+      return (
+        <PersonalInfo
+          page={page}
+          setPage={setPage}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      );
     } else if (page === 2) {
       //   console.log(page);
-      return <Address formData={formData} setFormData={setFormData} />;
+      return (
+        <ProfileCreation
+          page={page}
+          setPage={setPage}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      );
     } else {
       //   console.log(page);
 
@@ -37,12 +68,15 @@ function Form() {
   };
   return (
     <main
-      className="container shadow p-5 mt-5 rounded-3"
-      style={{ maxWidth: 500 }}
+      className={`container absolute transition-a;ll duration-300 z-[4] overflow-hidden inset-0 top-[10%] ${
+        page === 2 ? "w-[500px] h-[550px]" : "w-[400px]"
+      } ${
+        page === 1 && "h-[600px]"
+      } border rounded bg-white m-auto h-[500px]  p-5 mt-5 rounded-3`}
     >
-      <div className="progress-bar shadow bg-secondary rounded-3">
+      <div className="progress-bar  shadow bg-secondary rounded-3">
         <div
-          className="div"
+          className="div "
           style={{
             transition: "width 1s",
             width:
@@ -57,39 +91,15 @@ function Form() {
           }}
         ></div>
       </div>
-      <form className="form-container">
+      <form className=" ">
         <h1
-          className={`"display-2" ${
-            page === 3 ? "text-success" : "text-purple"
+          className={`  text-center  font-semibold text-[1.8rem] ${
+            page === 3 ? "text-success" : "text-navyblue"
           }`}
         >
           {FormTitle[page]}
         </h1>
         <div className="text-start">{PageDisplay()}</div>
-        <div className="mt-5">
-          {page !== 0 && page !== 3 ? (
-            <Button
-                          text="Prev"
-                          color="dark me-3"
-                          onClick={(e) => {
-                              e.preventDefault();
-                              setPage((currPage) => currPage - 1);
-                          } } isDisabled={false}            />
-          ) : null}
-          <Button
-                      text={page !== 3 ? "Next" : "Finish"}
-                      color={page !== 3 ? "purple" : "success"}
-                      onClick={(e) => {
-                          e.preventDefault();
-                          if (page === FormTitle.length - 1) {
-                              console.log(formData);
-                              window.alert("Are you done with the registration");
-                              window.location.reload();
-                          } else {
-                              setPage((currPage) => currPage + 1);
-                          }
-                      } } isDisabled={false}          />
-        </div>
       </form>
     </main>
   );

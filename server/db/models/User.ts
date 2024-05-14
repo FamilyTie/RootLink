@@ -17,6 +17,7 @@ const multer = require('multer')
     public id?: number 
     public created_at: Date
     public updated_at: Date
+     email: string;
 
     constructor(data: UserConstructor){
       this.id = data.id
@@ -45,6 +46,9 @@ static async findById(id: number) {
 }
 
 static async findByEmail(email: string) {
+  if (!email) {
+    throw new Error('Email is required to find a user.');
+  }
   const query = `SELECT * FROM users WHERE email = ?`
   const { rows } = await knex.raw(query, [email])
   const user = rows[0]
