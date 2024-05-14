@@ -59,7 +59,7 @@ class Profile {
     const query = `INSERT INTO profiles (img, user_id, username, full_name, bio, settings, account_type, data, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
     const values = [
-      data.img,
+      data.img || '',
       data.user_id,
       data.username,
       data.full_name,
