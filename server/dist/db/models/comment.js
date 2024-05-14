@@ -5,7 +5,7 @@ const knex_1 = require("../knex");
 class Comment {
     constructor(data) {
         this.id = data.id;
-        this.profileId = data.profile_id;
+        this.userId = data.user_id;
         this.postId = data.post_id;
         this.commentId = data.comment_id;
         this.body = data.body;
@@ -25,15 +25,15 @@ class Comment {
     }
     static async create(data) {
         try {
-            const query = `INSERT INTO comments (post_id, comment_id, profile_id, created_at, updated_at, body)
+            const query = `INSERT INTO comments (user_id, post_id, body, comment_id, created_at, updated_at)
                      VALUES (?, ?, ?, ?, ?, ?) RETURNING *`;
             const values = [
+                data.user_id,
                 data.post_id,
+                data.body,
                 data.comment_id || null,
-                data.profile_id,
                 data.created_at || new Date(),
                 data.updated_at || new Date(),
-                data.body,
             ];
             const { rows } = await knex_1.knex.raw(query, values);
             return new Comment(rows[0]);

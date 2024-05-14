@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { schema } from "../Editor-Configs/Utility"
 import handleFetch from "../Editor-Configs/Fetching"
+
 export function IndividualPostEditor({
   post,
   toggleCommentsVisibility,
@@ -46,23 +47,20 @@ export function IndividualPostEditor({
   const handleCommentSubmit = async (e, commentId, postId) => {
     e.preventDefault()
     const newCommentBody = e.target.elements.commentBody.value
-
-    const NewComment = {
+    const newComment = {
+      user_id: 1, // Replace with actual user_id from your auth context or state
       post_id: postId,
-      comment_id: commentId, // Connect the new comment to the parent comment
-      profile_id: 1, // Assuming a static profile ID for example
       body: newCommentBody,
+      comment_id: commentId,
     }
     const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(NewComment),
+      body: JSON.stringify(newComment),
     }
+    console.log(newComment)
 
-    const [data, error] = await handleFetch(
-      "http://localhost:1090/api/comments",
-      options
-    )
+    const [data, error] = await handleFetch("/api/comments", options)
     if (!error) {
       console.log("Comment Sent", data)
       toast.success("Comment sent successfully!")
@@ -71,7 +69,6 @@ export function IndividualPostEditor({
       console.log("Sending Comment Failed", error)
       toast.error("Failed to send comment!")
     }
-
     setCommentFormsVisibility((prev) => ({ ...prev, [commentId]: false }))
   }
 
