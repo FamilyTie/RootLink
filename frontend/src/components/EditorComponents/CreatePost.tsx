@@ -75,10 +75,7 @@ function CreateAPost({ refetchPosts }) {
       body: JSON.stringify(postData),
     }
 
-    const [data, error] = await handleFetch(
-      "http://localhost:1090/api/posts",
-      options
-    )
+    const [data, error] = await handleFetch("/api/posts", options)
     if (!error) {
       console.log("Post Sent", data)
       setTitle("")

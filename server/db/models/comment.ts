@@ -2,7 +2,7 @@ import { knex } from "../knex"
 
 interface CommentData {
   id?: number
-  profile_id: number
+  user_id: number
   post_id: number
   comment_id?: number // Added comment_id for additional referencing
   body: string
@@ -12,7 +12,7 @@ interface CommentData {
 
 export class Comment {
   id?: number
-  profileId: number
+  userId: number
   postId: number
   commentId?: number // used to reference parent comment
   body: string
@@ -21,7 +21,7 @@ export class Comment {
 
   constructor(data: CommentData) {
     this.id = data.id
-    this.profileId = data.profile_id
+    this.userId = data.user_id
     this.postId = data.post_id
     this.commentId = data.comment_id
     this.body = data.body
@@ -44,15 +44,15 @@ export class Comment {
 
   static async create(data: Omit<CommentData, "id">) {
     try {
-      const query = `INSERT INTO comments (post_id, comment_id, profile_id, created_at, updated_at, body)
+      const query = `INSERT INTO comments (user_id, post_id, body, comment_id, created_at, updated_at)
                      VALUES (?, ?, ?, ?, ?, ?) RETURNING *`
       const values = [
+        data.user_id,
         data.post_id,
+        data.body,
         data.comment_id || null,
-        data.profile_id,
         data.created_at || new Date(),
         data.updated_at || new Date(),
-        data.body,
       ]
       const { rows } = await knex.raw(query, values)
       return new Comment(rows[0])

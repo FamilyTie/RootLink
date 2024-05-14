@@ -1,8 +1,9 @@
 import { Request, Response } from "express"
 import { Comment } from "../db/models/comment"
 import { knex } from "../db/knex"
+
 export const createComment = async (req: Request, res: Response) => {
-  const { post_id, comment_id, profile_id, body } = req.body
+  const { user_id, post_id, body, comment_id } = req.body
 
   // First, check if the post exists to ensure the foreign key relation will hold.
   const postExists = await knex("posts").where("id", post_id).first()
@@ -12,17 +13,17 @@ export const createComment = async (req: Request, res: Response) => {
 
   try {
     const newComment = await Comment.create({
+      user_id,
       post_id,
-      comment_id,
-      profile_id,
       body,
+      comment_id,
     })
     res.status(201).json(newComment)
   } catch (error) {
     if (error.code === "23503") {
       res.status(400).json({
         message:
-          "Invalid post_id or profile_id: No such post or profile exists.",
+          "Invalid user_id, post_id, or comment_id: No such user, post, or comment exists.",
       })
     } else {
       console.error(error)
@@ -53,10 +54,8 @@ export const getCommentsByPost = async (req: Request, res: Response) => {
       .status(400)
       .json({ message: "Missing 'postId': 'postId' must be provided." })
   }
-  // @ts-ignore
-  const numericLastId = parseInt(lastId, 10)
-  // @ts-ignore
-  const numericPostId = parseInt(postId, 10)
+  const numericLastId = parseInt(lastId as string, 10)
+  const numericPostId = parseInt(postId as string, 10)
 
   if (isNaN(numericLastId) || isNaN(numericPostId)) {
     return res.status(400).json({

@@ -21,7 +21,7 @@ function GetPosts() {
 
   async function fetchComments() {
     try {
-      const response = await fetch("http://localhost:1090/api/comments")
+      const response = await fetch("/api/comments")
       if (!response.ok) throw new Error("Failed to fetch comments")
       const commentsData = await response.json()
       setComments(commentsData) // Set fetched comments into state
@@ -34,7 +34,7 @@ function GetPosts() {
 
   async function fetchPosts(comments) {
     try {
-      const response = await fetch("http://localhost:1090/api/posts")
+      const response = await fetch("/api/posts")
       if (!response.ok) throw new Error("Failed to fetch posts")
       const postsData = await response.json()
       // too lazy change names

@@ -4,7 +4,7 @@ exports.updateComment = exports.getCommentsByPost = exports.getAllComments = exp
 const comment_1 = require("../db/models/comment");
 const knex_1 = require("../db/knex");
 const createComment = async (req, res) => {
-    const { post_id, comment_id, profile_id, body } = req.body;
+    const { user_id, post_id, body, comment_id } = req.body;
     // First, check if the post exists to ensure the foreign key relation will hold.
     const postExists = await (0, knex_1.knex)("posts").where("id", post_id).first();
     if (!postExists) {
@@ -12,17 +12,17 @@ const createComment = async (req, res) => {
     }
     try {
         const newComment = await comment_1.Comment.create({
+            user_id,
             post_id,
-            comment_id,
-            profile_id,
             body,
+            comment_id,
         });
         res.status(201).json(newComment);
     }
     catch (error) {
         if (error.code === "23503") {
             res.status(400).json({
-                message: "Invalid post_id or profile_id: No such post or profile exists.",
+                message: "Invalid user_id, post_id, or comment_id: No such user, post, or comment exists.",
             });
         }
         else {
@@ -54,9 +54,7 @@ const getCommentsByPost = async (req, res) => {
             .status(400)
             .json({ message: "Missing 'postId': 'postId' must be provided." });
     }
-    // @ts-ignore
     const numericLastId = parseInt(lastId, 10);
-    // @ts-ignore
     const numericPostId = parseInt(postId, 10);
     if (isNaN(numericLastId) || isNaN(numericPostId)) {
         return res.status(400).json({
