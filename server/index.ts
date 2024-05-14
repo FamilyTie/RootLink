@@ -1,5 +1,5 @@
 import * as path from "path";
-import express = require("express");
+import express, { Application, Request, Response } from 'express';
 import { handleCookieSessions } from "./middleware/handleCookieSessions";
 import { logRoutes } from "./middleware/logRoutes";
 import authRouter from './routers/authRouter';
@@ -22,6 +22,9 @@ app.use('/api/users', userRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/profiles', profileRouter);
 
+app.get(/^(?!\/api).*/, function(request: Request, response: Response) {
+  response.sendFile(path.resolve(__dirname, '../frontend/dist', 'index.html'));
+});
 
 const port = process.env.PORT || 3761;
 app.listen(port, () => {
