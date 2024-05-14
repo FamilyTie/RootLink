@@ -28,17 +28,17 @@ async function up(knex) {
     //     );
     // `);
     // Comments Table
-    await knex.raw(`
-        CREATE TABLE comments (
-            id SERIAL PRIMARY KEY,
-            post_id INTEGER REFERENCES posts(id),
-            comment_id INTEGER REFERENCES comments(id),
-            profile_id INTEGER REFERENCES profiles(id),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            body TEXT
-        );
-    `);
+    // await knex.raw(`
+    //     CREATE TABLE comments (
+    //         id SERIAL PRIMARY KEY,
+    //         post_id INTEGER REFERENCES posts(id),
+    //         comment_id INTEGER REFERENCES comments(id),
+    //         profile_id INTEGER REFERENCES profiles(id),
+    //         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    //         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    //         body TEXT
+    //     );
+    // `);
     // Post Likes Table
     await knex.raw(`
         CREATE TABLE post_likes (
@@ -69,11 +69,11 @@ async function up(knex) {
 }
 exports.up = up;
 async function down(knex) {
-    await knex.raw('DROP TABLE IF EXISTS notifications');
-    await knex.raw('DROP TABLE IF EXISTS comment_likes');
-    await knex.raw('DROP TABLE IF EXISTS post_likes');
-    await knex.raw('DROP TABLE IF EXISTS comments');
-    await knex.raw('DROP TABLE IF EXISTS posts');
-    await knex.raw('DROP TABLE IF EXISTS profiles');
+    await knex.raw("DROP TABLE IF EXISTS notifications");
+    await knex.raw("DROP TABLE IF EXISTS comment_likes");
+    await knex.raw("DROP TABLE IF EXISTS post_likes");
+    await knex.raw("DROP TABLE IF EXISTS comments");
+    await knex.raw("DROP TABLE IF EXISTS posts");
+    await knex.raw("DROP TABLE IF EXISTS profiles");
 }
 exports.down = down;
