@@ -1,32 +1,29 @@
 
 import { knex } from "../knex";
 import { ValidPassword, hashPassword } from "../../utils/auth-utils";
+const multer = require('multer')
 
    export interface UserConstructor {
     id: number
-    username: string
     email: string
     password_hash: string
-    role:string
     created_at: Date
+    updated_at: Date
    }
 
 
    class User {
-    #passwordHash = null
+    #passwordHash : string
     public id?: number 
-    public username: string
-    public email: string
-    public role: string 
     public created_at: Date
+    public updated_at: Date
+     email: string;
 
     constructor(data: UserConstructor){
       this.id = data.id
-      this.username = data.username
-      this.email = data.email
       this.#passwordHash = data.password_hash
-      this.role = data.role
       this.created_at = data.created_at
+      this.updated_at = data.updated_at
     }
 
    async isValidPassword(password:string): Promise<boolean>{
@@ -48,41 +45,46 @@ static async findById(id: number) {
   return user ? new User(user) : null
 }
 
-static async findByUsername(username: string) {
-  const query =  `SELECT * FROM users WHERE username = ?`
-  const { rows } = await knex.raw(query, [username])
+static async findByEmail(email: string) {
+  if (!email) {
+    throw new Error('Email is required to find a user.');
+  }
+  const query = `SELECT * FROM users WHERE email = ?`
+  const { rows } = await knex.raw(query, [email])
   const user = rows[0]
   return user ? new User(user) : null
 }
 
 
-static async create(data: Omit<UserConstructor, 'id'>) {
-  const passwordHash = await hashPassword(data.password_hash)
 
-  const query = `INSERT INTO users (username, password_hash, email, role, created_at)
-  VALUES (?,?,?,?,? ) RETURNING *`
+static async create(data: { email: string; password: string }) {
+  const passwordHash = await hashPassword(data.password);
+
+  const query = `
+    INSERT INTO users (password_hash, email, created_at, updated_at)
+    VALUES (?, ?, ?, ?)
+    RETURNING *
+  `;
 
   const values = [
-    data.username,
     passwordHash,
     data.email,
-    data.role,
-    data.created_at || new Date()
-  ]
+    new Date(),
+    new Date()
+  ];
 
-  const {rows} = await knex.raw(query, values)
-  const user = rows[0]
-  return new User(user)
-
+  const { rows } = await knex.raw(query, values);
+  const user = rows[0];
+  return new User(user);
 }
 
+
 static async update(id:number, data: Partial<UserConstructor> ) {
- const query = `UPDATE users SET username = ?, email = ?, role= ?, created_at =? WHERE id = ?  RETURNING *`
+ const query = `UPDATE users SET email = ?, updated_at, created_at =? WHERE id = ?  RETURNING *`
   const values = [
-    data.username,
     data.email,
-    data.role, 
-    data.created_at || new Date()
+    data.created_at || new Date(),
+    data.updated_at || new Date()
   ]
 
   const {rows} = await knex.raw(query, values)
