@@ -6,33 +6,77 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.seed = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const Profile_1 = __importDefault(require("../models/Profile"));
+const Post_1 = __importDefault(require("../models/Post"));
+const comment_1 = __importDefault(require("../models/comment"));
 async function seed(knex) {
-    // Deletes ALL existing entries
-    await knex("users").del();
-    await knex("profiles").del();
-    // Inserts seed entries
-    await User_1.default.create({
-        email: "user1@gmail.com",
-        password: "hashed_password1"
-    });
-    await User_1.default.create({
-        email: "user2@gmail.com",
-        password: "hashed_password2"
-    });
-    await Profile_1.default.create({
-        user_id: 1,
-        username: "user1",
-        full_name: "User One",
-        account_type: "regular",
-        bio: "I am user"
-    });
-    await Profile_1.default.create({
-        user_id: 2,
-        username: "user2",
-        full_name: "User Two",
-        account_type: "",
-        bio: "I am user"
-    });
+    try {
+        console.log("Cleaning up database...");
+        // Deletes ALL existing entries in the correct order
+        await knex("comment_likes").del();
+        await knex("comments").del();
+        await knex("post_likes").del();
+        await knex("posts").del();
+        await knex("profiles").del();
+        await knex("users").del();
+        console.log("Inserting users...");
+        // Inserts seed entries for users
+        const user1 = await User_1.default.create({
+            email: "user1@gmail.com",
+            password: "hashed_password1",
+        });
+        const user2 = await User_1.default.create({
+            email: "user2@gmail.com",
+            password: "hashed_password2",
+        });
+        console.log(`User 1 ID: ${user1.id}, User 2 ID: ${user2.id}`);
+        console.log("Inserting profiles...");
+        // Inserts seed entries for profiles
+        const profile1 = await Profile_1.default.create({
+            user_id: user1.id,
+            username: "user1",
+            full_name: "User One",
+            bio: "I am user",
+            account_type: "regular",
+        });
+        const profile2 = await Profile_1.default.create({
+            user_id: user2.id,
+            username: "user2",
+            full_name: "User Two",
+            bio: "I am user",
+            account_type: "regular",
+        });
+        console.log(`Profile 1 ID: ${profile1.id}, Profile 2 ID: ${profile2.id}`);
+        console.log("Inserting posts...");
+        // Inserts seed entries for posts
+        const post1 = await Post_1.default.create({
+            user_id: user1.id,
+            profile_id: profile1.id,
+            title: "lonely",
+            body: `[{"id":"b774c317-fb12-418f-a0f8-0723a784b598","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"fsafasfas","styles":{}}],"children":[]}]`,
+            created_at: new Date(),
+        });
+        const post2 = await Post_1.default.create({
+            user_id: user1.id,
+            profile_id: profile1.id,
+            title: "hey",
+            body: `[{"id":"b774c317-fb12-418f-a0f8-0723a784b598","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"fsafasfas","styles":{}}],"children":[]}]`,
+            created_at: new Date(),
+        });
+        console.log(`Post 1 ID: ${post1.id}, Post 2 ID: ${post2.id}`);
+        console.log("Inserting comments...");
+        // Inserts seed entries for comments
+        await comment_1.default.create({
+            user_id: user1.id,
+            post_id: post1.id,
+            body: "comment on post 2 aka latest",
+            comment_id: null,
+            created_at: new Date(),
+            updated_at: new Date(),
+        });
+        console.log("Seeding completed successfully.");
+    }
+    catch (error) {
+        console.error("Error during seeding:", error);
+    }
 }
 exports.seed = seed;
-;

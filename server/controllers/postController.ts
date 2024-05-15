@@ -15,9 +15,23 @@ export const createPost = async (req: Request, res: Response) => {
 }
 
 export const getRecentPost = async (req: Request, res: Response) => {
-  const lastId = req.query.lastId
-  const posts = await Post.list(Number(lastId))
-  res.send(posts)
+  const { lastId } = req.query
+  let numericLastId = Number(lastId)
+
+  // Check if lastId is NaN or undefined and handle it
+  if (isNaN(numericLastId)) {
+    numericLastId = 0 // or set it to a logic that fetches the most recent posts
+  }
+
+  try {
+    const posts = await Post.list(numericLastId)
+    res.send(posts)
+  } catch (error) {
+    console.error("Failed to fetch posts:", error)
+    res
+      .status(500)
+      .json({ message: "Failed to fetch posts", error: error.toString() })
+  }
 }
 
 export const getRecentPostByProfile = async (req: Request, res: Response) => {
