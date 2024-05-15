@@ -36,6 +36,7 @@
     "react-dom": "^18.3.1",
     "react-feather": "^2.0.10",
     "react-router-dom": "^6.11.2",
+    "react-toastify": "^10.0.5",
     "typescript": "^5.4.5",
     "yup": "^1.4.0"
   },

@@ -30,13 +30,13 @@ class Post {
   }
 
   static async list(last_id: number) {
-    const query = `SELECT * FROM posts WHERE id > ? SORT BY id DESC LIMIT 20`
+    const query = `SELECT * FROM posts WHERE id > ? ORDER BY id DESC LIMIT 20`
     const { rows } = await knex.raw(query, [last_id])
     return rows.map((post: PostData) => new Post(post))
   }
-  US
+
   static async listByProfile(last_id: number, profile_id: number) {
-    const query = `SELECT * FROM posts WHERE profile_id = ? SORT BY id DESC LIMIT 20`
+    const query = `SELECT * FROM posts WHERE profile_id = ? ORDER BY id DESC LIMIT 20`
     const { rows } = await knex.raw(query, [profile_id])
     return rows.map((post: PostData) => new Post(post))
   }
