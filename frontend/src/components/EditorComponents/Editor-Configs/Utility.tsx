@@ -50,10 +50,10 @@ export const theme = {
   colors: {
     editor: {
       text: "#333333",
-      background: "rgb(199,199,199)",
+      background: "transparent",
     },
     borderRadius: 5,
-    fontFamily: "Arial, sans-serif",
+    fontFamily: "Impact, Charcoal",
   },
 }
 
