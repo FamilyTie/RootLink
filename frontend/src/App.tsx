@@ -11,6 +11,7 @@ import UsersPage from "./pages/Users"
 import UserPage from "./pages/User"
 import GetPosts from "./components/EditorComponents/GetPosts"
 import CreatePost from "./components/EditorComponents/CreatePost"
+import ChatApp from "./components/Messeging/mess"
 export default function App() {
   const { setCurrentUser } = useContext(UserContext)
   useEffect(() => {
@@ -49,6 +50,10 @@ export default function App() {
           <Route
             path="/get-posts"
             element={<GetPosts />}
+          />
+          <Route
+            path="/chat/:id"
+            element={<ChatApp />}
           />
           // Add the new route
           <Route

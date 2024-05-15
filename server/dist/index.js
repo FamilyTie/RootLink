@@ -35,22 +35,51 @@ const userRouter_1 = __importDefault(require("./routers/userRouter"));
 const postRouter_1 = __importDefault(require("./routers/postRouter"));
 const profileRouter_1 = require("./routers/profileRouter");
 const commentRouter_1 = __importDefault(require("./routers/commentRouter"));
+const chatroomsRouter_1 = __importDefault(require("./routers/chatroomsRouter"));
+const cors_1 = __importDefault(require("cors"));
+const ChatRooms_1 = __importDefault(require("./db/models/ChatRooms"));
+const http = require("http");
+const socketIo = require("socket.io");
 const app = (0, express_1.default)();
+const server = http.createServer(app);
+const io = socketIo(server, {
+    cors: {
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST"],
+    },
+});
 // Middleware
-app.use(handleCookieSessions_1.handleCookieSessions); // Adds a session property to each request representing the cookie
-app.use(logRoutes_1.logRoutes); // Print information about each incoming request
-app.use(express_1.default.json()); // Parse incoming request bodies as JSON
-app.use(express_1.default.static(path.join(__dirname, "../frontend/dist"))); // Serve static assets from the dist folder of the frontend
+app.use((0, cors_1.default)({
+    origin: "http://localhost:5173",
+    credentials: true,
+}));
+// Middleware
+app.use(handleCookieSessions_1.handleCookieSessions);
+app.use(logRoutes_1.logRoutes);
+app.use(express_1.default.json());
+app.use(express_1.default.static(path.join(__dirname, "../frontend/dist")));
 // Routers
 app.use("/api", authRouter_1.default);
 app.use("/api/users", userRouter_1.default);
 app.use("/api/posts", postRouter_1.default);
 app.use("/api/profiles", profileRouter_1.profileRouter);
 app.use("/api/comments", commentRouter_1.default);
+app.use("/api/chatrooms", chatroomsRouter_1.default);
 app.get(/^(?!\/api).*/, function (request, response) {
     response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
 });
+io.on("connection", (socket) => {
+    console.log("New client connected");
+    socket.on("message", async (message) => {
+        // send message to connected user
+        await ChatRooms_1.default.addMessage(message.chatroomId, message.userId, message.body);
+        io.emit("message", message);
+    });
+    socket.on("disconnect", () => {
+        console.log("Client disconnected");
+    });
+});
 const port = process.env.PORT || 3761;
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

@@ -12,6 +12,7 @@ import {
 import { ChecklistItem } from "./checkToggle"
 import { Alert } from "./Alert"
 import { MdChecklist } from "react-icons/md"
+import { Font } from "./Font"
 
 // customization
 
@@ -53,7 +54,7 @@ export const theme = {
       background: "rgb(199,199,199)",
     },
     borderRadius: 5,
-    fontFamily: "Arial, sans-serif",
+    // fontFamily: "Impact, Charcoal",
   },
 }
 
