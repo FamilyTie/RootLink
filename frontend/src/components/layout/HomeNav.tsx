@@ -10,7 +10,7 @@ function HomeNav() {
       <div>
         <ul className="flex text-[28px] gap-4">
           <li className="text-[#074979] font-semibold ">Home</li>
-          <li>Sign-In</li>
+          <li><a className="text-black" href="/login">Sign-In</a></li>
         </ul>
       </div>
     </nav>

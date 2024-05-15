@@ -8,8 +8,8 @@ const User_1 = __importDefault(require("../models/User"));
 const Profile_1 = __importDefault(require("../models/Profile"));
 async function seed(knex) {
     // Deletes ALL existing entries
-    await knex("users").del();
     await knex("profiles").del();
+    await knex("users").del();
     // Inserts seed entries
     await User_1.default.create({
         email: "user1@gmail.com",

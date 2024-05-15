@@ -58,12 +58,25 @@ nav a {
 .back-blue2 {
   background: linear-gradient(360deg, #ffffff 23.5%, #ceeafd 100%);
 }
-.grad-blue1{
-  background: radial-gradient(ellipse 50% 100% at center, #0A69AE 0%, #0A69AE 50%, #042B48 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent
+
+.back-blue4 {
+  background: linear-gradient(360deg, rgba(217, 217, 217, 0.21) 22.5%, rgba(56, 172, 250, 0.21) 58%, rgba(56, 172, 250, 0.21) 100%);
 }
+
+.back-blue3 {
+  background: #042B48
+}
+.grad-blue1 {
+  background: linear-gradient(180deg, #0c77c3 0%, #0c77c3 50%, #042B48 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.shadow-bottom {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
 
 .grad-blue2 {
   background: linear-gradient(to top, #0a69ae 0%, #0a69ae 10%, #042b48 100%);

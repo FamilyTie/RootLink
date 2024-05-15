@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import CurrentUserContext from "../contexts/current-user-context";
 import { getUser } from "../adapters/user-adapter";
 import { logUserOut } from "../adapters/auth-adapter";
-import UpdateUsernameForm from "../components/UpdateUsernameForm";
+import UpdateUsernameForm from "../components/ui/UpdateUsernameForm";
 
 export default function UserPage() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export default function UserPage() {
     const loadUser = async () => {
       const [user, error] = await getUser(id);
       if (error) return setErrorText(error.message);
-      setUserProfile(user);
+      setUserProfile(user.profile);
     };
 
     loadUser();
@@ -29,15 +29,13 @@ export default function UserPage() {
     navigate("/");
   };
 
-  if (!userProfile && !errorText) return null;
+  // if (!userProfile && !errorText) return null;
   if (errorText) return <p>{errorText}</p>;
 
   // What parts of state would change if we altered our currentUser context?
   // Ideally, this would update if we mutated it
   // But we also have to consider that we may NOT be on the current users page
-  const profileUsername = isCurrentUserProfile
-    ? currentUser.username
-    : userProfile.username;
+  const profileUsername = userProfile?.username || "Loading...";
 
   return (
     <>
@@ -47,6 +45,7 @@ export default function UserPage() {
       )}
       <p>If the user had any data, here it would be</p>
       <p>Fake Bio or something</p>
+      jkjk
       {!!isCurrentUserProfile && (
         <UpdateUsernameForm
           currentUser={currentUser}

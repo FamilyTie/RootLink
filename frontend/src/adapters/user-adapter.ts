@@ -66,5 +66,6 @@ export const createUserWithProfile = async (formData:  SignUpFormData) => {
   console.log(user)
   const userId = user[0].id;
   const profile = await createProfile({ user_id: userId, firstName, lastName, username, status, img, bio, adoptionYear, ethnicity });
-  console.log(profile);
+  
+  return { user, profile };
 }

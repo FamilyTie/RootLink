@@ -34,8 +34,10 @@ const authRouter_1 = __importDefault(require("./routers/authRouter"));
 const userRouter_1 = __importDefault(require("./routers/userRouter"));
 const postRouter_1 = __importDefault(require("./routers/postRouter"));
 const profileRouter_1 = require("./routers/profileRouter");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 // Middleware
+app.use((0, cookie_parser_1.default)());
 app.use(handleCookieSessions_1.handleCookieSessions); // Adds a session property to each request representing the cookie
 app.use(logRoutes_1.logRoutes); // Print information about each incoming request
 app.use(express_1.default.json()); // Parse incoming request bodies as JSON
