@@ -7,7 +7,7 @@ exports.seed = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const Profile_1 = __importDefault(require("../models/Profile"));
 const Post_1 = __importDefault(require("../models/Post"));
-const comment_1 = __importDefault(require("../models/comment"));
+const ChatRooms_1 = __importDefault(require("../models/ChatRooms"));
 async function seed(knex) {
     try {
         console.log("Cleaning up database...");
@@ -63,17 +63,9 @@ async function seed(knex) {
             created_at: new Date(),
         });
         console.log(`Post 1 ID: ${post1.id}, Post 2 ID: ${post2.id}`);
-        console.log("Inserting comments...");
+        // console.log("Inserting comments...")
         // Inserts seed entries for comments
-        await comment_1.default.create({
-            user_id: user1.id,
-            post_id: post1.id,
-            body: "comment on post 2 aka latest",
-            comment_id: null,
-            created_at: new Date(),
-            updated_at: new Date(),
-        });
-        console.log("Seeding completed successfully.");
+        await ChatRooms_1.default.createChatRoom(user1.id, user2.id);
     }
     catch (error) {
         console.error("Error during seeding:", error);

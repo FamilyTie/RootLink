@@ -3,6 +3,7 @@ import User from "../models/User"
 import Profile from "../models/Profile"
 import Post from "../models/Post"
 import Comment from "../models/comment"
+import Chatrooms from "../models/ChatRooms"
 
 export async function seed(knex: Knex): Promise<void> {
   try {
@@ -66,18 +67,9 @@ export async function seed(knex: Knex): Promise<void> {
 
     console.log(`Post 1 ID: ${post1.id}, Post 2 ID: ${post2.id}`)
 
-    console.log("Inserting comments...")
+    // console.log("Inserting comments...")
     // Inserts seed entries for comments
-    await Comment.create({
-      user_id: user1.id,
-      post_id: post1.id,
-      body: "comment on post 2 aka latest",
-      comment_id: null,
-      created_at: new Date(),
-      updated_at: new Date(),
-    })
-
-    console.log("Seeding completed successfully.")
+    await Chatrooms.createChatRoom(user1.id, user2.id)
   } catch (error) {
     console.error("Error during seeding:", error)
   }
