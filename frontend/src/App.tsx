@@ -9,7 +9,8 @@ import UserContext from "./contexts/current-user-context"
 import { checkForLoggedInUser } from "./adapters/auth-adapter"
 import UsersPage from "./pages/Users"
 import UserPage from "./pages/User"
-import CreatePostPage from "./pages/CreatePostPage"
+import GetPosts from "./components/EditorComponents/GetPosts"
+import CreatePost from "./components/EditorComponents/CreatePost"
 export default function App() {
   const { setCurrentUser } = useContext(UserContext)
   useEffect(() => {
@@ -43,8 +44,12 @@ export default function App() {
           />
           <Route
             path="/create-post"
-            element={<CreatePostPage />}
-          />{" "}
+            element={<CreatePost refetchPosts={undefined} />}
+          />
+          <Route
+            path="/get-posts"
+            element={<GetPosts />}
+          />
           // Add the new route
           <Route
             path="*"
