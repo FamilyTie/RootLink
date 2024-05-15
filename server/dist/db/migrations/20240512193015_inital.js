@@ -32,7 +32,7 @@ async function up(knex) {
     await knex.raw(`
       CREATE TABLE posts (
           id SERIAL PRIMARY KEY,
-          user_id INTEGER REFERENCES users(id),
+          user_id INTEGER REFERENCES profiles(id),
           profile_id INTEGER REFERENCES profiles(id) ON DELETE CASCADE,
           title TEXT NOT NULL,
           body TEXT NOT NULL,
@@ -44,7 +44,7 @@ async function up(knex) {
     await knex.raw(`
       CREATE TABLE comments (
           id SERIAL PRIMARY KEY,
-          user_id INTEGER REFERENCES users(id),
+          user_id INTEGER REFERENCES profiles(id),
           post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
           body TEXT NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -55,7 +55,7 @@ async function up(knex) {
     await knex.raw(`
       CREATE TABLE post_likes (
           id SERIAL PRIMARY KEY,
-          user_id INTEGER REFERENCES users(id),
+          user_id INTEGER REFERENCES profiles(id),
           post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE
       );
   `);
@@ -63,20 +63,21 @@ async function up(knex) {
     await knex.raw(`
       CREATE TABLE comment_likes (
           id SERIAL PRIMARY KEY,
-          user_id INTEGER REFERENCES users(id),
+          user_id INTEGER REFERENCES profiles(id),
           comment_id INTEGER REFERENCES comments(id) ON DELETE CASCADE
       );
   `);
     // Notifications Table
     await knex.raw(`
-      CREATE TABLE notifications (
-          id SERIAL PRIMARY KEY,
-          user_id INTEGER REFERENCES users(id),
-          body TEXT NOT NULL,
-          read BOOLEAN DEFAULT FALSE,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
+    CREATE TABLE notifications (
+      id SERIAL PRIMARY KEY,
+      user_sent INTEGER NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+      user_received INTEGER NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+      body TEXT NOT NULL,
+      read BOOLEAN DEFAULT FALSE,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
   `);
 }
 exports.up = up;

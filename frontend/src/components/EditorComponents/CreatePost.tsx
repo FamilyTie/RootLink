@@ -132,6 +132,7 @@ function CreateAPost({ refetchPosts }) {
                   theme={theme}
                   slashMenu={false}
                   data-theming-css-variables-demo
+                  data-changing-font-demo
                   formattingToolbar={false}
                 >
                   {enableSlashMenu && (
