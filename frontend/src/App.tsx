@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom"
 import Home from "./pages/Home"
 import SignUpPage from "./pages/SignUp"
 import LoginPage from "./pages/Login"
-import SiteHeadingAndNav from "./components/SiteHeadingAndNav"
 import NotFoundPage from "./pages/NotFound"
 import UserContext from "./contexts/current-user-context"
 import { checkForLoggedInUser } from "./adapters/auth-adapter"
@@ -11,12 +10,15 @@ import UsersPage from "./pages/Users"
 import UserPage from "./pages/User"
 import GetPosts from "./components/EditorComponents/GetPosts"
 import CreatePost from "./components/EditorComponents/CreatePost"
+import Feed from "./pages/Feed"
 export default function App() {
-  const { setCurrentUser } = useContext(UserContext)
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   useEffect(() => {
-    checkForLoggedInUser().then(setCurrentUser)
-  }, [setCurrentUser])
-
+    checkForLoggedInUser().then((userObject) =>
+      setCurrentUser(userObject.profile)
+    );
+  }, [setCurrentUser]);
+  console.log(currentUser);
   return (
     <>
       {/* <SiteHeadingAndNav /> */}
@@ -30,6 +32,7 @@ export default function App() {
             path="/login"
             element={<LoginPage />}
           />
+          <Route path="/feed" element={<Feed />} />
           <Route
             path="/sign-up"
             element={<SignUpPage />}
@@ -58,5 +61,5 @@ export default function App() {
         </Routes>
       </main>
     </>
-  )
+  );
 }

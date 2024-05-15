@@ -9,6 +9,34 @@ const Profile_1 = __importDefault(require("../models/Profile"));
 const Post_1 = __importDefault(require("../models/Post"));
 const comment_1 = __importDefault(require("../models/comment"));
 async function seed(knex) {
+<<<<<<< HEAD
+    // Deletes ALL existing entries
+    await knex("profiles").del();
+    await knex("users").del();
+    // Inserts seed entries
+    await User_1.default.create({
+        email: "user1@gmail.com",
+        password: "hashed_password1"
+    });
+    await User_1.default.create({
+        email: "user2@gmail.com",
+        password: "hashed_password2"
+    });
+    await Profile_1.default.create({
+        user_id: 1,
+        username: "user1",
+        full_name: "User One",
+        account_type: "regular",
+        bio: "I am user"
+    });
+    await Profile_1.default.create({
+        user_id: 2,
+        username: "user2",
+        full_name: "User Two",
+        account_type: "",
+        bio: "I am user"
+    });
+=======
     try {
         console.log("Cleaning up database...");
         // Deletes ALL existing entries in the correct order
@@ -78,5 +106,6 @@ async function seed(knex) {
     catch (error) {
         console.error("Error during seeding:", error);
     }
+>>>>>>> 9ae93a9541f8e05bcc68958129448a5fd6838487
 }
 exports.seed = seed;

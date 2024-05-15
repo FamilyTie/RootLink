@@ -1,5 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300..900&display=swap");
 .bn-container .bn-block-group {
-  margin-inline: -35px;
+  font-family: "Darker Grotesque";
+  margin-inline: -40px;
+}
+.bn-side-menu.m_4081bf90.mantine-Group-root {
+  margin-right: 20px;
 }
 
 .bn-container[data-theming-css-variables-demo][data-color-scheme] {
@@ -154,7 +159,8 @@ input.ProseMirror::selection {
   content: attr(
     data-placeholder
   ); /* Ensure your BlockNote setup uses `data-placeholder` to define placeholders */
-  color: #a3a3a3; /* This is the equivalent hex color for Tailwind's placeholder-gray-400 */
+  color: #a3a3a3;
+  font-style: normal; /* This is the equivalent hex color for Tailwind's placeholder-gray-400 */
   pointer-events: none;
 }
 
@@ -162,8 +168,12 @@ input.ProseMirror::selection {
 .bn-block-content[data-is-empty-and-focused]
   .bn-inline-content:has(> .ProseMirror-trailingBreak):before {
   content: attr(data-placeholder);
-  color: #a3a3a3;
+  font-style: normal;
+  /* color: rgb(157 173 184); */
   pointer-events: none;
+  font-weight: 500;
+  
+  
 }
 
 /* Applies to all empty blocks of a specific 'blockType' */
@@ -172,6 +182,9 @@ input.ProseMirror::selection {
   content: attr(data-placeholder);
   color: #a3a3a3;
   pointer-events: none;
+  font-style: normal;
+  font-weight: 500;
+
 }
 
 /* Applies to all empty blocks of a specific 'blockType', but only when they contain the text cursor */
@@ -180,6 +193,9 @@ input.ProseMirror::selection {
   content: attr(data-placeholder);
   color: #a3a3a3;
   pointer-events: none;
+  font-style: normal;
+  font-weight: 500;
+
 }
 
 .ProseMirror.bn-editor.bn-default-styles {
@@ -189,4 +205,8 @@ input.ProseMirror::selection {
 /* change image styling within the editor also saves like this   */
 .bn-image {
   max-height: 1rem;
+}
+
+.b-inline-content {
+  font-family: "Darker Grotesque"; ;
 }
