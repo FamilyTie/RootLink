@@ -59,6 +59,3 @@ export const updateUser = async (req: Request, res: Response) => {
   if (!updatedUser) return res.sendStatus(404)
   res.send(updatedUser);
 };
-// const newUser = createUser(bfaurelus@gmail.com,  '12345')
-
-// console.log(newUser)

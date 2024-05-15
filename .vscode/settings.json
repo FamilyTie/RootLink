@@ -5,16 +5,7 @@
       "server": "localhost",
       "port": 5432,
       "driver": "PostgreSQL",
-      "name": "profiles ",
-      "database": "postgres ",
-      "username": "ahmad"
-    },
-    {
-      "previewLimit": 50,
-      "server": "localhost",
-      "port": 5432,
-      "driver": "PostgreSQL",
-      "name": "database ",
+      "name": "profiles",
       "database": "postgres",
       "username": "ahmad"
     },
@@ -23,7 +14,16 @@
       "server": "localhost",
       "port": 5432,
       "driver": "PostgreSQL",
-      "name": "connections ",
+      "name": "database",
+      "database": "postgres",
+      "username": "ahmad"
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "connections",
       "database": "postgres",
       "username": "ahmad"
     },
@@ -45,5 +45,6 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/node_modules": true
-  }
+  },
+  "python.pythonPath": "${workspaceFolder}/backend/venv/bin/python"
 }

@@ -56,5 +56,3 @@ const updateUser = async (req, res) => {
     res.send(updatedUser);
 };
 exports.updateUser = updateUser;
-// const newUser = createUser(bfaurelus@gmail.com,  '12345')
-// console.log(newUser)

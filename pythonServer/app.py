@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 import joblib
 
 
-app = Flask(__name__)
+app = Flask(__namezAss__)
 CORS(app)
 
 @app.route('/api/predict', methods=['POST'])

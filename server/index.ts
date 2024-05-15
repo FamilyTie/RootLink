@@ -1,7 +1,8 @@
 
 require("dotenv").config()
-import path = require("path")
-import express = require("express")
+// import path = require("path")
+import path from 'path'// import express = require("express")
+import * as express from 'express'
 import { handleCookieSessions } from "./middleware/handleCookieSessions"
 import { logRoutes } from "./middleware/logRoutes"
 import authRouter from './routers/authRouter'
@@ -9,6 +10,7 @@ import userRouter from './routers/userRouter';
 import postRouter from './routers/postRouter';
 import { profileRouter } from "./routers/profileRouter"
 import User from "./db/models/User"
+
 
 const app = express();
 
