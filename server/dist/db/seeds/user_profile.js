@@ -7,36 +7,8 @@ exports.seed = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const Profile_1 = __importDefault(require("../models/Profile"));
 const Post_1 = __importDefault(require("../models/Post"));
-const comment_1 = __importDefault(require("../models/comment"));
+const ChatRooms_1 = __importDefault(require("../models/ChatRooms"));
 async function seed(knex) {
-<<<<<<< HEAD
-    // Deletes ALL existing entries
-    await knex("profiles").del();
-    await knex("users").del();
-    // Inserts seed entries
-    await User_1.default.create({
-        email: "user1@gmail.com",
-        password: "hashed_password1"
-    });
-    await User_1.default.create({
-        email: "user2@gmail.com",
-        password: "hashed_password2"
-    });
-    await Profile_1.default.create({
-        user_id: 1,
-        username: "user1",
-        full_name: "User One",
-        account_type: "regular",
-        bio: "I am user"
-    });
-    await Profile_1.default.create({
-        user_id: 2,
-        username: "user2",
-        full_name: "User Two",
-        account_type: "",
-        bio: "I am user"
-    });
-=======
     try {
         console.log("Cleaning up database...");
         // Deletes ALL existing entries in the correct order
@@ -91,21 +63,12 @@ async function seed(knex) {
             created_at: new Date(),
         });
         console.log(`Post 1 ID: ${post1.id}, Post 2 ID: ${post2.id}`);
-        console.log("Inserting comments...");
+        // console.log("Inserting comments...")
         // Inserts seed entries for comments
-        await comment_1.default.create({
-            user_id: user1.id,
-            post_id: post1.id,
-            body: "comment on post 2 aka latest",
-            comment_id: null,
-            created_at: new Date(),
-            updated_at: new Date(),
-        });
-        console.log("Seeding completed successfully.");
+        await ChatRooms_1.default.createChatRoom(user1.id, user2.id);
     }
     catch (error) {
         console.error("Error during seeding:", error);
     }
->>>>>>> 9ae93a9541f8e05bcc68958129448a5fd6838487
 }
 exports.seed = seed;

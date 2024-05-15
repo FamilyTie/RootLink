@@ -26,10 +26,10 @@ exports.loginUser = loginUser;
 // which is the thing that keeps them logged in.
 const logoutUser = (req, res) => {
     req.session = null; // This clears the session
-    // Clear all cookies
     for (const cookieName in req.cookies) {
         res.clearCookie(cookieName);
     }
+    res.sendStatus(204);
 };
 exports.logoutUser = logoutUser;
 // This controller returns 401 if the client is NOT logged in (doesn't have a cookie)
