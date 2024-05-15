@@ -4,9 +4,10 @@ export interface User {
     id: number;
     username: string;
 }
+
 export interface CurrentUserContextType {
     currentUser: User | null; // Assuming currentUser can be null
-    setCurrentUser: (user: User | null) => void;
+    setCurrentUser: (user: User | any) => void;
   }
 
   

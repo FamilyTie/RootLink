@@ -7,10 +7,12 @@ import userRouter from './routers/userRouter';
 import postRouter from './routers/postRouter';
 import { profileRouter } from "./routers/profileRouter"
 import User from "./db/models/User"
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 // Middleware
+app.use(cookieParser());
 app.use(handleCookieSessions); // Adds a session property to each request representing the cookie
 app.use(logRoutes); // Print information about each incoming request
 app.use(express.json()); // Parse incoming request bodies as JSON

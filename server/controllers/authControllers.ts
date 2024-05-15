@@ -1,5 +1,5 @@
 import User from "../db/models/User"
-
+import Profile from "../db/models/Profile"
 // This controller takes the provided username and password and finds
 // the matching user in the database. If the user is found and the password
 // is valid, it adds the userId to the cookie (allowing them to stay logged in)
@@ -20,8 +20,13 @@ export const loginUser = async (req, res) => {
 // This controller sets `req.session` to null, destroying the cookie
 // which is the thing that keeps them logged in.
 export const logoutUser = (req, res) => {
-  req.session = null
-  res.sendStatus(204)
+  req.session = null; // This clears the session
+
+    for (const cookieName in req.cookies) {
+      res.clearCookie(cookieName);
+      
+    }
+    res.sendStatus(204);
 }
 
 // This controller returns 401 if the client is NOT logged in (doesn't have a cookie)
@@ -30,5 +35,7 @@ export const showMe = async (req, res) => {
   if (!req.session.userId) return res.sendStatus(401)
 
   const user = await User.findById(req.session.userId)
-  res.send(user)
+  const profile = await Profile.findById(req.session.userId)
+  
+  res.send({user, profile})
 }

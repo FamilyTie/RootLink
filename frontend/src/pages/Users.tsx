@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllUsers } from "../adapters/user-adapter";
-import UserLink from "../components/UserLink";
+import UserLink from "../components/ui/UserLink";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);

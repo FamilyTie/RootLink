@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { updateUsername } from "../adapters/user-adapter";
-import { User } from "../contexts/current-user-context";
+import { updateUsername } from "../../adapters/user-adapter";
+import { User } from "../../contexts/current-user-context";
 
 export default function UpdateUsernameForm({ currentUser, setCurrentUser }) {
   const navigate = useNavigate();
