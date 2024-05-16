@@ -3,7 +3,7 @@ import { Comment } from "../db/models/comment"
 import { knex } from "../db/knex"
 
 export const createComment = async (req: Request, res: Response) => {
-  const { user_id, post_id, body, comment_id } = req.body
+  const { profile_id, post_id, body, comment_id } = req.body
 
   // First, check if the post exists to ensure the foreign key relation will hold.
   const postExists = await knex("posts").where("id", post_id).first()
@@ -13,7 +13,7 @@ export const createComment = async (req: Request, res: Response) => {
 
   try {
     const newComment = await Comment.create({
-      user_id,
+      profile_id,
       post_id,
       body,
       comment_id,

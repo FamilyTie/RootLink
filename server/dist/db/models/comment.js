@@ -1,11 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Comment = void 0;
 const knex_1 = require("../knex");
+const Post_1 = __importDefault(require("./Post"));
 class Comment {
     constructor(data) {
         this.id = data.id;
-        this.userId = data.user_id;
+        this.profileId = data.profile_id;
         this.postId = data.post_id;
         this.commentId = data.comment_id;
         this.body = data.body;
@@ -25,10 +29,10 @@ class Comment {
     }
     static async create(data) {
         try {
-            const query = `INSERT INTO comments (user_id, post_id, body, comment_id, created_at, updated_at)
+            const query = `INSERT INTO comments (profile_id, post_id, body, comment_id, created_at, updated_at)
                      VALUES (?, ?, ?, ?, ?, ?) RETURNING *`;
             const values = [
-                data.user_id,
+                data.profile_id,
                 data.post_id,
                 data.body,
                 data.comment_id || null,
@@ -36,6 +40,7 @@ class Comment {
                 data.updated_at || new Date(),
             ];
             const { rows } = await knex_1.knex.raw(query, values);
+            Post_1.default.incrementComments(data.post_id);
             return new Comment(rows[0]);
         }
         catch (error) {
@@ -58,6 +63,19 @@ class Comment {
         ];
         const { rows } = await knex_1.knex.raw(query, values);
         return rows[0] ? new Comment(rows[0]) : null;
+    }
+    static async delete(id) {
+        const query = `DELETE FROM comments WHERE id = ?`;
+        await knex_1.knex.raw(query, [id]);
+        Post_1.default.decrementComments(id);
+    }
+    static async decrementLikes(id) {
+        const query = `UPDATE comments SET likes = likes - 1 WHERE id = ?`;
+        await knex_1.knex.raw(query, [id]);
+    }
+    static async incrementLikes(id) {
+        const query = `UPDATE comments SET likes = likes + 1 WHERE id = ?`;
+        await knex_1.knex.raw(query, [id]);
     }
     static async findAll(limit = 20) {
         const query = `SELECT * FROM comments ORDER BY created_at DESC LIMIT ?`;

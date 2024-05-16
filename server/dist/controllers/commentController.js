@@ -4,7 +4,7 @@ exports.updateComment = exports.getCommentsByPost = exports.getAllComments = exp
 const comment_1 = require("../db/models/comment");
 const knex_1 = require("../db/knex");
 const createComment = async (req, res) => {
-    const { user_id, post_id, body, comment_id } = req.body;
+    const { profile_id, post_id, body, comment_id } = req.body;
     // First, check if the post exists to ensure the foreign key relation will hold.
     const postExists = await (0, knex_1.knex)("posts").where("id", post_id).first();
     if (!postExists) {
@@ -12,7 +12,7 @@ const createComment = async (req, res) => {
     }
     try {
         const newComment = await comment_1.Comment.create({
-            user_id,
+            profile_id,
             post_id,
             body,
             comment_id,

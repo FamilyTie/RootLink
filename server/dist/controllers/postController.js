@@ -3,12 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRecentPostByProfile = exports.getRecentPost = exports.createPost = void 0;
+exports.getRecentPostByProfile = exports.getRecentPost = exports.getLikedPosts = exports.createPost = void 0;
 const Post_1 = __importDefault(require("../db/models/Post"));
 const createPost = async (req, res) => {
     try {
-        const { user_id, title, body, profile_id } = req.body;
-        const newPost = await Post_1.default.create({ user_id, title, body, profile_id });
+        const { title, body, profile_id } = req.body;
+        const newPost = await Post_1.default.create({ title, body, profile_id });
         res.status(201).json(newPost);
     }
     catch (error) {
@@ -18,6 +18,12 @@ const createPost = async (req, res) => {
     }
 };
 exports.createPost = createPost;
+const getLikedPosts = async (req, res) => {
+    const profileId = req.params.profileId;
+    const likedPosts = await Post_1.default.getLikedPostsIds(Number(profileId));
+    res.send(Array.from(likedPosts));
+};
+exports.getLikedPosts = getLikedPosts;
 const getRecentPost = async (req, res) => {
     const { lastId } = req.query;
     let numericLastId = Number(lastId);
@@ -27,6 +33,7 @@ const getRecentPost = async (req, res) => {
     }
     try {
         const posts = await Post_1.default.list(numericLastId);
+        console.log(posts);
         res.send(posts);
     }
     catch (error) {

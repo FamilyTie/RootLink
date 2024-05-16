@@ -1,4 +1,11 @@
+import { useNavigate } from "react-router-dom";
 function Welcome({ formData }) {
+  const navigate = useNavigate();
+  
+
+  setTimeout(() => {
+    window.location.reload()
+  }, 1000)
   console.log(formData);
   return (
     <>

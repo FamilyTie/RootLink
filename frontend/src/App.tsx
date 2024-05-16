@@ -4,22 +4,32 @@ import Home from "./pages/Home"
 import SignUpPage from "./pages/SignUp"
 import LoginPage from "./pages/Login"
 import NotFoundPage from "./pages/NotFound"
-import UserContext from "./contexts/current-user-context"
+import CurrentUserContext from "./contexts/current-user-context"
 import { checkForLoggedInUser } from "./adapters/auth-adapter"
 import UsersPage from "./pages/Users"
 import UserPage from "./pages/User"
-import GetPosts from "./components/EditorComponents/GetPosts"
+import GetPosts from "./components/EditorComponents/FeedPosts"
 import CreatePost from "./components/EditorComponents/CreatePost"
 import Feed from "./pages/Feed"
 import ChatApp from "./components/Messeging/mess"
+import { fetchHandler } from "./utils"
+
 export default function App() {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   useEffect(() => {
-    checkForLoggedInUser().then((userObject) =>
-      setCurrentUser(userObject.profile)
-    );
+    const checkLoggedIn = async () => {
+      const user = await checkForLoggedInUser();
+      if (user) {
+        const likedPosts = await fetchHandler(`/api/posts/liked/${user.profile.id}`)
+        user.profile['likedPosts'] =  new Set(likedPosts[0])
+      }
+      setCurrentUser(user.profile);
+    }
+
+    checkLoggedIn()
+ 
   }, [setCurrentUser]);
-  console.log(currentUser);
+  console.log(currentUser, 'Hello World');
   return (
     <>
       {/* <SiteHeadingAndNav /> */}
@@ -49,10 +59,6 @@ export default function App() {
           <Route
             path="/create-post"
             element={<CreatePost refetchPosts={undefined} />}
-          />
-          <Route
-            path="/get-posts"
-            element={<GetPosts />}
           />
           <Route
             path="/chat/:id"

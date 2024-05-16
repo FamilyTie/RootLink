@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
 import SignUpForm from "../authentication/signUpForm";
 import Form from "../components/layout/ProfileForm";
-
-
+import { useNavigate } from "react-router-dom";
+import CurrentUserContext from "../contexts/current-user-context";
+import { useContext } from "react";
 
 export default function signUpPage() {
+  const navigate = useNavigate();
+  const { currentUser } = useContext(CurrentUserContext);
+  if (currentUser) {
+    navigate("/feed");
+  }
   return (
     <>
       <div className="overflow-hidden h-screen relative">

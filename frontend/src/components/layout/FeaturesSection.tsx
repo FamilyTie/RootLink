@@ -24,7 +24,7 @@ const features = [
 ];
 function FeaturesSection() {
   return (
-    <div className="h-screen mt-10 back-blue1">
+    <div className="h-screen mt-10 pb-20 back-blue1">
       <div className="relative pl-[17rem] flex flex-col items-center  py-[5rem]">
         <h1 className="text-[50px] text-[#074979]  ">Features</h1>
         <h2 className="text-[65px] font-semibold  pl-[20rem] mb-16">
