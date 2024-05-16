@@ -2,6 +2,7 @@ import * as path from "path"
 import express, { Application, Request, Response } from "express"
 import { handleCookieSessions } from "./middleware/handleCookieSessions"
 import { logRoutes } from "./middleware/logRoutes"
+import { likeRouter } from "./routers/LikeRouter"
 import authRouter from "./routers/authRouter"
 import userRouter from "./routers/userRouter"
 import postRouter from "./routers/postRouter"
@@ -46,6 +47,8 @@ app.use("/api/posts", postRouter)
 app.use("/api/profiles", profileRouter)
 app.use("/api/comments", commentRouter)
 app.use("/api/chatrooms", ChatRoomRouter)
+app.use("/api/likes", likeRouter)
+
 
 app.get(/^(?!\/api).*/, function (request: Request, response: Response) {
   response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"))

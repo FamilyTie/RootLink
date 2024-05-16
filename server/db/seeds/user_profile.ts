@@ -51,14 +51,12 @@ export async function seed(knex: Knex): Promise<void> {
     console.log("Inserting posts...")
     // Inserts seed entries for posts
     const post1 = await Post.create({
-      user_id: user1.id,
       profile_id: profile1.id,
       title: "lonely",
       body: `[{"id":"b774c317-fb12-418f-a0f8-0723a784b598","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"fsafasfas","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     })
     const post2 = await Post.create({
-      user_id: user1.id,
       profile_id: profile1.id,
       title: "hey",
       body: `[{"id":"b774c317-fb12-418f-a0f8-0723a784b598","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"fsafasfas","styles":{}}],"children":[]}]`,

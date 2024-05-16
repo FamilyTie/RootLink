@@ -78,6 +78,9 @@ function SingUp({ page, setPage, formData, setFormData }) {
           onClick={handleClick}
           isDisabled={false}
         />
+        <p className="text-center pt-5">
+           Have an account? <span className="underline"><a href='/login'>Login</a></span>
+          </p>
       </div>
     </>
   );

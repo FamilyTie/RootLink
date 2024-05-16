@@ -43,7 +43,7 @@ export const fetchHandler = async (url, options = {}) => {
 
 
 
-export async function uploadFileAndGetURL(file) {
+export const uploadFileAndGetURL = async(file) => {
   const storage = getStorage(app);
   const storageRef = ref(storage, `uploads/${file.name}`);
 
@@ -61,4 +61,66 @@ export async function uploadFileAndGetURL(file) {
 }
 
 
+export const fetchPostComments = async(id) => {
+  const [comments, error] = await fetchHandler(`/api/comments/posts?postId=${id}`, basicFetchOptions);
+  if (error) {
+    console.error('Error fetching comments:', error);
+    return [];
+  }
+  return comments;
+}
 
+export const fetchPostLikes = async(id) => {
+
+  const likeData = []
+  const [likes, error] = await fetchHandler(`/api/likes/posts/${id}`, basicFetchOptions);
+  if (error) {
+    console.error('Error fetching likes:', error);
+    return [];
+  }
+
+  for (const like of likes) {
+    const [user, error] = await fetchHandler(`/api/profiles/${like.profileId}`, basicFetchOptions);
+    if (error) {
+      console.error('Error fetching user:', error);
+      return [];
+    }
+    likeData.push({ id: like.id, username: user.username, profilePhoto: user.img });
+  }
+
+  return likeData;
+}
+
+
+
+
+export const fetchCommentLikes = async(id) => {
+  const likeData = []
+  const [likes, error] = await fetchHandler(`/api/likes/comments/${id}`, basicFetchOptions);
+  if (error) {
+    console.error('Error fetching likes:', error);
+    return [];
+  }
+
+  for (const like of likes) {
+    const [user, error] = await fetchHandler(`/api/profiles/${like.profileId}`, basicFetchOptions);
+    if (error) {
+      console.error('Error fetching user:', error);
+      return [];
+    }
+    likeData.push({ id: like.id, username: user.username, profilePhoto: user.img });
+  }
+
+  return likeData;
+}
+
+
+export const profileForPost = async(id) => {
+  const [profile, error] = await fetchHandler(`/api/profiles/${id}`, basicFetchOptions);
+  if (error) {
+    console.error('Error fetching profile:', error);
+    return {};
+  }
+  const { img, username } = profile;
+  return {img, username};
+}
