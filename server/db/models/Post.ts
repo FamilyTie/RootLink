@@ -32,7 +32,7 @@ class Post {
   static async list(lastId: number) {
     try {
       const query = `
-    SELECT 
+      SELECT 
       posts.id,
       posts.title,
       posts.body,
@@ -41,20 +41,22 @@ class Post {
       profiles.username,
       posts.comments_count,
       posts.likes_count,
-      json_agg(json_build_object('profile_id', post_likes.profile_id, 'img', profiles.img) ORDER BY post_likes.id DESC) AS new_likes
-    FROM 
+      json_agg(json_build_object('profile_id', post_likes.profile_id, 'img', liker_profiles.img) ORDER BY post_likes.id DESC) AS new_likes
+  FROM 
       posts
-    LEFT JOIN 
+  LEFT JOIN 
       profiles ON posts.profile_id = profiles.id
-    LEFT JOIN 
+  LEFT JOIN 
       post_likes ON posts.id = post_likes.post_id
-    WHERE 
+  LEFT JOIN 
+      profiles AS liker_profiles ON post_likes.profile_id = liker_profiles.id
+  WHERE 
       posts.id > ?
-    GROUP BY 
+  GROUP BY 
       posts.id, profiles.id
-    ORDER BY 
+  ORDER BY 
       posts.id DESC
-    LIMIT 
+  LIMIT 
       20
   `;
       const { rows } = await knex.raw(query, [lastId]);
