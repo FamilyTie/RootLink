@@ -175,14 +175,8 @@ input.ProseMirror::selection {
   font-style: normal;
   /* color: rgb(157 173 184); */
   pointer-events: none;
-<<<<<<< HEAD
-  font-weight: 500;
-  
-  
-=======
   font-family: "Comic Sans MS", sans-serif;
   font-style: normal;
->>>>>>> 62698fdf6f79f281115b0156fcb07df00b7c121e
 }
 
 /* Applies to all empty blocks of a specific 'blockType' */
@@ -191,14 +185,8 @@ input.ProseMirror::selection {
   content: attr(data-placeholder);
   color: #a3a3a3;
   pointer-events: none;
-<<<<<<< HEAD
-  font-style: normal;
-  font-weight: 500;
-
-=======
   font-family: "Comic Sans MS", sans-serif;
   font-style: normal;
->>>>>>> 62698fdf6f79f281115b0156fcb07df00b7c121e
 }
 
 /* Applies to all empty blocks of a specific 'blockType', but only when they contain the text cursor */
@@ -207,14 +195,8 @@ input.ProseMirror::selection {
   content: attr(data-placeholder);
   color: #a3a3a3;
   pointer-events: none;
-<<<<<<< HEAD
-  font-style: normal;
-  font-weight: 500;
-
-=======
   font-family: "Comic Sans MS", sans-serif;
   font-style: normal;
->>>>>>> 62698fdf6f79f281115b0156fcb07df00b7c121e
 }
 
 .ProseMirror.bn-editor.bn-default-styles {
@@ -225,12 +207,6 @@ input.ProseMirror::selection {
 .bn-image {
   max-height: 1rem;
 }
-<<<<<<< HEAD
-
-.b-inline-content {
-  font-family: "Darker Grotesque"; ;
-}
-=======
 .bn-side-menu.m_4081bf90.mantine-Group-root {
   margin-right: 40px;
 }
@@ -254,4 +230,3 @@ input.ProseMirror::selection {
   color: var(--color-base-grey-70);
   font-style: none;
 } */
->>>>>>> 62698fdf6f79f281115b0156fcb07df00b7c121e
