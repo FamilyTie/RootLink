@@ -15,6 +15,7 @@ export const FormTitle = [
 ];
 function Form() {
   const { currentUser } = useContext(CurrentUserContext);
+  
   const [page, setPage] = useState(0);
   const [formData, setFormData] = useState({
     email: "",

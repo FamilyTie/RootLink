@@ -29,6 +29,8 @@ function ProfileCreation({ page, setPage, formData, setFormData }) {
       setPage((currPage) => currPage + 1);
     }
   };
+
+  
   return (
     <div>
       <div className="mt-2 ">

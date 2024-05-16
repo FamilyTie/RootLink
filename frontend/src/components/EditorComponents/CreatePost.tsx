@@ -147,6 +147,7 @@ function CreatePost({ refetchPosts }) {
                   <BlockNoteView
                     editor={editor}
                     theme={theme}
+                    
                     slashMenu={false}
                     data-theming-css-variables-demo
                     data-changing-font-demo
