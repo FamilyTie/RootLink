@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-function Welcome({ formData, user }) {
+function Welcome({ formData, user, refresh }) {
 
   const navigate = useNavigate();   
   useEffect(() => {
@@ -9,7 +9,7 @@ function Welcome({ formData, user }) {
     }
   }, [user])
 
-  setTimeout(() => window.location.reload(), 1000)
+  setTimeout(() => refresh(), 1000)
   return (
     <>
       <h4 className="text-center mt-2">Registration was successful for...</h4>
