@@ -56,6 +56,19 @@ export class Chatrooms {
     }
   }
 
+  static async findChatRoomsByUserId(user_id: number) {
+    try {
+      const query = `
+        SELECT * FROM chatrooms
+        WHERE user1_id = ? OR user2_id = ?`
+      const { rows } = await knex.raw(query, [user_id, user_id])
+      return rows.map((row: ChatRoomsData) => new Chatrooms(row))
+    } catch (error) {
+      console.error("Error finding chat rooms by user ID:", error)
+      throw error
+    }
+  }
+
   static async deleteChatroom(id: number) {
     try {
       const query = `
