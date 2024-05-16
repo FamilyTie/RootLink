@@ -17,9 +17,19 @@ class Comment {
         this.updatedAt = data.updated_at || new Date();
     }
     static async listByPost(last_id, post_id) {
-        const query = `SELECT * FROM comments WHERE post_id = ? AND id > ? ORDER BY id DESC LIMIT 20`;
+        const query = `
+      SELECT 
+        comments.id, 
+        comments.body, 
+        profiles.username, 
+        profiles.img 
+      FROM comments 
+      JOIN profiles ON comments.profile_id = profiles.id 
+      WHERE comments.post_id = ? AND comments.id > ? 
+      ORDER BY comments.id DESC 
+      LIMIT 20`;
         const { rows } = await knex_1.knex.raw(query, [post_id, last_id]);
-        return rows.map((comment) => new Comment(comment));
+        return rows;
     }
     static async findById(id) {
         const query = `SELECT * FROM comments WHERE id = ?`;

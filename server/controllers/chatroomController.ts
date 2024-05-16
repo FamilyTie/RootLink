@@ -40,6 +40,21 @@ export const deleteChatroom = async (req: Request, res: Response) => {
   }
 }
 
+export const getChatroomsByUserId = async (req: Request, res: Response) => {
+  const { userId } = req.params
+  console.log("controller userId", userId)
+
+  try {
+    const chatrooms = await Chatrooms.findChatRoomsByUserId(Number(userId))
+    res.status(200).json(chatrooms)
+  } catch (error) {
+    console.error("Failed to fetch chatrooms:", error)
+    res
+      .status(500)
+      .json({ message: "Failed to fetch chatrooms", error: error.toString() })
+  }
+}
+
 export const getMessages = async (req: Request, res: Response) => {
   const { id } = req.params
 

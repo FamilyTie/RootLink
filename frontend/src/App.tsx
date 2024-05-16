@@ -11,8 +11,8 @@ import UserPage from "./pages/User"
 import GetPosts from "./components/EditorComponents/FeedPosts"
 import CreatePost from "./components/EditorComponents/CreatePost"
 import Feed from "./pages/Feed"
-import ChatApp from "./components/Messeging/mess"
 import { fetchHandler } from "./utils"
+import ChatApp from "./components/Messeging/Chat"
 
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
@@ -64,6 +64,14 @@ export default function App() {
             path="/chat/:id"
             element={<ChatApp />}
           />
+          <Route
+            path="/chat/:id"
+            element={<ChatApp />}
+          />
+          {/* <Route
+            path="/slack"
+            element={<SlackChat sendMessage={undefined} />}
+          /> */}
           // Add the new route
           <Route
             path="*"

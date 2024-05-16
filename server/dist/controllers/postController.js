@@ -7,8 +7,8 @@ exports.getRecentPostByProfile = exports.getRecentPost = exports.getLikedPosts =
 const Post_1 = __importDefault(require("../db/models/Post"));
 const createPost = async (req, res) => {
     try {
-        const { title, body, profile_id } = req.body;
-        const newPost = await Post_1.default.create({ title, body, profile_id });
+        const { title, body, profile_id, img } = req.body;
+        const newPost = await Post_1.default.create({ title, body, profile_id, img });
         res.status(201).json(newPost);
     }
     catch (error) {
