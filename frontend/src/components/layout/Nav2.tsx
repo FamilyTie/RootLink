@@ -1,8 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import CurrentUserContext from "../../contexts/current-user-context";
+import { logUserOut } from "../../adapters/auth-adapter";
+import { useNavigate } from "react-router-dom";
 
 function Nav2() {
   const letters = "Search something here...".split("");
   const [searchPlaceHolder, setSearchPlaceHolder] = useState("");
+  const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     letters.forEach((letter, index) => {
@@ -11,6 +16,13 @@ function Nav2() {
       }, index * 100); // Adjust the delay as needed
     });
   }, []);
+
+  
+  const handleLogout  = async () => {
+    logUserOut();
+    setCurrentUser(null);
+    navigate("/");
+  }
   return (
     <nav className="flex px-[2%] border-b-[1px]  py-[0.5rem] w-screen bg-white absolute z-[1000]  justify-between">
       <div className="flex   gap-1 ">
@@ -33,8 +45,11 @@ function Nav2() {
       </div>
 
       <div className="flex gap-5">
+        <p className="underline m-auto text-[20px] cursor-pointer" onClick={handleLogout}>Logout</p>
         <p className="text-[25px]  font-medium m-auto">Bryan Ramos</p>
-        <div className="border rounded-full w-[3rem] h-[3rem]"></div>
+        <div className="border overflow-hidden rounded-full w-[3rem] h-[3rem]">
+          <img  className='w-full m-auto' src={currentUser && (currentUser as any).img}></img>
+        </div>
       </div>
     </nav>
   );

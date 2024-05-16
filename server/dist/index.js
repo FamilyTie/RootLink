@@ -30,6 +30,7 @@ const path = __importStar(require("path"));
 const express_1 = __importDefault(require("express"));
 const handleCookieSessions_1 = require("./middleware/handleCookieSessions");
 const logRoutes_1 = require("./middleware/logRoutes");
+const LikeRouter_1 = require("./routers/LikeRouter");
 const authRouter_1 = __importDefault(require("./routers/authRouter"));
 const userRouter_1 = __importDefault(require("./routers/userRouter"));
 const postRouter_1 = __importDefault(require("./routers/postRouter"));
@@ -67,6 +68,7 @@ app.use("/api/posts", postRouter_1.default);
 app.use("/api/profiles", profileRouter_1.profileRouter);
 app.use("/api/comments", commentRouter_1.default);
 app.use("/api/chatrooms", chatroomsRouter_1.default);
+app.use("/api/likes", LikeRouter_1.likeRouter);
 app.get(/^(?!\/api).*/, function (request, response) {
     response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
 });

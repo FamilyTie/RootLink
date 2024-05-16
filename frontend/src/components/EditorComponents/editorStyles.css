@@ -161,11 +161,13 @@ input.ProseMirror::selection {
   content: attr(
     data-placeholder
   ); /* Ensure your BlockNote setup uses `data-placeholder` to define placeholders */
-  color: #a3a3a3;
-  font-style: normal; /* This is the equivalent hex color for Tailwind's placeholder-gray-400 */
+  color: lightgray;
   pointer-events: none;
-  font-family: "Comic Sans MS", sans-serif;
+  font-family: "Darker Grotesque";
   font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  
 }
 
 /* Applies to all empty blocks, but only when they contain the text cursor */
@@ -175,14 +177,9 @@ input.ProseMirror::selection {
   font-style: normal;
   /* color: rgb(157 173 184); */
   pointer-events: none;
-<<<<<<< HEAD
   font-weight: 500;
   
   
-=======
-  font-family: "Comic Sans MS", sans-serif;
-  font-style: normal;
->>>>>>> 62698fdf6f79f281115b0156fcb07df00b7c121e
 }
 
 /* Applies to all empty blocks of a specific 'blockType' */
@@ -191,14 +188,9 @@ input.ProseMirror::selection {
   content: attr(data-placeholder);
   color: #a3a3a3;
   pointer-events: none;
-<<<<<<< HEAD
   font-style: normal;
   font-weight: 500;
 
-=======
-  font-family: "Comic Sans MS", sans-serif;
-  font-style: normal;
->>>>>>> 62698fdf6f79f281115b0156fcb07df00b7c121e
 }
 
 /* Applies to all empty blocks of a specific 'blockType', but only when they contain the text cursor */
@@ -207,14 +199,9 @@ input.ProseMirror::selection {
   content: attr(data-placeholder);
   color: #a3a3a3;
   pointer-events: none;
-<<<<<<< HEAD
   font-style: normal;
   font-weight: 500;
 
-=======
-  font-family: "Comic Sans MS", sans-serif;
-  font-style: normal;
->>>>>>> 62698fdf6f79f281115b0156fcb07df00b7c121e
 }
 
 .ProseMirror.bn-editor.bn-default-styles {
@@ -225,33 +212,7 @@ input.ProseMirror::selection {
 .bn-image {
   max-height: 1rem;
 }
-<<<<<<< HEAD
 
 .b-inline-content {
   font-family: "Darker Grotesque"; ;
 }
-=======
-.bn-side-menu.m_4081bf90.mantine-Group-root {
-  margin-right: 40px;
-}
-/* .bn-block-content {
-  font-family: Georgia, "", Times, serif;
-} */
-.bn-editor * {
-  font-family: "Chiller, cursive";
-}
-
-.bn-container[data-changing-font-demo] .bn-editor * {
-  font-family: "Comic Sans MS", sans-serif;
-}
-
-/* [data-is-empty-and-focused="true"] [aria-placeholder]::before {
-  content: attr(aria-placeholder);
-  font-family: var(--font-family-normal);
-  font-size: var(--typography-body-1-font-size);
-  line-height: inherit;
-  font-weight: var(--typography-body-1-font-weight);
-  color: var(--color-base-grey-70);
-  font-style: none;
-} */
->>>>>>> 62698fdf6f79f281115b0156fcb07df00b7c121e
