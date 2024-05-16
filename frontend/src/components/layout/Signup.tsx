@@ -1,6 +1,7 @@
 import FormInputGroup from "../ui/FormInputGroup";
 import Button from "../ui/Button";
 import { FormTitle } from "../layout/ProfileForm";
+
 function SingUp({ page, setPage, formData, setFormData }) {
   //Validation
   const handleClick = (e) => {
@@ -32,7 +33,6 @@ function SingUp({ page, setPage, formData, setFormData }) {
     if (page === FormTitle.length - 1) {
       console.log(formData);
       window.alert("Are you done with the registration");
-      window.location.reload();
     } else {
       setPage((currPage) => currPage + 1);
     }
