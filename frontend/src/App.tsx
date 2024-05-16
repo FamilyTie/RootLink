@@ -11,7 +11,7 @@ import UsersPage from "./pages/Users"
 import UserPage from "./pages/User"
 import GetPosts from "./components/EditorComponents/GetPosts"
 import CreatePost from "./components/EditorComponents/CreatePost"
-import ChatApp from "./components/Messeging/mess"
+import ChatApp from "./components/Messeging/Chat"
 export default function App() {
   const { setCurrentUser } = useContext(UserContext)
   useEffect(() => {
@@ -55,6 +55,14 @@ export default function App() {
             path="/chat/:id"
             element={<ChatApp />}
           />
+          <Route
+            path="/chat/:id"
+            element={<ChatApp />}
+          />
+          {/* <Route
+            path="/slack"
+            element={<SlackChat sendMessage={undefined} />}
+          /> */}
           // Add the new route
           <Route
             path="*"

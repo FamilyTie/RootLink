@@ -70,10 +70,15 @@ app.get(/^(?!\/api).*/, function (request, response) {
 });
 io.on("connection", (socket) => {
     console.log("New client connected");
+    socket.on("joinRoom", (roomId) => {
+        socket.join(roomId);
+        console.log(`Client joined room ${roomId}`);
+    });
     socket.on("message", async (message) => {
-        // send message to connected user
+        // Save the message to the database
         await ChatRooms_1.default.addMessage(message.chatroomId, message.userId, message.body);
-        io.emit("message", message);
+        // Emit the message to the specific room
+        io.to(message.chatroomId).emit("message", message);
     });
     socket.on("disconnect", () => {
         console.log("Client disconnected");
