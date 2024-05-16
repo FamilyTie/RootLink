@@ -7,7 +7,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [errorText, setErrorText] = useState("");
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
-
+  if (currentUser) return <Navigate to="/feed" />;
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrorText("");
@@ -15,10 +15,12 @@ export default function LoginPage() {
     const [user, error] = await logUserIn(formData as any as UserCredentials);
     if (error) return setErrorText(error.message);
     setCurrentUser(user);
-    navigate(`/feed`);
+
+    window.location.reload();
+
   };
 
-  if (currentUser) return <Navigate to="/" />;
+  
 
   return (
     <>
@@ -64,7 +66,7 @@ export default function LoginPage() {
           </label>
           <input
             type="text"
-            className="border border-[#0A69AE] m-auto rounded-sm w-[210px]"
+            className="border bg-[#ceeafd20] border-[#0A69AE] m-auto rounded-sm w-[210px]"
             autoComplete="email"
             id="email"
             name="email"
@@ -78,7 +80,7 @@ export default function LoginPage() {
           </label>
           <input
             type="password"
-            className="border border-[#0A69AE] m-auto rounded-sm w-[210px]"
+            className="border bg-[#ceeafd20] border-[#0A69AE] m-auto rounded-sm w-[210px]"
             autoComplete="current-password"
             id="password"
             name="password"
@@ -91,7 +93,7 @@ export default function LoginPage() {
             Log-In
           </button>
           <p className="text-center pt-5">
-            Don't have an account? <span className="underline">Sign up</span>
+            Don't have an account? <span className="underline"><a href='/sign-up'>Sign up</a></span>
           </p>
         </form>
         <p className="z-[5] absolute left-[27%] bottom-[3.5rem] text-[32px] font-medium">

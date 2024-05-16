@@ -1,8 +1,8 @@
 import { knex } from "../knex"
-
+import Post from "./Post"
 interface CommentData {
   id?: number
-  user_id: number
+  profile_id: number
   post_id: number
   comment_id?: number // Added comment_id for additional referencing
   body: string
@@ -12,7 +12,7 @@ interface CommentData {
 
 export class Comment {
   id?: number
-  userId: number
+  profileId: number
   postId: number
   commentId?: number // used to reference parent comment
   body: string
@@ -21,7 +21,7 @@ export class Comment {
 
   constructor(data: CommentData) {
     this.id = data.id
-    this.userId = data.user_id
+    this.profileId = data.profile_id
     this.postId = data.post_id
     this.commentId = data.comment_id
     this.body = data.body
@@ -30,9 +30,20 @@ export class Comment {
   }
 
   static async listByPost(last_id: number, post_id: number) {
-    const query = `SELECT * FROM comments WHERE post_id = ? AND id > ? ORDER BY id DESC LIMIT 20`
-    const { rows } = await knex.raw(query, [post_id, last_id])
-    return rows.map((comment: CommentData) => new Comment(comment))
+    const query = `
+      SELECT 
+        comments.id, 
+        comments.body, 
+        profiles.username, 
+        profiles.img 
+      FROM comments 
+      JOIN profiles ON comments.profile_id = profiles.id 
+      WHERE comments.post_id = ? AND comments.id > ? 
+      ORDER BY comments.id DESC 
+      LIMIT 20`;
+  
+    const { rows } = await knex.raw(query, [post_id, last_id]);
+    return rows
   }
 
   static async findById(id: number) {
@@ -44,10 +55,10 @@ export class Comment {
 
   static async create(data: Omit<CommentData, "id">) {
     try {
-      const query = `INSERT INTO comments (user_id, post_id, body, comment_id, created_at, updated_at)
+      const query = `INSERT INTO comments (profile_id, post_id, body, comment_id, created_at, updated_at)
                      VALUES (?, ?, ?, ?, ?, ?) RETURNING *`
       const values = [
-        data.user_id,
+        data.profile_id,
         data.post_id,
         data.body,
         data.comment_id || null,
@@ -55,6 +66,7 @@ export class Comment {
         data.updated_at || new Date(),
       ]
       const { rows } = await knex.raw(query, values)
+      Post.incrementComments(data.post_id)
       return new Comment(rows[0])
     } catch (error) {
       console.error("Failed to create a comment:", error)
@@ -76,6 +88,22 @@ export class Comment {
     ]
     const { rows } = await knex.raw(query, values)
     return rows[0] ? new Comment(rows[0]) : null
+  }
+
+  static async delete(id: number) {
+    const query = `DELETE FROM comments WHERE id = ?`
+    await knex.raw(query, [id])
+    Post.decrementComments(id)
+  }
+
+  static async decrementLikes(id: number) {
+    const query = `UPDATE comments SET likes = likes - 1 WHERE id = ?`
+    await knex.raw(query, [id])
+  }
+  
+  static async incrementLikes(id: number) {
+    const query = `UPDATE comments SET likes = likes + 1 WHERE id = ?`
+    await knex.raw(query, [id])
   }
 
   static async findAll(limit: number = 20) {

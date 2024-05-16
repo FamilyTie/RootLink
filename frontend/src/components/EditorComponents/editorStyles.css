@@ -161,11 +161,13 @@ input.ProseMirror::selection {
   content: attr(
     data-placeholder
   ); /* Ensure your BlockNote setup uses `data-placeholder` to define placeholders */
-  color: #a3a3a3;
-  font-style: normal; /* This is the equivalent hex color for Tailwind's placeholder-gray-400 */
+  color: lightgray;
   pointer-events: none;
-  font-family: "Comic Sans MS", sans-serif;
+  font-family: "Darker Grotesque";
   font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  
 }
 
 /* Applies to all empty blocks, but only when they contain the text cursor */
