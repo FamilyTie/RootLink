@@ -61,7 +61,6 @@ export const updateUsername = async ({ id, username }: User) => (
 
 export const createUserWithProfile = async (formData:  SignUpFormData) => {
   const { email, password, firstName, lastName, username, status, img, bio, adoptionYear, ethnicity } = formData;
-
   const user = await createUser({ email, password });
   console.log(user)
   const userId = user[0].id;
