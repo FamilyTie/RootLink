@@ -54,11 +54,7 @@ export const theme = {
       background: "transparent",
     },
     borderRadius: 5,
-<<<<<<< HEAD
-    fontFamily: "Impact, Charcoal",
-=======
     // fontFamily: "Impact, Charcoal",
->>>>>>> 62698fdf6f79f281115b0156fcb07df00b7c121e
   },
 }
 

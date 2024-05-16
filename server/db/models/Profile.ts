@@ -103,4 +103,26 @@ class Profile {
   }
 }
 
+
+export async function fetchInBatches(batchSize: number): Promise<ProfileData[][]> {
+  const batches: ProfileData[][] = [];
+
+  let offset = 0;
+  while (true) {
+    const profiles = await knex.raw(`SELECT id, data FROM profiles ORDER BY id LIMIT ? OFFSET ?`, [batchSize, offset]);
+    const profileData: ProfileData[] = profiles.rows;
+
+    if (profileData.length === 0) {
+      break;
+    }
+
+    batches.push(profileData);
+    offset += batchSize;
+  }
+
+  return batches;
+}
+
+
+
 export default Profile
