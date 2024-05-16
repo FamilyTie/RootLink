@@ -18,12 +18,16 @@ import Comments from "../../layout/Comments";
 export function Post({ post, postBody }) {
   const { currentUser } = useContext(CurrentUserContext);
   const [initialContent, setInitialContent] = useState(postBody);
+  const [likesCount, setLikesCount] = useState(post.likes_count);
+  const [commentsCount, setCommentsCount] = useState(post.comments_count);
+  const [likes, setLikes] = useState(post.new_likes);
   const [comments, setComments] = useState([]);
   const [commentFormsVisibility, setCommentFormsVisibility] = useState({});
   const [bodyExpanded, setBodyExpanded] = useState(false);
   const [commentsExpanded, setCommentsExpanded] = useState(false);
   const [liked, setLiked] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
+
   useEffect(() => {
     if (!currentUser) return;
     if (
@@ -88,6 +92,7 @@ export function Post({ post, postBody }) {
       ...comments,
       
     ]);
+    setCommentsCount((count) => count + 1);
 
   };
 
@@ -105,6 +110,9 @@ export function Post({ post, postBody }) {
           toast.error("Failed to like post");
         }
       });
+      setLikesCount((count) => count + 1)
+      setLikes((likes) => [...likes, { profile_id: currentUser.id, img: (currentUser as any).img }])
+
     } else {
       console.log("unliking post");
       handleFetch(
@@ -113,6 +121,8 @@ export function Post({ post, postBody }) {
       ).then((response) => {
         if (response) {
           setLiked((liked) => false);
+          setLikesCount((count) => count - 1)
+          setLikes((likes) => likes.filter((like) => like.profile_id !== currentUser.id));
         } else {
           toast.error("Failed to unlike post");
         }
@@ -189,15 +199,22 @@ export function Post({ post, postBody }) {
         </div>
       )}
 
-      {post.like_count && post.like_count > 1 && (
-        <div className="flex">
-          <LikesGraphic likes={post.new_likes} />
-          <div className="flex gap-10  m-auto font-medium translate-y-[6px] text-gray-400">
-            <p className="text-[18px] my-auto">{post.likeCount} likes</p>
-            <p className="text-[18px] my-auto">{post.commentCount} comments</p>
+      { likesCount > 0 &&
+          <div className="flex justify-between  w-full">
+            <div className="flex flex-grow">
+            <LikesGraphic  likes_count={likesCount} likes={likes.slice(0, 3)} />
+            </div>
+          
+          <div className="flex  gap-3  m-auto pr-5 font-medium translate-y-[6px] text-gray-400">
+           <p className="text-[18px]  my-auto ">{likesCount} { likesCount > 1? "likes" : "like"}</p>
+            <p className="text-[18px]  my-auto ">{commentsCount} {commentsCount > 1? "comments": "comment"}</p>
           </div>
         </div>
-      )}
+      }
+        
+ 
+        
+      
       <div className="flex border-t-[1.5px] w-[90%] justify-between  m-auto mt-2   p-1 border-b-[1.5px] border-gray-100">
         {actions.map((action) => (
           <div
