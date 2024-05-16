@@ -4,18 +4,10 @@ import { logUserOut } from "../../adapters/auth-adapter";
 import { useNavigate } from "react-router-dom";
 
 function Nav2() {
-  const letters = "Search something here...".split("");
-  const [searchPlaceHolder, setSearchPlaceHolder] = useState("");
   const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    letters.forEach((letter, index) => {
-      setTimeout(() => {
-        setSearchPlaceHolder((prev) => prev + letter);
-      }, index * 100); // Adjust the delay as needed
-    });
-  }, []);
+
 
   
   const handleLogout  = async () => {
@@ -38,7 +30,7 @@ function Nav2() {
             src="/search.png"
           ></img>
           <input
-            placeholder={searchPlaceHolder}
+            placeholder="Search something here..."
             className="  pb-1 pl-12 text-[1.3rem] placeholder:text-gray-300 text-[#9DADB8] font-medium  m-auto ml-[5rem] w-[22rem] h-[2.2rem]  rounded  border-[2px] "
           ></input>
         </div>

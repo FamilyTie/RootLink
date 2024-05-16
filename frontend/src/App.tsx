@@ -13,9 +13,10 @@ import CreatePost from "./components/EditorComponents/CreatePost"
 import Feed from "./pages/Feed"
 import { fetchHandler } from "./utils"
 import ChatApp from "./components/Messeging/Chat"
-
+import { useState } from "react"
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const [refreshUser, setRefreshUser] = useState(false)
   useEffect(() => {
     const checkLoggedIn = async () => {
       const user = await checkForLoggedInUser();
@@ -28,8 +29,12 @@ export default function App() {
 
     checkLoggedIn()
  
-  }, [setCurrentUser]);
+  }, [setCurrentUser, refreshUser]);
   console.log(currentUser, 'Hello World');
+
+  const handleRefresh = () => {
+    setRefreshUser(!refreshUser)
+  }
   return (
     <>
       {/* <SiteHeadingAndNav /> */}
@@ -41,12 +46,12 @@ export default function App() {
           />
           <Route
             path="/login"
-            element={<LoginPage />}
+            element={<LoginPage refresh={handleRefresh} />}
           />
           <Route path="/feed" element={<Feed />} />
           <Route
             path="/sign-up"
-            element={<SignUpPage />}
+            element={<SignUpPage refresh={handleRefresh}  />}
           />
           <Route
             path="/users"
