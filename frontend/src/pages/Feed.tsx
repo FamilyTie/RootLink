@@ -12,10 +12,13 @@ function Feed() {
   const { currentUser } = useContext(CurrentUserContext)
   const [refetchFlag, setRefetchFlag] = useState(false)
   const [posts, setPosts] = useState([])
-  if (!currentUser) {
-      const navigate = useNavigate()
-      navigate("/")
-  }
+  setTimeout(() => {
+    if (!currentUser) {
+        const navigate = useNavigate()
+        navigate("/")
+    }
+  }, 1000)
+  
 
   useEffect(() => {
     const fetchPosts = async () => {

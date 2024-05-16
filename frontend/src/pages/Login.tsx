@@ -3,7 +3,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { UserCredentials, logUserIn } from "../adapters/auth-adapter";
 import CurrentUserContext, { User } from "../contexts/current-user-context";
 
-export default function LoginPage() {
+export default function LoginPage(refresh) {
   const navigate = useNavigate();
   const [errorText, setErrorText] = useState("");
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
@@ -16,7 +16,7 @@ export default function LoginPage() {
     if (error) return setErrorText(error.message);
     setCurrentUser(user);
 
-    window.location.reload();
+   refresh
 
   };
 
