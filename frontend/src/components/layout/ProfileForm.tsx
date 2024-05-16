@@ -13,7 +13,7 @@ export const FormTitle = [
   "Profile Creation",
   "Done",
 ];
-function Form() {
+function Form(refresh) {
   const { currentUser } = useContext(CurrentUserContext);
   
   const [page, setPage] = useState(0);
@@ -56,6 +56,7 @@ function Form() {
       //   console.log(page);
       return (
         <ProfileCreation
+        
           page={page}
           setPage={setPage}
           formData={formData}
@@ -65,7 +66,7 @@ function Form() {
     } else {
       //   console.log(page);
 
-      return <Welcome  user={currentUser} formData={formData} />;
+      return <Welcome  refresh={refresh} user={currentUser} formData={formData} />;
     }
   };
   return (
