@@ -46,7 +46,7 @@ function Nav2() {
 
       <div className="flex gap-5">
         <p className="underline m-auto text-[20px] cursor-pointer" onClick={handleLogout}>Logout</p>
-        <p className="text-[25px]  font-medium m-auto">Bryan Ramos</p>
+        <p className="text-[25px]  font-medium m-auto">{currentUser && currentUser.username}</p>
         <div className="border overflow-hidden rounded-full w-[3rem] h-[3rem]">
           <img  className='w-full m-auto' src={currentUser && (currentUser as any).img}></img>
         </div>
