@@ -5,7 +5,8 @@ import Address from "./ProfileCreation";
 import Button from "../ui/Button";
 import Welcome from "./Welcome";
 import ProfileCreation from "./ProfileCreation";
-
+import CurrentUserContext from "../../contexts/current-user-context";
+import { useContext } from "react";
 export const FormTitle = [
   "Sign Up",
   "Personal Info",
@@ -13,8 +14,8 @@ export const FormTitle = [
   "Done",
 ];
 function Form() {
+  const { currentUser } = useContext(CurrentUserContext);
   const [page, setPage] = useState(0);
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -63,7 +64,7 @@ function Form() {
     } else {
       //   console.log(page);
 
-      return <Welcome formData={formData} />;
+      return <Welcome  user={currentUser} formData={formData} />;
     }
   };
   return (
