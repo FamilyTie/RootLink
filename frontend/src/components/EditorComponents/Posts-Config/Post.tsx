@@ -190,6 +190,7 @@ export function Post({ post, postBody }) {
             editor={editor}
             editable={false}
             theme={"light"}
+            
           />
         </div>
       )}
@@ -205,9 +206,9 @@ export function Post({ post, postBody }) {
             <LikesGraphic  likes_count={likesCount} likes={likes.slice(0, 3)} />
             </div>
           
-          <div className="flex  gap-3  m-auto pr-5 font-medium translate-y-[6px] text-gray-400">
-           <p className="text-[18px]  my-auto ">{likesCount} { likesCount > 1? "likes" : "like"}</p>
-            <p className="text-[18px]  my-auto ">{commentsCount} {commentsCount > 1? "comments": "comment"}</p>
+          <div className="flex  gap-3  m-auto pr-12 font-medium translate-y-[6px] text-gray-400">
+           <p className="text-[18px]  my-auto ">{likesCount} { likesCount > 1 || likesCount === 0? "likes" : "like"}</p>
+            <p className="text-[18px]  my-auto ">{commentsCount} {commentsCount > 1 || commentsCount === 0? "comments": "comment"}</p>
           </div>
         </div>
       }
