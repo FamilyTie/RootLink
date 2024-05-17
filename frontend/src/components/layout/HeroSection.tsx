@@ -11,7 +11,7 @@ function HeroSection() {
             uncover the missing pieces of their family puzzle, offering hope,
             support, and a pathway to reconnect with lost loved ones.
           </p>
-          <button className="  box-shadow_custom w-[180px] text-white mt-8  text-[20px] bg-[#074979]   h-[55px]">
+          <button className="  font-medium box-shadow_custom w-[180px] text-white mt-8  text-[20px] bg-[#074979]   h-[55px]">
             Start Your Journey
           </button>
         </div>
