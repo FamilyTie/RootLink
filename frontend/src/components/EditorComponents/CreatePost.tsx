@@ -197,7 +197,7 @@ function CreatePost({ refetchPosts }) {
                   />
                   <div className="z-[400] flex gap-1">
                     <img
-                      className="w-[1.5rem] m-auto h-[1.5rem] opacity-30"
+                      className="w-[1rem] m-auto translate-y-[2px] h-[1rem] opacity-30"
                       src="image (1).png"
                       alt="Image Upload"
                     />
