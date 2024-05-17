@@ -2,25 +2,37 @@
 import { text } from "express"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-function SideBar({page}) {
+import { useLocation } from 'react-router-dom';
 
+function SideBar() {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const pathname = location.pathname;
+    const pathIndexes = {
+        '/feed' : 1,
+        '/discover' :  2,
+        '/notifications': 3,
+        "/messages" : 4,
+       "/settings" : 5,
+    }
 
-    const images = [
+    const images  =[
         {id: 1, src: ['/home (1).png', '/home (2).png'], text: 'Home', link: '/feed'},
-        {id: 2, src: ['/compass (2).png', '/compass (3).png'], text: 'Discover'},
+        {id: 2, src: ['/compass (2).png', '/compass (3).png'], text: 'Discover' , link: '/discover'},
         {id: 3, src: ['/notification.png', '/notification (1).png'], text: 'Notifications'},
         {id: 4, src: ['/send (3).png', '/send (4).png'], text: 'Messages'},
         {id: 5, src: ['/setting.png', '/setting (1).png'], text: 'Settings'},
     ]
-    const [clicked, setClicked] = useState(null)
+    
+    const [clicked, setClicked] = useState(pathIndexes[pathname])
     useEffect(() => {
-        setClicked(page)
-    })
+        setClicked(pathIndexes[pathname])
+    }, [pathname])
 
     const handleClick = (link) => {
         //navigate to the link
-        const navigate = useNavigate();
         navigate(link);
+
     }
 
   return (
