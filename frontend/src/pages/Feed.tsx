@@ -34,13 +34,11 @@ function Feed() {
 
   return (
     <div className="">
-      <Nav2 />
-      <SideBar page={1} />
       <div className="overlay-shadow absolute   w-full bottom-0 h-[5rem]"></div>
       <div className="w-full  pl-[15rem] pt-[5rem]     bg-slate-100 h-screen overflow-scroll   rounded-tl-[3rem]   ">
         
         <div className="h-full overflow-scroll">
-          <CreatePost refetchPosts={handleRefetch} />
+          <CreatePost  refetchPosts={handleRefetch} />
           <div className="mt-5">
             <FeedPosts posts={posts} />
           </div>
