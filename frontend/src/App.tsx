@@ -14,8 +14,9 @@ import Feed from "./pages/Feed";
 import { fetchHandler } from "./utils";
 import ChatApp from "./components/Messeging/Chat";
 import { useState } from "react";
-import Discover from "./pages/Discover";
+import Discover from "./pages/Search";
 import Layout from "./Layout";
+import Search from "./pages/Search";
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [refreshUser, setRefreshUser] = useState(false);
@@ -44,10 +45,12 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+
           <Route element={<Layout />}>
-            <Route path="/discover" element={<Discover />} />
+            <Route path="/search/:query?" element={<Search />} />
             <Route path="/feed" element={<Feed />} />
           </Route>
+
           <Route
             path="/login"
             element={<LoginPage refresh={handleRefresh} />}
@@ -58,10 +61,6 @@ export default function App() {
           />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/users/:id" element={<UserPage />} />
-          {/* <Route
-            path="/create-post"
-            element={<CreatePost userImg={} refetchPosts={undefined} />}
-          /> */}
           <Route path="/chat/:id" element={<ChatApp />} />
           <Route path="/chat/:id" element={<ChatApp />} />
           {/* <Route
