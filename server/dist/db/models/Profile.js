@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchInBatches = void 0;
 const knex_1 = require("../knex");
 class Profile {
     constructor(data) {
