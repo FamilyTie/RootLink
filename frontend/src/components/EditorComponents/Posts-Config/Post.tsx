@@ -27,6 +27,7 @@ export function Post({ post, postBody }) {
   const [commentsExpanded, setCommentsExpanded] = useState(false)
   const [liked, setLiked] = useState(false)
   const [newCommentText, setNewCommentText] = useState("")
+  const [profilePhoto, setProfilePhoto] = useState(post.profile_photo)
 
   useEffect(() => {
     if (!currentUser) return
@@ -159,30 +160,35 @@ export function Post({ post, postBody }) {
         pauseOnHover
       />
       <div className="flex pl-[5%]">
-        <img
-          src={
-            post.profile_photo
-              ? post.profile_photo
-              : "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
-          }
-          className="w-12 mr-5 h-12  rounded-full object-cover shadow-sm ml-2 mt-4"
-          alt=""
-        />
+        {post.profile_photo && (
+          <img
+            src={
+              post.profile_photo
+                ? post.profile_photo
+                : "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
+            }
+            className="w-12 mr-2 h-12  p-1 bg-white rounded-full object-cover shadow ml-2 mt-4"
+            alt=""
+          />
+        )}
 
         <div className="my-auto">
-          <p className="text-[25px] my-auto">
+          <p className="text-[25px] font-medium textshadow2 translate-y-[7.5px] my-auto">
             {post.username && post.username}
           </p>
         </div>
       </div>
-      <div className="flex   text-center pt-4 pl-[8%] gap-3">
-        <h1 className="text-[23px]">{post.title}</h1>
-        <p
-          className="underline cursor-pointer text-[20px] my-auto"
-          onClick={() => setBodyExpanded((expanded) => !expanded)}
-        >
-          Read {bodyExpanded ? "Less" : "More"}
-        </p>
+      <div
+        onClick={() => setBodyExpanded((expanded) => !expanded)}
+        className="flex hover:bg-gray-50 rounded-md cursor-pointer justify-between  transition-all duration-200 pl-[2%] mt-2   text-center py-2 mx-[6%] gap-3"
+      >
+        <h1 className="text-[25px] textshadow2">{post.title}</h1>
+        <img
+          src="/down (1).png"
+          className={`w-[1rem] h-[1rem] my-auto translate-x-[-1rem]  translate-y-[5px] transition-all duration-200 ${
+            bodyExpanded ? "rotate-[180deg]" : ""
+          } `}
+        ></img>
       </div>
       {bodyExpanded && (
         <div className="pl-7">

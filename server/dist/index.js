@@ -38,8 +38,10 @@ const profileRouter_1 = require("./routers/profileRouter");
 const commentRouter_1 = __importDefault(require("./routers/commentRouter"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const chatroomsRouter_1 = __importDefault(require("./routers/chatroomsRouter"));
+const searchRouter_1 = require("./routers/searchRouter");
 const cors_1 = __importDefault(require("cors"));
 const ChatRooms_1 = __importDefault(require("./db/models/ChatRooms"));
+// import sendDataToPythonServer from "./db/sendData/dataSender"
 const http = require("http");
 const socketIo = require("socket.io");
 const app = (0, express_1.default)();
@@ -69,6 +71,7 @@ app.use("/api/profiles", profileRouter_1.profileRouter);
 app.use("/api/comments", commentRouter_1.default);
 app.use("/api/chatrooms", chatroomsRouter_1.default);
 app.use("/api/likes", LikeRouter_1.likeRouter);
+app.use("/api/search", searchRouter_1.searchRouter);
 app.get(/^(?!\/api).*/, function (request, response) {
     response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
 });
@@ -99,6 +102,21 @@ io.on("connection", (socket) => {
         console.log("Client disconnected");
     });
 });
+// function sendDataToPythonServer() {
+//   .then(() => {
+//     console.log('Data sent to Python server successfully');
+//     // Start the Express server
+//     app.listen(3000, () => {
+//       console.log('Express server listening on port 3000');
+//     });
+//   })
+//   .catch((error) => {
+//     console.error('Error sending data to Python server:', error);
+//     // If there was an error sending data, you might choose to start the server anyway
+//     app.listen(5000, () => {
+//       console.log('Express server listening on port 3000');
+//     });
+//   });
 const port = process.env.PORT || 3761;
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);

@@ -14,6 +14,9 @@ import Feed from "./pages/Feed"
 import { fetchHandler } from "./utils"
 import ChatApp from "./components/Messeging/ChatApp"
 import { useState } from "react"
+import Discover from "./pages/Search"
+import Layout from "./Layout"
+import Search from "./pages/Search"
 import SidebarChats from "./components/Messeging/sidebarChats"
 import ChatLayout from "./components/Messeging/ChatLayout"
 export default function App() {
@@ -47,6 +50,18 @@ export default function App() {
             path="/"
             element={<Home />}
           />
+
+          <Route element={<Layout />}>
+            <Route
+              path="/search/:query?"
+              element={<Search />}
+            />
+            <Route
+              path="/feed"
+              element={<Feed />}
+            />
+          </Route>
+
           <Route
             path="/login"
             element={<LoginPage refresh={handleRefresh} />}
@@ -76,7 +91,7 @@ export default function App() {
             element={
               <ChatApp
                 username={undefined}
-                userId={undefined}
+                userId={2}
                 chatroomId={undefined}
               />
             }
@@ -99,14 +114,30 @@ export default function App() {
               />
             }
           />
+          <Route
+            path="/sign-up"
+            element={<SignUpPage refresh={handleRefresh} />}
+          />
+          <Route
+            path="/users"
+            element={<UsersPage />}
+          />
+          <Route
+            path="/users/:id"
+            element={<UserPage />}
+          />
           {/* <Route
             path="/slack"
             element={<SlackChat sendMessage={undefined} />}
           /> */}
-          // Add the new route
+          {/* Add the new route */}
           <Route
             path="fed"
             element={<Feed />}
+          />
+          <Route
+            path="*"
+            element={<NotFoundPage />}
           />
           <Route
             path="*"
