@@ -1,53 +1,53 @@
-import { useState, useEffect, useMemo, useContext, useRef } from "react";
-import { BlockNoteView } from "@blocknote/mantine";
-import { BlockNoteEditor } from "@blocknote/core";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { schema } from "../Editor-Configs/Utility";
-import handleFetch from "../Editor-Configs/Fetching";
-import LikesGraphic from "../../ui/LikesGraphic";
+import { useState, useEffect, useMemo, useContext, useRef } from "react"
+import { BlockNoteView } from "@blocknote/mantine"
+import { BlockNoteEditor } from "@blocknote/core"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { schema } from "../Editor-Configs/Utility"
+import handleFetch from "../Editor-Configs/Fetching"
+import LikesGraphic from "../../ui/LikesGraphic"
 import {
   deleteOptions,
   fetchHandler,
   fetchPostComments,
   getPostOptions,
-} from "../../../utils";
-import CurrentUserContext from "../../../contexts/current-user-context";
-import Comments from "../../layout/Comments";
+} from "../../../utils"
+import CurrentUserContext from "../../../contexts/current-user-context"
+import Comments from "../../layout/Comments"
 
 export function Post({ post, postBody }) {
-  const { currentUser } = useContext(CurrentUserContext);
-  const [initialContent, setInitialContent] = useState(postBody);
-  const [likesCount, setLikesCount] = useState(post.likes_count);
-  const [commentsCount, setCommentsCount] = useState(post.comments_count);
-  const [likes, setLikes] = useState(post.new_likes);
-  const [comments, setComments] = useState([]);
-  const [commentFormsVisibility, setCommentFormsVisibility] = useState({});
-  const [bodyExpanded, setBodyExpanded] = useState(false);
-  const [commentsExpanded, setCommentsExpanded] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [newCommentText, setNewCommentText] = useState("");
+  const { currentUser } = useContext(CurrentUserContext)
+  const [initialContent, setInitialContent] = useState(postBody)
+  const [likesCount, setLikesCount] = useState(post.likes_count)
+  const [commentsCount, setCommentsCount] = useState(post.comments_count)
+  const [likes, setLikes] = useState(post.new_likes)
+  const [comments, setComments] = useState([])
+  const [commentFormsVisibility, setCommentFormsVisibility] = useState({})
+  const [bodyExpanded, setBodyExpanded] = useState(false)
+  const [commentsExpanded, setCommentsExpanded] = useState(false)
+  const [liked, setLiked] = useState(false)
+  const [newCommentText, setNewCommentText] = useState("")
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser) return
     if (
       (currentUser as any).likedPosts &&
       (currentUser as any).likedPosts.has(post.id)
     ) {
-      setLiked(true);
+      setLiked(true)
     }
-  }, [currentUser]);
-  console.log(post);
+  }, [currentUser])
+  console.log(post)
 
   useEffect(() => {
     const fetchComments = async () => {
-      const comments = await fetchPostComments(post.id);
-      setComments(comments);
-    };
-    fetchComments();
-  }, [commentsExpanded]);
+      const comments = await fetchPostComments(post.id)
+      setComments(comments)
+    }
+    fetchComments()
+  }, [commentsExpanded])
 
-  console.log(comments);
+  console.log(comments)
 
   const editor = useMemo(() => {
     if (initialContent) {
@@ -57,31 +57,30 @@ export function Post({ post, postBody }) {
           schema,
           readOnly: true,
           editable: false,
-        });
+        })
       } catch (error) {
-        console.error("Failed to create editor:", error);
+        console.error("Failed to create editor:", error)
       }
     }
-  }, [initialContent]);
+  }, [initialContent])
 
   if (!editor) {
-    return <div>Loading editor...</div>;
+    return <div>Loading editor...</div>
   }
 
   const handleCommentSubmit = () => {
-   
     const comment = {
       profile_id: currentUser.id,
       post_id: post.id,
       body: newCommentText,
-    };
-    const response = handleFetch("/api/comments/", getPostOptions(comment));
-    if (response) {
-      toast.success("Comment submitted");
-    } else {
-      toast.error("Failed to submit comment");
     }
-   
+    const response = handleFetch("/api/comments/", getPostOptions(comment))
+    if (response) {
+      toast.success("Comment submitted")
+    } else {
+      toast.error("Failed to submit comment")
+    }
+
     setComments((comments) => [
       {
         profile_id: currentUser.id,
@@ -90,49 +89,51 @@ export function Post({ post, postBody }) {
         body: newCommentText,
       },
       ...comments,
-      
-    ]);
-    setCommentsCount((count) => count + 1);
-
-  };
+    ])
+    setCommentsCount((count) => count + 1)
+  }
 
   const handleLike = () => {
     if (!liked) {
-      console.log("liking post");
+      console.log("liking post")
       const like = {
         profile_id: currentUser.id,
         post_id: post.id,
-      };
+      }
       handleFetch("/api/likes/post", getPostOptions(like)).then((response) => {
         if (response) {
-          setLiked((liked) => true);
+          setLiked((liked) => true)
         } else {
-          toast.error("Failed to like post");
+          toast.error("Failed to like post")
         }
-      });
+      })
       setLikesCount((count) => count + 1)
-      setLikes((likes) => [...likes, { profile_id: currentUser.id, img: (currentUser as any).img }])
-
+      setLikes((likes) => [
+        ...likes,
+        { profile_id: currentUser.id, img: (currentUser as any).img },
+      ])
     } else {
-      console.log("unliking post");
+      console.log("unliking post")
       handleFetch(
         `/api/likes/post?profile_id=${currentUser.id}&post_id=${post.id}`,
         deleteOptions
       ).then((response) => {
         if (response) {
-          setLiked((liked) => false);
+          setLiked((liked) => false)
           setLikesCount((count) => count - 1)
-          setLikes((likes) => likes.filter((like) => like.profile_id !== currentUser.id));
+          setLikes((likes) =>
+            likes.filter((like) => like.profile_id !== currentUser.id)
+          )
         } else {
-          toast.error("Failed to unlike post");
+          toast.error("Failed to unlike post")
         }
-      });
+      })
     }
-  };
+  }
 
   const expandComments = () => {
-    setCommentsExpanded((expanded) => !expanded);
-  };
+    setCommentsExpanded((expanded) => !expanded)
+  }
 
   const actions = [
     {
@@ -142,7 +143,7 @@ export function Post({ post, postBody }) {
     },
     { text: "Comments", src: "/chat-box.png", onClick: expandComments },
     { text: "Share", src: "/share (1).png", onClick: null },
-  ];
+  ]
 
   return (
     <div className="h-full transition-all duration-300 pb-7 bg-white pt-3 w-[35rem] rounded">
@@ -190,7 +191,8 @@ export function Post({ post, postBody }) {
             editor={editor}
             editable={false}
             theme={"light"}
-            
+            sideMenu={false}
+            slashMenu={false}
           />
         </div>
       )}
@@ -200,22 +202,30 @@ export function Post({ post, postBody }) {
         </div>
       )}
 
-      { likesCount > 0 &&
-          <div className="flex justify-between  w-full">
-            <div className="flex flex-grow">
-            <LikesGraphic  likes_count={likesCount} likes={likes.slice(0, 3)} />
-            </div>
-          
+      {likesCount > 0 && (
+        <div className="flex justify-between  w-full">
+          <div className="flex flex-grow">
+            <LikesGraphic
+              likes_count={likesCount}
+              likes={likes.slice(0, 3)}
+            />
+          </div>
+
           <div className="flex  gap-3  m-auto pr-12 font-medium translate-y-[6px] text-gray-400">
-           <p className="text-[18px]  my-auto ">{likesCount} { likesCount > 1 || likesCount === 0? "likes" : "like"}</p>
-            <p className="text-[18px]  my-auto ">{commentsCount} {commentsCount > 1 || commentsCount === 0? "comments": "comment"}</p>
+            <p className="text-[18px]  my-auto ">
+              {likesCount}{" "}
+              {likesCount > 1 || likesCount === 0 ? "likes" : "like"}
+            </p>
+            <p className="text-[18px]  my-auto ">
+              {commentsCount}{" "}
+              {commentsCount > 1 || commentsCount === 0
+                ? "comments"
+                : "comment"}
+            </p>
           </div>
         </div>
-      }
-        
- 
-        
-      
+      )}
+
       <div className="flex border-t-[1.5px] w-[90%] justify-between  m-auto mt-2   p-1 border-b-[1.5px] border-gray-100">
         {actions.map((action) => (
           <div
@@ -263,5 +273,5 @@ export function Post({ post, postBody }) {
       </div>
       {commentsExpanded && <Comments comments={comments} />}
     </div>
-  );
+  )
 }

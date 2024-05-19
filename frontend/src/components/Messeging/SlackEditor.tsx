@@ -2,6 +2,7 @@ import YooptaEditor, { createYooptaEditor } from "@yoopta/editor"
 import Blockquote from "@yoopta/blockquote"
 import Paragraph from "@yoopta/paragraph"
 import Image from "@yoopta/image"
+import { buildBlockData } from "@yoopta/editor"
 import { uploadFileAndGetURL } from "../../utils"
 import {
   Bold,
@@ -21,7 +22,7 @@ import ActionMenuList, {
 } from "@yoopta/action-menu-list"
 import Toolbar, { DefaultToolbarRender } from "@yoopta/toolbar"
 import LinkTool, { DefaultLinkToolRender } from "@yoopta/link-tool"
-import { useMemo, useEffect } from "react"
+import { useMemo, useEffect, useState } from "react"
 import { SlackTopToolbar } from "./Slacktoolbar"
 import "./Slack.css"
 
@@ -93,26 +94,13 @@ const MARKS = [Bold, Italic, CodeMark, Strike, Underline, Highlight]
 
 const SlackChat = ({ sendMessage }) => {
   const editor = useMemo(() => createYooptaEditor(), [])
-
+  const [key, setKey] = useState(Math.random())
   function handleMessageSubmit() {
     const content = editor.getEditorValue()
     console.log("submitContent", content)
     sendMessage(JSON.stringify(content)) // Send the editor content as a string
-    editor.setEditorValue({
-      "142475fb-e046-404c-98be-3ef60c3ab7b9": {
-        id: "142475fb-e046-404c-98be-3ef60c3ab7b9",
-        value: [
-          {
-            id: "c1825d1d-ec3d-49c5-a260-2dc0bfa3521f",
-            type: "paragraph",
-            children: [{ text: "" }],
-            props: { nodeType: "block" },
-          },
-        ],
-        type: "Paragraph",
-        meta: { order: 0, depth: 0 },
-      },
-    })
+    editor.setEditorValue({ document: buildBlockData() })
+    setKey(Math.random())
   }
 
   function handleChange(value) {
@@ -134,18 +122,20 @@ const SlackChat = ({ sendMessage }) => {
       id="slack"
       className="relative"
     >
-      <div className="relative border border-gray-600 rounded-lg bg-gray-900 w-full max-w-xl mx-auto">
-        <div className="flex flex-col pt-10 px-4 pb-4">
+      <div className="relative border border-gray-600 rounded-lg w-full max-w-xl mx-auto">
+        <div className="flex flex-col pt-10 px-4 pb-4 ">
           <YooptaEditor
             editor={editor}
             // @ts-ignore
             plugins={plugins}
             marks={MARKS}
-            className="editor text-white"
+            className="editor text-[rgb(189,189,189)]"
             placeholder="Type your message..."
             selectionBoxRoot={false}
             width="100%"
             submit={handleMessageSubmit}
+            autoFocus={true}
+            key={key}
           >
             <SlackTopToolbar handleMessageSubmit={handleMessageSubmit} />
           </YooptaEditor>

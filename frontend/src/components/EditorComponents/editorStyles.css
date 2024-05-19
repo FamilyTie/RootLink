@@ -167,7 +167,6 @@ input.ProseMirror::selection {
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
-  
 }
 
 /* Applies to all empty blocks, but only when they contain the text cursor */
@@ -178,8 +177,6 @@ input.ProseMirror::selection {
   /* color: rgb(157 173 184); */
   pointer-events: none;
   font-weight: 500;
-  
-  
 }
 
 /* Applies to all empty blocks of a specific 'blockType' */
@@ -190,7 +187,6 @@ input.ProseMirror::selection {
   pointer-events: none;
   font-style: normal;
   font-weight: 500;
-
 }
 
 /* Applies to all empty blocks of a specific 'blockType', but only when they contain the text cursor */
@@ -201,7 +197,6 @@ input.ProseMirror::selection {
   pointer-events: none;
   font-style: normal;
   font-weight: 500;
-
 }
 
 .ProseMirror.bn-editor.bn-default-styles {
@@ -214,5 +209,5 @@ input.ProseMirror::selection {
 }
 
 .b-inline-content {
-  font-family: "Darker Grotesque"; ;
+  font-family: "Darker Grotesque";
 }

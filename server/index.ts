@@ -9,7 +9,7 @@ import postRouter from "./routers/postRouter"
 import { profileRouter } from "./routers/profileRouter"
 import commentRouter from "./routers/commentRouter"
 import User from "./db/models/User"
-import cookieParser from 'cookie-parser';
+import cookieParser from "cookie-parser"
 import ChatRoomRouter from "./routers/chatroomsRouter"
 import cors from "cors"
 import Chatrooms from "./db/models/ChatRooms"
@@ -34,7 +34,7 @@ app.use(
   })
 )
 
-app.use(cookieParser());
+app.use(cookieParser())
 app.use(handleCookieSessions)
 app.use(logRoutes)
 app.use(express.json())
@@ -49,11 +49,9 @@ app.use("/api/comments", commentRouter)
 app.use("/api/chatrooms", ChatRoomRouter)
 app.use("/api/likes", likeRouter)
 
-
 app.get(/^(?!\/api).*/, function (request: Request, response: Response) {
   response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"))
 })
-
 io.on("connection", (socket) => {
   console.log("New client connected")
 
@@ -63,10 +61,22 @@ io.on("connection", (socket) => {
   })
 
   socket.on("message", async (message) => {
-    // Save the message to the database
-    await Chatrooms.addMessage(message.chatroomId, message.userId, message.body)
-    // Emit the message to the specific room
-    io.to(message.chatroomId).emit("message", message)
+    const { chatroomId, userId, body } = message
+    console.log("Received message:", { chatroomId, userId, body })
+
+    if (!chatroomId || !userId || !body) {
+      console.error("Invalid message format:", message)
+      return
+    }
+
+    try {
+      // Save the message to the database
+      const savedMessage = await Chatrooms.addMessage(chatroomId, userId, body)
+      // Emit the message to the specific room
+      io.to(chatroomId).emit("message", savedMessage)
+    } catch (error) {
+      console.error("Error adding message:", error)
+    }
   })
 
   socket.on("disconnect", () => {

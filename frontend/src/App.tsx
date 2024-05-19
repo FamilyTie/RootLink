@@ -12,25 +12,28 @@ import GetPosts from "./components/EditorComponents/FeedPosts"
 import CreatePost from "./components/EditorComponents/CreatePost"
 import Feed from "./pages/Feed"
 import { fetchHandler } from "./utils"
-import ChatApp from "./components/Messeging/Chat"
+import ChatApp from "./components/Messeging/ChatApp"
 import { useState } from "react"
+import SidebarChats from "./components/Messeging/sidebarChats"
+import ChatLayout from "./components/Messeging/ChatLayout"
 export default function App() {
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
   const [refreshUser, setRefreshUser] = useState(false)
   useEffect(() => {
     const checkLoggedIn = async () => {
-      const user = await checkForLoggedInUser();
+      const user = await checkForLoggedInUser()
       if (user) {
-        const likedPosts = await fetchHandler(`/api/posts/liked/${user.profile.id}`)
-        user.profile['likedPosts'] =  new Set(likedPosts[0])
+        const likedPosts = await fetchHandler(
+          `/api/posts/liked/${user.profile.id}`
+        )
+        user.profile["likedPosts"] = new Set(likedPosts[0])
       }
-      setCurrentUser(user.profile);
+      setCurrentUser(user.profile)
     }
 
     checkLoggedIn()
- 
-  }, [setCurrentUser, refreshUser]);
-  console.log(currentUser, 'Hello World');
+  }, [setCurrentUser, refreshUser])
+  console.log(currentUser, "Hello World")
 
   const handleRefresh = () => {
     setRefreshUser(!refreshUser)
@@ -48,10 +51,13 @@ export default function App() {
             path="/login"
             element={<LoginPage refresh={handleRefresh} />}
           />
-          <Route path="/feed" element={<Feed />} />
+          <Route
+            path="/feed"
+            element={<Feed />}
+          />
           <Route
             path="/sign-up"
-            element={<SignUpPage refresh={handleRefresh}  />}
+            element={<SignUpPage refresh={handleRefresh} />}
           />
           <Route
             path="/users"
@@ -67,11 +73,31 @@ export default function App() {
           />
           <Route
             path="/chat/:id"
-            element={<ChatApp />}
+            element={
+              <ChatApp
+                username={undefined}
+                userId={undefined}
+                chatroomId={undefined}
+              />
+            }
           />
           <Route
-            path="/chat/:id"
-            element={<ChatApp />}
+            path="/chats"
+            element={
+              <SidebarChats
+                userId={2}
+                onSelectChatroom={undefined}
+              />
+            }
+          />
+          <Route
+            path="/chats-Lay"
+            element={
+              <ChatLayout
+                userId={2}
+                username={undefined}
+              />
+            }
           />
           {/* <Route
             path="/slack"
@@ -79,11 +105,15 @@ export default function App() {
           /> */}
           // Add the new route
           <Route
+            path="fed"
+            element={<Feed />}
+          />
+          <Route
             path="*"
             element={<NotFoundPage />}
           />
         </Routes>
       </main>
     </>
-  );
+  )
 }

@@ -32,15 +32,17 @@ export async function seed(knex: Knex): Promise<void> {
     console.log("Inserting profiles...")
     // Inserts seed entries for profiles
     const profile1 = await Profile.create({
+      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9NIE8BeFEd772P4ic_8xbf3olCG7PbF81q9HDjSjQVw&s",
       user_id: user1.id,
-      username: "user1",
+      username: "Vegeta",
       full_name: "User One",
       bio: "I am user",
       account_type: "regular",
     })
     const profile2 = await Profile.create({
+      img: "https://dragonball.guru/wp-content/uploads/2021/03/goku-profile-e1616173641804-400x400.png",
       user_id: user2.id,
-      username: "user2",
+      username: "Goku",
       full_name: "User Two",
       bio: "I am user",
       account_type: "regular",
@@ -67,7 +69,11 @@ export async function seed(knex: Knex): Promise<void> {
 
     // console.log("Inserting comments...")
     // Inserts seed entries for comments
-    const chatRoom1 = await Chatrooms.createChatRoom(user1.id, user2.id)
+    const { chatroom: chatRoom1 } = await Chatrooms.createChatRoom(
+      user1.id,
+      user2.id
+    )
+
     await Chatrooms.addMessage(
       chatRoom1.id,
       user1.id,

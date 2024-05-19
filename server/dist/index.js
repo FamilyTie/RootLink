@@ -79,10 +79,21 @@ io.on("connection", (socket) => {
         console.log(`Client joined room ${roomId}`);
     });
     socket.on("message", async (message) => {
-        // Save the message to the database
-        await ChatRooms_1.default.addMessage(message.chatroomId, message.userId, message.body);
-        // Emit the message to the specific room
-        io.to(message.chatroomId).emit("message", message);
+        const { chatroomId, userId, body } = message;
+        console.log("Received message:", { chatroomId, userId, body });
+        if (!chatroomId || !userId || !body) {
+            console.error("Invalid message format:", message);
+            return;
+        }
+        try {
+            // Save the message to the database
+            const savedMessage = await ChatRooms_1.default.addMessage(chatroomId, userId, body);
+            // Emit the message to the specific room
+            io.to(chatroomId).emit("message", savedMessage);
+        }
+        catch (error) {
+            console.error("Error adding message:", error);
+        }
     });
     socket.on("disconnect", () => {
         console.log("Client disconnected");
