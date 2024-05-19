@@ -8,11 +8,13 @@ import userRouter from "./routers/userRouter"
 import postRouter from "./routers/postRouter"
 import { profileRouter } from "./routers/profileRouter"
 import commentRouter from "./routers/commentRouter"
-import User from "./db/models/User"
 import cookieParser from "cookie-parser"
 import ChatRoomRouter from "./routers/chatroomsRouter"
+import { searchRouter } from "./routers/searchRouter"
 import cors from "cors"
 import Chatrooms from "./db/models/ChatRooms"
+
+// import sendDataToPythonServer from "./db/sendData/dataSender"
 const http = require("http")
 const socketIo = require("socket.io")
 
@@ -48,6 +50,7 @@ app.use("/api/profiles", profileRouter)
 app.use("/api/comments", commentRouter)
 app.use("/api/chatrooms", ChatRoomRouter)
 app.use("/api/likes", likeRouter)
+app.use("/api/search", searchRouter)
 
 app.get(/^(?!\/api).*/, function (request: Request, response: Response) {
   response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"))
@@ -83,6 +86,25 @@ io.on("connection", (socket) => {
     console.log("Client disconnected")
   })
 })
+
+// function sendDataToPythonServer() {
+
+//   .then(() => {
+//     console.log('Data sent to Python server successfully');
+
+//     // Start the Express server
+//     app.listen(3000, () => {
+//       console.log('Express server listening on port 3000');
+//     });
+//   })
+//   .catch((error) => {
+//     console.error('Error sending data to Python server:', error);
+
+//     // If there was an error sending data, you might choose to start the server anyway
+//     app.listen(5000, () => {
+//       console.log('Express server listening on port 3000');
+//     });
+//   });
 
 const port = process.env.PORT || 3761
 server.listen(port, () => {

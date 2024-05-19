@@ -12,10 +12,11 @@ import GetPosts from "./components/EditorComponents/FeedPosts"
 import CreatePost from "./components/EditorComponents/CreatePost"
 import Feed from "./pages/Feed"
 import { fetchHandler } from "./utils"
-import ChatApp from "./components/Messeging/ChatApp"
+import ChatApp from "./components/Messeging/Chat"
 import { useState } from "react"
-import SidebarChats from "./components/Messeging/sidebarChats"
-import ChatLayout from "./components/Messeging/ChatLayout"
+import Discover from "./pages/Search"
+import Layout from "./Layout"
+import Search from "./pages/Search"
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
   const [refreshUser, setRefreshUser] = useState(false)
@@ -47,13 +48,19 @@ export default function App() {
             path="/"
             element={<Home />}
           />
+          <Route element={<Layout />}>
+            <Route
+              path="/search/:query?"
+              element={<Search />}
+            />
+            <Route
+              path="/feed"
+              element={<Feed />}
+            />
+          </Route>
           <Route
             path="/login"
             element={<LoginPage refresh={handleRefresh} />}
-          />
-          <Route
-            path="/feed"
-            element={<Feed />}
           />
           <Route
             path="/sign-up"
@@ -68,46 +75,18 @@ export default function App() {
             element={<UserPage />}
           />
           <Route
-            path="/create-post"
-            element={<CreatePost refetchPosts={undefined} />}
+            path="/chat/:id"
+            element={<ChatApp />}
           />
           <Route
             path="/chat/:id"
-            element={
-              <ChatApp
-                username={undefined}
-                userId={undefined}
-                chatroomId={undefined}
-              />
-            }
-          />
-          <Route
-            path="/chats"
-            element={
-              <SidebarChats
-                userId={2}
-                onSelectChatroom={undefined}
-              />
-            }
-          />
-          <Route
-            path="/chats-Lay"
-            element={
-              <ChatLayout
-                userId={2}
-                username={undefined}
-              />
-            }
+            element={<ChatApp />}
           />
           {/* <Route
             path="/slack"
             element={<SlackChat sendMessage={undefined} />}
           /> */}
           // Add the new route
-          <Route
-            path="fed"
-            element={<Feed />}
-          />
           <Route
             path="*"
             element={<NotFoundPage />}

@@ -3,6 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.darkText  {
+  font-family: "Darker Grotesque";
+}
 body {
   font-family: "Darker Grotesque";
   margin: 0;

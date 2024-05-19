@@ -16,13 +16,14 @@ function FeedPosts({posts}) {
   console.log(posts)
 
   return (
-    <div className="bg-gray-100 min-h-screen py-10">
+    <div className="bg-gray-100 min-h-screen pb-10">
       
-      <div className="flex flex-col  space-y-4">
+      <div className="flex flex-col ">
         
         { posts.map((post) => (
           <Post key={post.id} postBody={JSON.parse(post.body)} post={post}/>
         ))}
+        
       </div>
     </div>
   );

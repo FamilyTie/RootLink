@@ -38,6 +38,7 @@ const profileRouter_1 = require("./routers/profileRouter");
 const commentRouter_1 = __importDefault(require("./routers/commentRouter"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const chatroomsRouter_1 = __importDefault(require("./routers/chatroomsRouter"));
+const searchRouter_1 = require("./routers/searchRouter");
 const cors_1 = __importDefault(require("cors"));
 const ChatRooms_1 = __importDefault(require("./db/models/ChatRooms"));
 const http = require("http");
@@ -69,6 +70,7 @@ app.use("/api/profiles", profileRouter_1.profileRouter);
 app.use("/api/comments", commentRouter_1.default);
 app.use("/api/chatrooms", chatroomsRouter_1.default);
 app.use("/api/likes", LikeRouter_1.likeRouter);
+app.use("/api/search", searchRouter_1.searchRouter);
 app.get(/^(?!\/api).*/, function (request, response) {
     response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
 });
