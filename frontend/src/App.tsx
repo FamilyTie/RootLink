@@ -12,11 +12,13 @@ import GetPosts from "./components/EditorComponents/FeedPosts"
 import CreatePost from "./components/EditorComponents/CreatePost"
 import Feed from "./pages/Feed"
 import { fetchHandler } from "./utils"
-import ChatApp from "./components/Messeging/Chat"
+import ChatApp from "./components/Messeging/ChatApp"
 import { useState } from "react"
 import Discover from "./pages/Search"
 import Layout from "./Layout"
 import Search from "./pages/Search"
+import SidebarChats from "./components/Messeging/sidebarChats"
+import ChatLayout from "./components/Messeging/ChatLayout"
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
   const [refreshUser, setRefreshUser] = useState(false)
@@ -76,16 +78,32 @@ export default function App() {
           />
           <Route
             path="/chat/:id"
-            element={<ChatApp />}
+            element={
+              <ChatApp
+                username={undefined}
+                userId={undefined}
+                chatroomId={undefined}
+              />
+            }
           />
           <Route
-            path="/chat/:id"
-            element={<ChatApp />}
+            path="/chats"
+            element={
+              <SidebarChats
+                userId={2}
+                onSelectChatroom={undefined}
+              />
+            }
           />
-          {/* <Route
-            path="/slack"
-            element={<SlackChat sendMessage={undefined} />}
-          /> */}
+          <Route
+            path="/chats-Lay"
+            element={
+              <ChatLayout
+                userId={2}
+                username={undefined}
+              />
+            }
+          />
           // Add the new route
           <Route
             path="*"
