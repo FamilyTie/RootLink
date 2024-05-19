@@ -71,4 +71,19 @@ class Profile {
         }
     }
 }
+async function fetchInBatches(batchSize) {
+    const batches = [];
+    let offset = 0;
+    while (true) {
+        const profiles = await knex_1.knex.raw(`SELECT id, data FROM profiles ORDER BY id LIMIT ? OFFSET ?`, [batchSize, offset]);
+        const profileData = profiles.rows;
+        if (profileData.length === 0) {
+            break;
+        }
+        batches.push(profileData);
+        offset += batchSize;
+    }
+    return batches;
+}
+exports.fetchInBatches = fetchInBatches;
 exports.default = Profile;
