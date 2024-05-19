@@ -17,7 +17,20 @@ class Chatrooms {
         VALUES (?, ?)
         RETURNING *`;
             const { rows } = await knex_1.knex.raw(query, [user1_id, user2_id]);
-            return new Chatrooms(rows[0]);
+            const chatroom = new Chatrooms(rows[0]);
+            // Get user details
+            const userDetailsQuery = `
+        SELECT id, username, full_name, img 
+        FROM profiles
+        WHERE id = ? OR id = ?`;
+            const { rows: userDetails } = await knex_1.knex.raw(userDetailsQuery, [
+                user1_id,
+                user2_id,
+            ]);
+            return {
+                chatroom,
+                users: userDetails,
+            };
         }
         catch (error) {
             console.error("Error creating chat room:", error);
@@ -36,7 +49,22 @@ class Chatrooms {
                 user2_id,
                 user1_id,
             ]);
-            return rows.length ? new Chatrooms(rows[0]) : null;
+            const chatroom = rows.length ? new Chatrooms(rows[0]) : null;
+            if (!chatroom)
+                return null;
+            // Get user details
+            const userDetailsQuery = `
+        SELECT id, username, full_name, img 
+        FROM profiles
+        WHERE id = ? OR id = ?`;
+            const { rows: userDetails } = await knex_1.knex.raw(userDetailsQuery, [
+                user1_id,
+                user2_id,
+            ]);
+            return {
+                chatroom,
+                users: userDetails,
+            };
         }
         catch (error) {
             console.error("Error finding chat room:", error);
@@ -49,7 +77,21 @@ class Chatrooms {
         SELECT * FROM chatrooms
         WHERE user1_id = ? OR user2_id = ?`;
             const { rows } = await knex_1.knex.raw(query, [user_id, user_id]);
-            return rows.map((row) => new Chatrooms(row));
+            const chatrooms = rows.map((row) => new Chatrooms(row));
+            // Get unique user IDs from chatrooms
+            const userIds = [
+                ...new Set(rows.flatMap((row) => [row.user1_id, row.user2_id])),
+            ];
+            // Get user details
+            const userDetailsQuery = `
+        SELECT id, username, full_name, img 
+        FROM profiles
+        WHERE id = ANY(?)`;
+            const { rows: userDetails } = await knex_1.knex.raw(userDetailsQuery, [userIds]);
+            return {
+                chatrooms,
+                users: userDetails,
+            };
         }
         catch (error) {
             console.error("Error finding chat rooms by user ID:", error);
@@ -73,8 +115,11 @@ class Chatrooms {
     static async getMessages(chatroomId) {
         try {
             const query = `
-        SELECT * FROM messages
-        WHERE chatroom_id = ?`;
+        SELECT messages.*, profiles.username, profiles.full_name, profiles.img
+        FROM messages
+        JOIN profiles ON messages.user_sent = profiles.id
+        WHERE messages.chatroom_id = ?
+        ORDER BY messages.id DESC`;
             const { rows } = await knex_1.knex.raw(query, [chatroomId]);
             return rows;
         }
@@ -85,6 +130,14 @@ class Chatrooms {
     }
     static async addMessage(id, userId, body) {
         try {
+            if (id === undefined || userId === undefined || body === undefined) {
+                console.error("Invalid parameters received in addMessage:", {
+                    id,
+                    userId,
+                    body,
+                });
+                throw new Error("Invalid parameters: id, userId, and body are required");
+            }
             console.log("chatroomId:", id);
             console.log("userId:", userId);
             console.log("body:", body);
@@ -93,7 +146,23 @@ class Chatrooms {
         VALUES (?, ?, ?)
         RETURNING *`;
             const { rows } = await knex_1.knex.raw(query, [id, userId, body]);
-            return rows.length ? rows[0] : null;
+            const message = rows.length ? rows[0] : null;
+            if (!message) {
+                throw new Error("Failed to add message");
+            }
+            // Get sender details
+            const userDetailsQuery = `
+        SELECT id, username, full_name, img 
+        FROM profiles
+        WHERE id = ?`;
+            const { rows: userDetails } = await knex_1.knex.raw(userDetailsQuery, [userId]);
+            const fullMessage = {
+                ...message,
+                username: userDetails[0].username,
+                full_name: userDetails[0].full_name,
+                img: userDetails[0].img,
+            };
+            return fullMessage;
         }
         catch (error) {
             console.error("Error adding message:", error);

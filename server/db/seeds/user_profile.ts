@@ -251,130 +251,130 @@ export async function seed(knex: Knex): Promise<void> {
     await Profile.create(profile);
   }
 
-  const profiles1 = await knex('profiles').select('*');
-  console.log(profiles1)
+  const seedingProfiles = await knex('profiles').select('*');
+  console.log(seedingProfiles)
   const posts = [
     {
-      profile_id: profiles1[0].id,
+      profile_id: seedingProfiles[0].id,
       title: "My Adoption Journey",
       body: `[{"id":"1","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"I have always wondered about my birth family...","styles":{}}],"children":[]}]`,
       img: 'https://images.pexels.com/photos/847489/pexels-photo-847489.jpeg',
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[1].id,
+      profile_id: seedingProfiles[1].id,
       title: "Searching for My Son",
       body: `[{"id":"2","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"I am looking for my son who was adopted...","styles":{}}],"children":[]}]`,
       img: 'https://images.pexels.com/photos/1236701/pexels-photo-1236701.jpeg',
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[2].id,
+      profile_id: seedingProfiles[2].id,
       title: "Finding My Roots",
       body: `[{"id":"3","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"As an adoptee, I have always felt a part of me was missing...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[3].id,
+      profile_id: seedingProfiles[3].id,
       title: "A Mother's Hope",
       body: `[{"id":"4","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"I placed my daughter for adoption years ago...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[4].id,
+      profile_id: seedingProfiles[4].id,
       title: "Cultural Connections",
       body: `[{"id":"5","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"I want to learn more about my Asian heritage...","styles":{}}],"children":[]}]`,
       img: 'https://images.pexels.com/photos/920209/pexels-photo-920209.jpeg',
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[5].id,
+      profile_id: seedingProfiles[5].id,
       title: "Reunion Dreams",
       body: `[{"id":"6","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"I dream of reuniting with my birth family someday...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[6].id,
+      profile_id: seedingProfiles[6].id,
       title: "Family and Heritage",
       body: `[{"id":"7","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"Learning about my heritage has always been important to me...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[7].id,
+      profile_id: seedingProfiles[7].id,
       title: "Longing for Reunion",
       body: `[{"id":"8","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"Every day I think about the possibility of reuniting with my birth parents...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[8].id,
+      profile_id: seedingProfiles[8].id,
       title: "Connecting with My Culture",
       body: `[{"id":"9","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"I have always felt a strong connection to my cultural heritage...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[9].id,
+      profile_id: seedingProfiles[9].id,
       title: "Hopes and Dreams",
       body: `[{"id":"10","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"I hope to one day meet my birth family and learn about their lives...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[10].id,
+      profile_id: seedingProfiles[10].id,
       title: "Finding My Place",
       body: `[{"id":"11","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"As an adoptee, finding my place in the world has been a journey...","styles":{}}],"children":[]}]`,
       img: 'https://images.pexels.com/photos/1235453/pexels-photo-1235453.jpeg',
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[11].id,
+      profile_id: seedingProfiles[11].id,
       title: "A Parent's Love",
       body: `[{"id":"12","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"I have always loved my child and hope to one day reunite with them...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[12].id,
+      profile_id: seedingProfiles[12].id,
       title: "Tracing My Ancestry",
       body: `[{"id":"13","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"I have spent years tracing my ancestry in hopes of finding my birth family...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[13].id,
+      profile_id: seedingProfiles[13].id,
       title: "Discovering My Past",
       body: `[{"id":"14","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"Learning about my past has been a long and emotional journey...","styles":{}}],"children":[]}]`,
       img: 'https://images.pexels.com/photos/1237118/pexels-photo-1237118.jpeg',
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[14].id,
+      profile_id: seedingProfiles[14].id,
       title: "The Search for Family",
       body: `[{"id":"15","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"I have always been searching for my birth family...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[15].id,
+      profile_id: seedingProfiles[15].id,
       title: "Finding Connection",
       body: `[{"id":"16","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"Connecting with my birth family has always been a dream of mine...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[16].id,
+      profile_id: seedingProfiles[16].id,
       title: "Family Ties",
       body: `[{"id":"17","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"The ties of family are strong, even through adoption...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[17].id,
+      profile_id: seedingProfiles[17].id,
       title: "Heritage and History",
       body: `[{"id":"18","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"Understanding my heritage has been key to understanding myself...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[18].id,
+      profile_id: seedingProfiles[18].id,
       title: "A Journey of Discovery",
       body: `[{"id":"19","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"Learning about my adoption story has been a journey of discovery...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
     },
     {
-      profile_id: profiles1[19].id,
+      profile_id: seedingProfiles[19].id,
       title: "Finding Peace",
       body: `[{"id":"20","type":"paragraph","props":{"textColor":"default","backgroundColor":"default","textAlignment":"left"},"content":[{"type":"text","text":"Finding peace with my adoption story has been challenging but rewarding...","styles":{}}],"children":[]}]`,
       created_at: new Date(),
@@ -384,21 +384,25 @@ export async function seed(knex: Knex): Promise<void> {
   for (const post of posts) {
     await Post.create(post);
   }
-    const chatRoom1 = await Chatrooms.createChatRoom(profiles1[0].id, profiles1[1].id)
-    await Chatrooms.addMessage(
-      chatRoom1.id,
-      profiles1[0].id,
-      `{"8c04e81a-d751-4b4c-9ea8-af853a31bb01":{"id":"8c04e81a-d751-4b4c-9ea8-af853a31bb01","type":"NumberedList","meta":{"order":0,"depth":0},"value":[{"id":"f87bd950-060e-49cb-b5ea-c9924c54c8c1","type":"numbered-list","children":[{"text":"testing message n stuff "}],"props":{"nodeType":"block"}}]},"597fb6f2-a802-45c4-a3ae-ce5a8fc9e079":{"id":"597fb6f2-a802-45c4-a3ae-ce5a8fc9e079","value":[{"id":"46d5fa4e-ec9e-4ad8-a627-974dc2793aac","type":"numbered-list","children":[{"text":"yessir ","strike":true}],"props":{"nodeType":"block"}}],"type":"NumberedList","meta":{"order":1,"depth":0}},"1fb05d1f-197e-4ffa-bcc7-28f446605caa":{"id":"1fb05d1f-197e-4ffa-bcc7-28f446605caa","value":[{"id":"996ab609-1095-4ba2-b15a-828e687ab436","type":"numbered-list","children":[{"text":"trueeeee"},{"text":"eeeeee","bold":true}],"props":{"nodeType":"block"}}],"type":"NumberedList","meta":{"order":2,"depth":0}},"e642c019-6734-46e7-8bdb-13af2aaeebc6":{"id":"e642c019-6734-46e7-8bdb-13af2aaeebc6","type":"Blockquote","meta":{"order":3,"depth":0},"value":[{"id":"e80a2940-db9d-446c-ba38-28b6b1184069","type":"blockquote","children":[{"text":"damn"}],"props":{"nodeType":"block"}}]}}`
-    )
-    // await Chatrooms.addMessage(chatRoom1.id, user2.id, `what's good???`)
-    // await Chatrooms.addMessage(
-    //   chatRoom1.id,
-    //   user1.id,
-    //   `just reading documentation`
-    // )
-  } catch (error) {
-    console.error("Error during seeding:", error)
-  }
+  const { chatroom: chatRoom1 } = await Chatrooms.createChatRoom(
+    seedingProfiles[0].id,
+    seedingProfiles[1].id
+  )
+
+  await Chatrooms.addMessage(
+    chatRoom1.id,
+    seedingProfiles[0].id,
+    `{"8c04e81a-d751-4b4c-9ea8-af853a31bb01":{"id":"8c04e81a-d751-4b4c-9ea8-af853a31bb01","type":"NumberedList","meta":{"order":0,"depth":0},"value":[{"id":"f87bd950-060e-49cb-b5ea-c9924c54c8c1","type":"numbered-list","children":[{"text":"testing message n stuff "}],"props":{"nodeType":"block"}}]},"597fb6f2-a802-45c4-a3ae-ce5a8fc9e079":{"id":"597fb6f2-a802-45c4-a3ae-ce5a8fc9e079","value":[{"id":"46d5fa4e-ec9e-4ad8-a627-974dc2793aac","type":"numbered-list","children":[{"text":"yessir ","strike":true}],"props":{"nodeType":"block"}}],"type":"NumberedList","meta":{"order":1,"depth":0}},"1fb05d1f-197e-4ffa-bcc7-28f446605caa":{"id":"1fb05d1f-197e-4ffa-bcc7-28f446605caa","value":[{"id":"996ab609-1095-4ba2-b15a-828e687ab436","type":"numbered-list","children":[{"text":"trueeeee"},{"text":"eeeeee","bold":true}],"props":{"nodeType":"block"}}],"type":"NumberedList","meta":{"order":2,"depth":0}},"e642c019-6734-46e7-8bdb-13af2aaeebc6":{"id":"e642c019-6734-46e7-8bdb-13af2aaeebc6","type":"Blockquote","meta":{"order":3,"depth":0},"value":[{"id":"e80a2940-db9d-446c-ba38-28b6b1184069","type":"blockquote","children":[{"text":"damn"}],"props":{"nodeType":"block"}}]}}`
+  )
+  // await Chatrooms.addMessage(chatRoom1.id, user2.id, `what's good???`)
+  // await Chatrooms.addMessage(
+  //   chatRoom1.id,
+  //   user1.id,
+  //   `just reading documentation`
+  // )
+} catch (error) {
+  console.error("Error during seeding:", error)
+}
 }
 
 

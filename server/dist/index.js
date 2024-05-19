@@ -42,9 +42,13 @@ const searchRouter_1 = require("./routers/searchRouter");
 const cors_1 = __importDefault(require("cors"));
 const ChatRooms_1 = __importDefault(require("./db/models/ChatRooms"));
 <<<<<<< HEAD
+<<<<<<< HEAD
 // import sendDataToPythonServer from "./db/sendData/dataSender"
 =======
 >>>>>>> a686435ab2f13a60d1b2addafa14fdea0bd10103
+=======
+// import sendDataToPythonServer from "./db/sendData/dataSender"
+>>>>>>> eaf9d96b282f3e2ec35c7714b79681d92a8e4b36
 const http = require("http");
 const socketIo = require("socket.io");
 const app = (0, express_1.default)();
@@ -85,16 +89,30 @@ io.on("connection", (socket) => {
         console.log(`Client joined room ${roomId}`);
     });
     socket.on("message", async (message) => {
-        // Save the message to the database
-        await ChatRooms_1.default.addMessage(message.chatroomId, message.userId, message.body);
-        // Emit the message to the specific room
-        io.to(message.chatroomId).emit("message", message);
+        const { chatroomId, userId, body } = message;
+        console.log("Received message:", { chatroomId, userId, body });
+        if (!chatroomId || !userId || !body) {
+            console.error("Invalid message format:", message);
+            return;
+        }
+        try {
+            // Save the message to the database
+            const savedMessage = await ChatRooms_1.default.addMessage(chatroomId, userId, body);
+            // Emit the message to the specific room
+            io.to(chatroomId).emit("message", savedMessage);
+        }
+        catch (error) {
+            console.error("Error adding message:", error);
+        }
     });
     socket.on("disconnect", () => {
         console.log("Client disconnected");
     });
 });
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> eaf9d96b282f3e2ec35c7714b79681d92a8e4b36
 // function sendDataToPythonServer() {
 //   .then(() => {
 //     console.log('Data sent to Python server successfully');
@@ -110,8 +128,11 @@ io.on("connection", (socket) => {
 //       console.log('Express server listening on port 3000');
 //     });
 //   });
+<<<<<<< HEAD
 =======
 >>>>>>> a686435ab2f13a60d1b2addafa14fdea0bd10103
+=======
+>>>>>>> eaf9d96b282f3e2ec35c7714b79681d92a8e4b36
 const port = process.env.PORT || 3761;
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);

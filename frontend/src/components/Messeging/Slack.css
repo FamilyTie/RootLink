@@ -49,6 +49,9 @@
   }
 }
 
+#yoopta-editor .yoopta-placeholder::after {
+  color: black;
+}
 .chatText {
   font-size: 15px !important;
   line-height: 1.46668 !important;
@@ -65,7 +68,7 @@
 }
 
 .chatInput {
-  /* align-self: stretch; */
+  align-self: stretch;
   min-width: 0;
   display: flex;
   position: relative;

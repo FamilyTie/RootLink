@@ -8,7 +8,8 @@ import userRouter from "./routers/userRouter"
 import postRouter from "./routers/postRouter"
 import { profileRouter } from "./routers/profileRouter"
 import commentRouter from "./routers/commentRouter"
-import cookieParser from 'cookie-parser';
+import User from "./db/models/User"
+import cookieParser from "cookie-parser"
 import ChatRoomRouter from "./routers/chatroomsRouter"
 import { searchRouter } from "./routers/searchRouter"
 import cors from "cors"
@@ -36,7 +37,7 @@ app.use(
   })
 )
 
-app.use(cookieParser());
+app.use(cookieParser())
 app.use(handleCookieSessions)
 app.use(logRoutes)
 app.use(express.json())
@@ -52,11 +53,9 @@ app.use("/api/chatrooms", ChatRoomRouter)
 app.use("/api/likes", likeRouter)
 app.use("/api/search", searchRouter)
 
-
 app.get(/^(?!\/api).*/, function (request: Request, response: Response) {
   response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"))
 })
-
 io.on("connection", (socket) => {
   console.log("New client connected")
 
@@ -66,10 +65,22 @@ io.on("connection", (socket) => {
   })
 
   socket.on("message", async (message) => {
-    // Save the message to the database
-    await Chatrooms.addMessage(message.chatroomId, message.userId, message.body)
-    // Emit the message to the specific room
-    io.to(message.chatroomId).emit("message", message)
+    const { chatroomId, userId, body } = message
+    console.log("Received message:", { chatroomId, userId, body })
+
+    if (!chatroomId || !userId || !body) {
+      console.error("Invalid message format:", message)
+      return
+    }
+
+    try {
+      // Save the message to the database
+      const savedMessage = await Chatrooms.addMessage(chatroomId, userId, body)
+      // Emit the message to the specific room
+      io.to(chatroomId).emit("message", savedMessage)
+    } catch (error) {
+      console.error("Error adding message:", error)
+    }
   })
 
   socket.on("disconnect", () => {
@@ -79,10 +90,9 @@ io.on("connection", (socket) => {
 
 // function sendDataToPythonServer() {
 
-
 //   .then(() => {
 //     console.log('Data sent to Python server successfully');
-    
+
 //     // Start the Express server
 //     app.listen(3000, () => {
 //       console.log('Express server listening on port 3000');
@@ -90,14 +100,12 @@ io.on("connection", (socket) => {
 //   })
 //   .catch((error) => {
 //     console.error('Error sending data to Python server:', error);
-    
+
 //     // If there was an error sending data, you might choose to start the server anyway
 //     app.listen(5000, () => {
 //       console.log('Express server listening on port 3000');
 //     });
 //   });
-
-
 
 const port = process.env.PORT || 3761
 server.listen(port, () => {
