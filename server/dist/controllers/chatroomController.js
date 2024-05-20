@@ -76,9 +76,13 @@ const addMessage = async (req, res) => {
     console.log("controller id:", id); // Log to verify id is extracted correctly
     console.log("controller userId:", userId);
     console.log("controller body:", body);
-    if (!id) {
-        console.log("Invalid chatroom ID:", id);
-        return res.status(400).json({ message: "Invalid chatroom ID" });
+    if (!id || !userId || !body) {
+        console.log("Invalid parameters:", { id, userId, body });
+        return res
+            .status(400)
+            .json({
+            message: "Invalid parameters: id, userId, and body are required",
+        });
     }
     try {
         const message = await ChatRooms_1.Chatrooms.addMessage(Number(id), userId, body);
