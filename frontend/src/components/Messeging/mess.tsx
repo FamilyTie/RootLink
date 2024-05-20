@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import io from "socket.io-client"
 
-const socket = io("http://localhost:3761")
+const socket = io("http://localhost:5173")
 
 const ChatApp = () => {
   const { id } = useParams() // Extract id
