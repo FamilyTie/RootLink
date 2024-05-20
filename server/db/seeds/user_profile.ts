@@ -43,10 +43,18 @@ export async function seed(knex: Knex): Promise<void> {
     for (const user of users) {
       await User.create(user);
     }
+
+    const createdUsers = await knex('users').select('id', 'email');
+    const userMap = createdUsers.reduce((map, user) => {
+      map[user.email] = user.id;
+      return map;
+    }, {});
+
+
   const profiles = [
     {
       img: 'https://randomuser.me/api/portraits/women/44.jpg',
-      user_id: 1,
+      user_id: userMap['alice@example.com'],
       username: 'alice_wonder',
       full_name: 'Alice Smith',
       bio: 'I was adopted as a baby in 1995 and have always wondered about my birth family. I know that I am of Caucasian descent and have a passion for genealogy. I would love to connect with my biological relatives to learn more about my roots and share my journey with them.',
@@ -56,7 +64,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/men/45.jpg',
-      user_id: 2,
+      user_id: userMap['john@example.com'],
       username: 'john_doe_seeker',
       full_name: 'John Johnson',
       bio: 'I am a birth father looking for my son who was adopted in 2000. I am of Hispanic ethnicity and have been searching for years. I hope to reconnect with him and share our family’s history and culture. I want him to know that I have always loved him and think about him every day.',
@@ -66,7 +74,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/46.jpg',
-      user_id: 3,
+      user_id: userMap['maria@example.com'],
       username: 'maria_gonzalez98',
       full_name: 'Maria Gonzalez',
       bio: 'Adopted at age five, I have vague memories of my birth family. I am of Hispanic descent and was adopted in 1998. I’m hoping to find my biological siblings and parents to understand more about my heritage and the circumstances of my adoption.',
@@ -76,7 +84,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/47.jpg',
-      user_id: 4,
+      user_id: userMap['luisa@example.com'],
       username: 'luisa_heart',
       full_name: 'Luisa Martinez',
       bio: 'As a young mother, I made the difficult decision to place my daughter for adoption in 1998. I am of Hispanic ethnicity and have always hoped to reconnect with her someday. I want her to know that she has always been in my heart and that I am here, ready to welcome her into my life whenever she is ready.',
@@ -86,7 +94,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/men/48.jpg',
-      user_id: 5,
+      user_id: userMap['james@example.com'],
       username: 'james_lee90',
       full_name: 'James Lee',
       bio: 'I was adopted in 1990 and have always been curious about my Asian heritage. I hope to find my birth parents and siblings to learn more about my cultural background and family history. Connecting with them would mean the world to me as I seek to piece together my past.',
@@ -96,7 +104,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/49.jpg',
-      user_id: 6,
+      user_id: userMap['kim@example.com'],
       username: 'kim_nguyen_seeker',
       full_name: 'Kim Nguyen',
       bio: 'I am a birth mother searching for my son who was adopted in 1990. I am of Asian ethnicity and have been looking for him ever since. I hope to reunite with him and share our family’s traditions and stories. He has always been a part of my heart, and I long to see him again.',
@@ -106,7 +114,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/men/50.jpg',
-      user_id: 7,
+      user_id: userMap['david@example.com'],
       username: 'david_brown85',
       full_name: 'David Brown',
       bio: 'I was adopted in 1985 and am of Black/African descent. I’ve always felt a part of me was missing, and I hope to find my birth family to fill that void. Learning about my roots and heritage is important to me, and I hope to connect with those who share my story.',
@@ -116,7 +124,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/50.jpg',
-      user_id: 8,
+      user_id: userMap['sandra@example.com'],
       username: 'sandra_green',
       full_name: 'Sandra Green',
       bio: 'I am a birth mother who placed my son for adoption in 1985. I am of Black/African ethnicity and have always hoped to reconnect with him. I want him to know that I have never forgotten him and that I am ready to welcome him with open arms whenever he is ready.',
@@ -126,7 +134,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/51.jpg',
-      user_id: 9,
+      user_id: userMap['sophia@example.com'],
       username: 'sophia_white05',
       full_name: 'Sophia White',
       bio: 'Adopted as a baby in 2005, I have always been curious about my Native American heritage. I want to learn more about my culture and connect with my birth family to understand my roots and traditions. It’s a journey I’ve been longing to take for a long time.',
@@ -136,7 +144,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/52.jpg',
-      user_id: 10,
+      user_id: userMap['rebecca@example.com'],
       username: 'rebecca_grey',
       full_name: 'Rebecca Grey',
       bio: 'I am a birth mother looking for my daughter who was adopted in 2005. I am of Native American descent and have always wanted to reconnect with her. I want to share our family’s rich history and traditions with her and let her know she has always been loved and missed.',
@@ -146,7 +154,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/men/52.jpg',
-      user_id: 11,
+      user_id: userMap['michael@example.com'],
       username: 'michael_johnson92',
       full_name: 'Michael Johnson',
       bio: 'I was adopted in 1992 and am of Caucasian ethnicity. I’ve always felt a connection to my birth family and have been searching for them for years. I hope to find them and learn more about my heritage and the story of my adoption.',
@@ -156,7 +164,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/53.jpg',
-      user_id: 12,
+      user_id: userMap['linda@example.com'],
       username: 'linda_adams',
       full_name: 'Linda Adams',
       bio: 'I am a birth mother searching for my son who was adopted in 1992. I am of Caucasian ethnicity and have always hoped to reconnect with him. I want him to know that he has always been in my heart and that I am here, ready to welcome him back into my life.',
@@ -166,7 +174,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/54.jpg',
-      user_id: 13,
+      user_id: userMap['emma@example.com'],
       username: 'emma_wilson97',
       full_name: 'Emma Wilson',
       bio: 'Adopted in 1997, I am of Pacific Islander descent. I’ve always felt a connection to my birth family and hope to find them to learn more about my cultural heritage and the story behind my adoption. Connecting with them would mean everything to me.',
@@ -176,7 +184,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/men/54.jpg',
-      user_id: 14,
+      user_id: userMap['mark@example.com'],
       username: 'mark_james',
       full_name: 'Mark James',
       bio: 'I am a birth father searching for my daughter who was adopted in 1997. I am of Pacific Islander ethnicity and have always hoped to reconnect with her. I want to share our family’s traditions and stories with her and let her know she has always been loved and missed.',
@@ -186,7 +194,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/men/55.jpg',
-      user_id: 15,
+      user_id: userMap['robert@example.com'],
       username: 'robert_carter89',
       full_name: 'Robert Carter',
       bio: 'I was adopted in 1989 and am of Native American descent. I have always felt a part of me was missing, and I hope to find my birth family to fill that void. Learning about my roots and heritage is important to me, and I hope to connect with those who share my story.',
@@ -196,7 +204,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/55.jpg',
-      user_id: 16,
+      user_id: userMap['susan@example.com'],
       username: 'susan_hall',
       full_name: 'Susan Hall',
       bio: 'I am a birth mother who placed my son for adoption in 1989. I am of Native American ethnicity and have always hoped to reconnect with him. I want him to know that I have never forgotten him and that I am ready to welcome him with open arms whenever he is ready.',
@@ -206,7 +214,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/men/56.jpg',
-      user_id: 17,
+      user_id: userMap['daniel@example.com'],
       username: 'daniel_anderson93',
       full_name: 'Daniel Anderson',
       bio: 'Adopted in 1993, I am of Black/African descent. I’ve always felt a connection to my birth family and have been searching for them for years. I hope to find them and learn more about my heritage and the story of my adoption.',
@@ -216,7 +224,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/56.jpg',
-      user_id: 18,
+      user_id: userMap['patricia@example.com'],
       username: 'patricia_clark',
       full_name: 'Patricia Clark',
       bio: 'I am a birth mother searching for my son who was adopted in 1993. I am of Black/African ethnicity and have always hoped to reconnect with him. I want him to know that he has always been in my heart and that I am here, ready to welcome him back into my life.',
@@ -226,7 +234,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/women/57.jpg',
-      user_id: 19,
+      user_id: userMap['linda_b@example.com'],
       username: 'linda_baker94',
       full_name: 'Linda Baker',
       bio: 'I was adopted in 1994 and am of Caucasian descent. I’ve always been curious about my birth family and hope to find them to learn more about my heritage and the story behind my adoption. Connecting with them would mean everything to me.',
@@ -236,7 +244,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       img: 'https://randomuser.me/api/portraits/men/57.jpg',
-      user_id: 20,
+      user_id: userMap['thomas@example.com'],
       username: 'thomas_davis',
       full_name: 'Thomas Davis',
       bio: 'I am a birth father searching for my daughter who was adopted in 1994. I am of Caucasian ethnicity and have always hoped to reconnect with her. I want to share our family’s traditions and stories with her and let her know she has always been loved and missed.',
