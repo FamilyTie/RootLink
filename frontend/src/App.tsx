@@ -65,6 +65,10 @@ export default function App() {
             element={<LoginPage refresh={handleRefresh} />}
           />
           <Route
+            path="/feed"
+            element={<Feed />}
+          />
+          <Route
             path="/sign-up"
             element={<SignUpPage refresh={handleRefresh} />}
           />
@@ -81,7 +85,7 @@ export default function App() {
             element={
               <ChatApp
                 username={undefined}
-                userId={undefined}
+                userId={2}
                 chatroomId={undefined}
               />
             }
@@ -104,7 +108,31 @@ export default function App() {
               />
             }
           />
-          // Add the new route
+          <Route
+            path="/sign-up"
+            element={<SignUpPage refresh={handleRefresh} />}
+          />
+          <Route
+            path="/users"
+            element={<UsersPage />}
+          />
+          <Route
+            path="/users/:id"
+            element={<UserPage />}
+          />
+          {/* <Route
+            path="/slack"
+            element={<SlackChat sendMessage={undefined} />}
+          /> */}
+          {/* Add the new route */}
+          <Route
+            path="fed"
+            element={<Feed />}
+          />
+          <Route
+            path="*"
+            element={<NotFoundPage />}
+          />
           <Route
             path="*"
             element={<NotFoundPage />}

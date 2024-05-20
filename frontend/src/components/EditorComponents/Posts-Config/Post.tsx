@@ -28,6 +28,10 @@ export function Post({ post, postBody }) {
   const [commentsExpanded, setCommentsExpanded] = useState(false)
   const [liked, setLiked] = useState(false)
   const [newCommentText, setNewCommentText] = useState("")
+<<<<<<< HEAD
+=======
+  const [profilePhoto, setProfilePhoto] = useState(post.profile_photo)
+>>>>>>> fd776215d4f8b9e5a02a8fb3456ccf7bce2141bb
 
   useEffect(() => {
     if (!currentUser) return
