@@ -45,7 +45,7 @@ const VideoChat = () => {
                 if (localVideoRef.current && type === 'video') {
                     localVideoRef.current.srcObject = stream;
                 }
-                const peer = new Peer();
+                const peer = new Peer(callUserId);
                 peerRef.current = peer;
 
                 peer.on('open', () => {
@@ -93,7 +93,7 @@ const VideoChat = () => {
                 localVideoRef.current.srcObject = stream;
             }
 
-            const peer = new Peer();
+            const peer = new Peer(callUserId);
             peerRef.current = peer;
 
             peer.on('open', () => {

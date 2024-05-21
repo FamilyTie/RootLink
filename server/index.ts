@@ -92,23 +92,23 @@ io.on("connection", (socket) => {
   });
 });
 
-sendDataToPythonServer()
-  .then(() => {
-    console.log('Data sent to Python server successfully');
+// sendDataToPythonServer()
+//   .then(() => {
+//     console.log('Data sent to Python server successfully');
 
-    // Start the Express server
-    app.listen(3000, () => {
-      console.log('Express server listening on port 3000');
-    });
-  })
-  .catch((error) => {
-    console.error('Error sending data to Python server:', error);
+//     // Start the Express server
+//     app.listen(3000, () => {
+//       console.log('Express server listening on port 3000');
+//     });
+//   })
+//   .catch((error) => {
+//     console.error('Error sending data to Python server:', error);
 
-    // If there was an error sending data, you might choose to start the server anyway
-    app.listen(3000, () => {
-      console.log('Express server listening on port 3000');
-    });
-  });
+//     // If there was an error sending data, you might choose to start the server anyway
+//     app.listen(3000, () => {
+//       console.log('Express server listening on port 3000');
+//     });
+//   });
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
