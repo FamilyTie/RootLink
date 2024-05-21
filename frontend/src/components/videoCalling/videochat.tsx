@@ -1,123 +1,15 @@
-// import { useState, useRef, useEffect, useContext } from "react";
-// import { io } from "socket.io-client";
-// import Peer from "simple-peer"
-// import { useParams } from "react-router-dom";
 
-// const socket = io("http://localhost:3761")
-
-
-// const VideoChat = () => {
-//     const [localStream, setLocalStream] = useState(null)
-//     const  [remoteStream, setRemoteStream] = useState(null)
-//     const localVideoRef = useRef<HTMLVideoElement>(null)
-//     const remoteVideoRef = useRef<HTMLVideoElement>(null)
-//     const peerRef = useRef<Peer.Instance | null > (null)
-
-
-
-//     useEffect(() => {
-
-//         navigator.mediaDevices.getUserMedia({video: true, audio: true})
-//         .then(stream => {
-//             setLocalStream(stream)
-//             if(localVideoRef.current) {
-//                 localVideoRef.current.srcObject = stream
-//             }
-//         })
-//         .catch(error => console.error('Error accessing media devices.', error))
-//     }, [])
-
-
-//    useEffect(() => {
-//     socket.on('offer', handleRecieveCall)
-//     socket.on('answer', handleAnswer)
-//     socket.on('candidate', handleNewICECandidateMsg)
-
-//     return () => {
-//         socket.off('offer', handleRecieveCall)
-//         socket.off('answer', handleAnswer)
-//         socket.off('candidate', handleNewICECandidateMsg)
-
-//     }
-// }, [])
-// const startCall = () => {
-//     const peer = new Peer({initiator: true, trickle: false, stream: localStream})
-//     peerRef.current = peer
-
-
-
-//     peer.on('signal', data => {
-//         socket.emit('offer', data)
-//     })
-//     peer.on('stream', stream => {
-//         setRemoteStream(stream)
-//         if(remoteVideoRef.current){
-//             remoteVideoRef.current.srcObject = stream
-//         }
-//     })
-
-//     peer.on('error', error => console.error('Peer error:', error))
-// }
-
-// const handleRecieveCall = (incoming) => {
-// const peer = new Peer({initiator: false, trickle: false , stream: localStream})
-// peerRef.current = peer
-
-// peer.on('signal', data => {
-//     socket.emit('answer', data);
-//   });
-
-//   peer.on('stream', stream => {
-//     setRemoteStream(stream);
-//     if (remoteVideoRef.current) {
-//       remoteVideoRef.current.srcObject = stream;
-//     }
-//   });
-
-//   peer.signal(incoming);
-// };
-// const handleAnswer = (answer) => {
-//     peerRef.current?.signal(answer);
-//   };
-
-//   const handleNewICECandidateMsg = (incoming) => {
-//     peerRef.current?.signal(incoming);
-//   };
-
-//   const endCall = () => {
-//     peerRef.current?.destroy();
-//     setRemoteStream(null);
-//   };
-
-//    return (
-//     <div>
-//       <div>
-//         <video ref={localVideoRef} autoPlay muted playsInline width="320" height="240"></video>
-//       </div>
-//       <div>
-//         <video ref={remoteVideoRef} autoPlay playsInline width="320" height="240"></video>
-//       </div>
-//       <div>
-//         <button onClick={startCall}>Start Call</button>
-//         <button onClick={endCall}>End Call</button>
-//       </div>
-//     </div>
-//   );
-
-// }
-
-
-// export default VideoChat
-
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { io } from "socket.io-client";
 import Peer from 'peerjs';
 import { useParams } from "react-router-dom";
+import CurrentUserContext from "../../contexts/current-user-context";
 
 const socket = io("http://localhost:5173");
 
 const VideoChat = () => {
-    const { userId, callUserId } = useParams<{ userId: string; callUserId: string }>();
+    const { currentUser: currentUserId } = useContext(CurrentUserContext);
+    const { callUserId } = useParams<{ callUserId: string }>();
     const [localStream, setLocalStream] = useState<MediaStream | null>(null);
     const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
     const localVideoRef = useRef<HTMLVideoElement>(null);
@@ -125,24 +17,12 @@ const VideoChat = () => {
     const peerRef = useRef<Peer | null>(null);
 
     useEffect(() => {
-        const getUserMedia = async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                setLocalStream(stream);
-                if (localVideoRef.current) {
-                    localVideoRef.current.srcObject = stream;
-                }
-            } catch (error) {
-                console.error('Error accessing media devices.', error);
-            }
-        };
-
-        getUserMedia();
-
-        socket.emit('join', userId);
+        console.log('User joined the chat');
+        socket.emit('join', currentUserId);
 
         return () => {
-            socket.emit('leave', userId);
+            console.log('User left the chat');
+            socket.emit('leave', currentUserId);
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
             }
@@ -150,46 +30,104 @@ const VideoChat = () => {
                 peerRef.current.destroy();
             }
         };
-    }, [userId]);
+    }, [currentUserId]);
 
     useEffect(() => {
-        socket.on('offer', (data) => {
-            console.log('Offer received:', data);
-        });
+        socket.on('call', async ({ peerId, type }: { peerId: string, type: string }) => {
+            console.log('Incoming call from:', peerId, 'with type:', type);
+            const mediaConstraints = type === 'video'
+                ? { video: true, audio: true }
+                : { video: false, audio: true };
 
-        socket.on('answer', (data) => {
-            console.log('Answer received:', data);
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+                setLocalStream(stream);
+                if (localVideoRef.current && type === 'video') {
+                    localVideoRef.current.srcObject = stream;
+                }
+                const peer = new Peer();
+                peerRef.current = peer;
+
+                peer.on('open', () => {
+                    const call = peer.call(peerId, stream);
+                    call.on('stream', remoteStream => {
+                        console.log('Receiving remote stream');
+                        setRemoteStream(remoteStream);
+                        if (remoteVideoRef.current) {
+                            remoteVideoRef.current.srcObject = remoteStream;
+                        }
+                    });
+                });
+
+                peer.on('call', call => {
+                    call.answer(stream);
+                    call.on('stream', remoteStream => {
+                        console.log('Answering call, receiving remote stream');
+                        setRemoteStream(remoteStream);
+                        if (remoteVideoRef.current) {
+                            remoteVideoRef.current.srcObject = remoteStream;
+                        }
+                    });
+                });
+
+                peer.on('error', error => console.error('Peer error:', error));
+            } catch (error) {
+                console.error('Error accessing media devices.', error);
+            }
         });
 
         return () => {
-            socket.off('offer');
-            socket.off('answer');
+            socket.off('call');
         };
-    }, []);
+    }, [localStream]);
 
-    const startCall = () => {
-        const peer = new Peer(userId);
-        peerRef.current = peer;
+    const startCall = async (callType: string) => {
+        const mediaConstraints = callType === 'video'
+            ? { video: true, audio: true }
+            : { video: false, audio: true };
 
-        peer.on('open', () => {
-            socket.emit('call', { userId: callUserId, peerId: userId });
-        });
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+            setLocalStream(stream);
+            if (localVideoRef.current && callType === 'video') {
+                localVideoRef.current.srcObject = stream;
+            }
 
-        peer.on('call', call => {
-            call.answer(localStream!);
-            call.on('stream', stream => {
-                setRemoteStream(stream);
-                if (remoteVideoRef.current) {
-                    remoteVideoRef.current.srcObject = stream;
-                }
+            const peer = new Peer();
+            peerRef.current = peer;
+
+            peer.on('open', () => {
+                console.log('Starting call to:', callUserId, 'with type:', callType);
+                socket.emit('call', { userId: callUserId, peerId: currentUserId, type: callType });
             });
-        });
 
-        peer.on('error', error => console.error('Peer error:', error));
+            peer.on('call', call => {
+                call.answer(stream);
+                call.on('stream', remoteStream => {
+                    console.log('Receiving remote stream after answering call');
+                    setRemoteStream(remoteStream);
+                    if (remoteVideoRef.current) {
+                        remoteVideoRef.current.srcObject = remoteStream;
+                    }
+                });
+            });
+
+            peer.on('error', error => console.error('Peer error:', error));
+        } catch (error) {
+            console.error('Error accessing media devices.', error);
+        }
     };
 
     const endCall = () => {
+        console.log('Ending call');
+        if (localStream) {
+            localStream.getTracks().forEach(track => track.stop());
+        }
+        if (remoteStream) {
+            remoteStream.getTracks().forEach(track => track.stop());
+        }
         peerRef.current?.destroy();
+        setLocalStream(null);
         setRemoteStream(null);
     };
 
@@ -201,14 +139,17 @@ const VideoChat = () => {
             <div>
                 <video ref={remoteVideoRef} autoPlay playsInline width="320" height="240"></video>
             </div>
-            <div>
-                <button onClick={startCall}>Start Call</button>
-                <button onClick={endCall}>End Call</button>
+            <div className="button-container">
+            <button onClick={() => startCall('video')} style={{ margin: '10px' }}>Start Video Call</button>
+           <button onClick={() => startCall('audio')} style={{ margin: '10px' }}>Start Voice Call</button>
+            <button onClick={endCall} style={{ margin: '10px' }}>End Call</button>
             </div>
         </div>
     );
 };
 
 export default VideoChat;
+
+
 
 

@@ -16,4 +16,10 @@ const CurrentUserContext = createContext<CurrentUserContextType>({
     setCurrentUser: () => {},
 });
 
+
+
+
+
+
+
 export default CurrentUserContext;

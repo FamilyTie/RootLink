@@ -38,7 +38,7 @@ export default function App() {
           <Route path="/create-post" element={<CreatePost refetchPosts={undefined} />} />
           <Route path="/get-posts" element={<GetPosts />} />
           <Route path="/chat/:id" element={<ChatApp />} />
-          <Route path="/video-chat/:userId/:callUserId" element={<VideoChat />} /> 
+          <Route path="/video-chat/:callUserId" element={<VideoChat />} /> 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
