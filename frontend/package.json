@@ -33,16 +33,27 @@
     "aos": "^2.3.4",
     "browserify": "^17.0.0",
     "firebase": "^10.11.1",
+<<<<<<< HEAD
     "peerjs": "^1.5.4",
     "polling": "^0.1.3",
+=======
+    "lucide-react": "^0.378.0",
+>>>>>>> fd776215d4f8b9e5a02a8fb3456ccf7bce2141bb
     "react": "^18.2.0",
     "react-dom": "^18.3.1",
-    "react-feather": "^2.0.10",
+    "react-icons": "^5.2.1",
     "react-router-dom": "^6.11.2",
+    "react-search-autocomplete": "^8.5.2",
     "react-toastify": "^10.0.5",
+<<<<<<< HEAD
     "simple-peer": "^9.11.1",
+=======
+    "react-tooltip": "^5.26.4",
+    "slate": "^0.102.0",
+>>>>>>> fd776215d4f8b9e5a02a8fb3456ccf7bce2141bb
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
+    "tailwind-scrollbar": "^3.1.0",
     "typescript": "^5.4.5",
     "vite-compatible-readable-stream": "^3.6.1",
     "vite-plugin-node-polyfills": "^0.22.0",

@@ -1,6 +1,7 @@
 import { Response, Request } from "express"
 import Profile from "../db/models/Profile"
 import { ProfileData } from "../db/models/Profile"
+
 export interface ProfileReqBody {
   user_id: number
   img: string

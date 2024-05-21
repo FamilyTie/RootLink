@@ -24,12 +24,13 @@ function ProfileCreation({ page, setPage, formData, setFormData }) {
     if (page === FormTitle.length - 1) {
       console.log(formData);
       window.alert("Are you done with the registration");
-      window.location.reload();
     } else {
       createUserWithProfile(formData);
       setPage((currPage) => currPage + 1);
     }
   };
+
+  
   return (
     <div>
       <div className="mt-2 ">

@@ -60,12 +60,14 @@ export const updateUsername = async ({ id, username }: User) => (
 
 
 export const createUserWithProfile = async (formData:  SignUpFormData) => {
-  const { email, password, firstName, lastName, username, status, img, bio, adoptionYear, ethnicity } = formData;
-
-  const user = await createUser({ email, password });
-  console.log(user)
-  const userId = user[0].id;
-  const profile = await createProfile({ user_id: userId, firstName, lastName, username, status, img, bio, adoptionYear, ethnicity });
-  
-  return { user, profile };
+  try {
+    const { email, password, firstName, lastName, username, status, img, bio, adoptionYear, ethnicity } = formData;
+    const user = await createUser({ email, password });
+    const userId = user[0].id;
+    const profile = await createProfile({ user_id: userId, firstName, lastName, username, status, img, bio, adoptionYear, ethnicity });
+    return { user, profile };
+  } catch (error) {
+    console.error('Error creating user with profile:', error);
+    return { user: null, profile: null };
+  }
 }

@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
 import SignUpForm from "../authentication/signUpForm";
 import Form from "../components/layout/ProfileForm";
+import { useNavigate } from "react-router-dom";
+import CurrentUserContext from "../contexts/current-user-context";
+import { useContext } from "react";
 
-
-
-export default function signUpPage() {
+export default function signUpPage(refresh) {
+  const navigate = useNavigate();
+  const { currentUser } = useContext(CurrentUserContext);
+  if (currentUser) {
+    navigate("/feed");
+  }
   return (
     <>
       <div className="overflow-hidden h-screen relative">
@@ -21,7 +27,7 @@ export default function signUpPage() {
         {/* Blue Gradient Layer */}
         <div className="absolute bg-gradient-to-b z-[3] from-[#A0D9FF] to-white h-full w-screen opacity-[85%]"></div>
         <li>
-        <Form />
+        <Form refresh={refresh} />
         </li>
       
       </div>
