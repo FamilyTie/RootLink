@@ -1,11 +1,10 @@
 import { Request, Response } from "express"
-import { knex } from "../db/knex"
 import Post from "../db/models/Post"
 
 export const createPost = async (req: Request, res: Response) => {
   try {
-    const { user_id, title, body, profile_id } = req.body
-    const newPost = await Post.create({ user_id, title, body, profile_id })
+    const {  title, body, profile_id, img } = req.body
+    const newPost = await Post.create({title, body, profile_id, img })
     res.status(201).json(newPost)
   } catch (error) {
     res
@@ -14,6 +13,12 @@ export const createPost = async (req: Request, res: Response) => {
   }
 }
 
+export const getLikedPosts = async (req: Request, res: Response) => {
+  const profileId = req.params.profileId
+  const likedPosts = await Post.getLikedPostsIds(Number(profileId))
+  res.send(Array.from(likedPosts))
+
+}
 export const getRecentPost = async (req: Request, res: Response) => {
   const { lastId } = req.query
   let numericLastId = Number(lastId)
@@ -25,6 +30,8 @@ export const getRecentPost = async (req: Request, res: Response) => {
 
   try {
     const posts = await Post.list(numericLastId)
+    console.log(posts)
+    
     res.send(posts)
   } catch (error) {
     console.error("Failed to fetch posts:", error)

@@ -8,14 +8,17 @@ import CurrentUserContext from "../contexts/current-user-context";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  // const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
+  if (currentUser) {
+    navigate("/feed");
+  }
 
   return (
     <div className="overflow-hidden">
       <HomeNav />
       <HeroSection />
       <FeaturesSection />
-      <div className="h-screen w-screen"></div>
+      
     </div>
   );
 }

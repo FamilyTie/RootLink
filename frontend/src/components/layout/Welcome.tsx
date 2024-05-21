@@ -1,5 +1,15 @@
-function Welcome({ formData }) {
-  console.log(formData);
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+function Welcome({ formData, user, refresh }) {
+
+  const navigate = useNavigate();   
+  useEffect(() => {
+    if (user){
+      navigate('/feed')
+    }
+  }, [user])
+
+  setTimeout(() => refresh(), 1000)
   return (
     <>
       <h4 className="text-center mt-2">Registration was successful for...</h4>
