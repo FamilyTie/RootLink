@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 
 export interface User {
+    similarProfiles: any;
     id: number;
     username: string;
 }

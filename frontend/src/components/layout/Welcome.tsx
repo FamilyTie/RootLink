@@ -8,8 +8,9 @@ function Welcome({ formData, user, refresh }) {
       navigate('/feed')
     }
   }, [user])
-
+  
   setTimeout(() => refresh(), 1000)
+ 
   return (
     <>
       <h4 className="text-center mt-2">Registration was successful for...</h4>

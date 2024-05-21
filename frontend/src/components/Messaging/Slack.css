@@ -5,9 +5,8 @@
 .chat {
   position: relative;
   border-radius: 8px;
-  border: 1px solid #565856;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   width: 580px;
-  background: #232529;
 }
 
 .toolbar {
@@ -22,7 +21,7 @@
 .toolbarItem {
   flex: 0 0 28px;
   margin-bottom: 0;
-  color: #fff;
+  color: gray;
   border-radius: 4px;
   width: 28px;
   height: 28px;
@@ -53,7 +52,7 @@
   color: black;
 }
 .chatText {
-  font-size: 15px !important;
+  font-size: 20px !important;
   line-height: 1.46668 !important;
   margin-top: 0.2rem !important;
 }
@@ -76,9 +75,9 @@
 }
 
 .editor {
-  width: 100%;
+  width: 18rem;
   margin: 0;
-  color: #fff;
+  color: white;
   max-height: calc(60vh - 80px);
   padding-left: 12px;
   padding-top: 8px;
@@ -97,3 +96,5 @@
     width: 100%;
   }
 }
+
+

@@ -31,6 +31,7 @@
     "@yoopta/toolbar": "^4.2.0",
     "@yoopta/video": "^4.2.0",
     "aos": "^2.3.4",
+    "axios": "^1.7.1",
     "firebase": "^10.11.1",
     "lucide-react": "^0.378.0",
     "react": "^18.2.0",

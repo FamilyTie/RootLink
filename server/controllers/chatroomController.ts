@@ -3,13 +3,11 @@ import { Chatrooms } from "../db/models/ChatRooms"
 
 export const createChatroom = async (req: Request, res: Response) => {
   const { user1_id, user2_id } = req.body
-
-  try {
-    const existingChatroom = await Chatrooms.findChatRoom(user1_id, user2_id)
+ const existingChatroom = await Chatrooms.findChatRoom(user1_id, user2_id)
     if (existingChatroom) {
       return res.status(200).json(existingChatroom)
     }
-
+  try {
     const newChatroom = await Chatrooms.createChatRoom(user1_id, user2_id)
     res.status(201).json(newChatroom)
   } catch (error) {

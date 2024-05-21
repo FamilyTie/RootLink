@@ -9,12 +9,20 @@ export const loginUser = async (req, res) => {
 
   const user = await User.findByEmail(email)
   if (!user) return res.sendStatus(404)
+  let profile = await Profile.findById(user.id)
+  if (!profile) return res.sendStatus(404)
 
   const isPasswordValid = await user.isValidPassword(password)
   if (!isPasswordValid) return res.sendStatus(404)
 
+
+  const similarProfiles = await Profile.getSimilarProfiles({ id: user.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio })
+  if (similarProfiles) profile = { ...profile, similarProfiles }
+
+
   req.session.userId = user.id
-  res.send(user)
+
+  res.send({ user, profile })
 }
 
 // This controller sets `req.session` to null, destroying the cookie
@@ -22,20 +30,36 @@ export const loginUser = async (req, res) => {
 export const logoutUser = (req, res) => {
   req.session = null; // This clears the session
 
-    for (const cookieName in req.cookies) {
-      res.clearCookie(cookieName);
-      
-    }
-    res.sendStatus(204);
+  for (const cookieName in req.cookies) {
+    res.clearCookie(cookieName);
+
+  }
+  res.sendStatus(204);
 }
 
 // This controller returns 401 if the client is NOT logged in (doesn't have a cookie)
 // or returns the user based on the userId stored on the client's cookie
 export const showMe = async (req, res) => {
-  if (!req.session.userId) return res.sendStatus(401)
+  if (!req.session.userId) return res.sendStatus(401);
 
-  const user = await User.findById(req.session.userId)
-  const profile = await Profile.findById(req.session.userId)
-  
-  res.send({user, profile})
-}
+  const user = await User.findById(req.session.userId);
+  if (!user) return res.status(404).send("User not found");
+
+  let profile = await Profile.findById(req.session.userId);
+  if (!profile) return res.status(404).send("Profile not found");
+
+  try {
+    const similarProfiles = await Profile.getSimilarProfiles({
+      id: profile.id,
+      adoption_year: profile.data.raw.adoptionYear,
+      ethnicity: profile.data.raw.ethnicity,
+      bio: profile.bio,
+    });
+    profile = { ...profile, similarProfiles };
+  } catch (error) {
+    console.error("Error fetching similar profiles:", error);
+    return res.status(500).send("Error fetching similar profiles");
+  }
+
+  res.send({ user, profile });
+};

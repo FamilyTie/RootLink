@@ -19,6 +19,7 @@ class Comment {
     static async listByPost(last_id, post_id) {
         const query = `
       SELECT 
+      comments.comment_id,
         comments.id, 
         comments.body, 
         profiles.username, 

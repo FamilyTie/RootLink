@@ -2,9 +2,10 @@ import React, { useState } from "react"
 import ChatApp from "./ChatApp"
 import SidebarChats from "./sidebarChats"
 
-const ChatLayout = ({ userId, username }) => {
+const ChatLayout = ({ userId, username, refresh }) => {
   const [selectedChatroomId, setSelectedChatroomId] = useState(null)
   const [isChatAppVisible, setIsChatAppVisible] = useState(false)
+
 
   const handleSelectChatroom = (chatroomId) => {
     setSelectedChatroomId(chatroomId)
@@ -12,14 +13,16 @@ const ChatLayout = ({ userId, username }) => {
   }
 
   const toggleChatApp = () => {
-    setIsChatAppVisible(!isChatAppVisible)
+    
+    setIsChatAppVisible(!isChatAppVisible);
+    refresh()
   }
 
   return (
-    <div className="chat-layout flex h-screen overflow-hidden relative">
+    <div className="chat-layout z-[420] pt-[4rem] flex h-[95vh] overflow-hidden ">
       <div
-        className={`chat-content transform transition-transform duration-500 ${
-          isChatAppVisible ? "translate-x-0" : "translate-x-full"
+        className={`chat-content  overflow-hidden transform transition-all duration-300  ${
+          isChatAppVisible ? "translate-x-[18%]" : "translate-x-[110%]"
         } w-3/4 absolute left-0`}
       >
         {selectedChatroomId && (
@@ -30,16 +33,18 @@ const ChatLayout = ({ userId, username }) => {
           />
         )}
         <button
-          className="absolute top-0 right-0 mt-4 mr-4 p-2 bg-blue-600 text-white rounded"
+          className="absolute top-0 right-[10rem] mt-4 mr-4 p-2  font-medium text-[#074979] bg-white border-[2px] h-[98%] border-[#074979] shadow rounded"
           onClick={toggleChatApp}
         >
           {isChatAppVisible && "Close Messages"}
         </button>
       </div>
-      <div className="sidebar w-1/4 bg-gray-900 text-white absolute right-0 h-full">
+      <div className="sidebar w-[20rem] bg-white text-black absolute right-0">
         <SidebarChats
-          userId={userId}
+        userid={userId}
+          refresh={refresh}
           onSelectChatroom={handleSelectChatroom}
+          chatRoomId={selectedChatroomId}
         />
       </div>
     </div>

@@ -12,13 +12,13 @@ import GetPosts from "./components/EditorComponents/FeedPosts"
 import CreatePost from "./components/EditorComponents/CreatePost"
 import Feed from "./pages/Feed"
 import { fetchHandler } from "./utils"
-import ChatApp from "./components/Messeging/ChatApp"
+import ChatApp from "./components/Messaging/ChatApp"
 import { useState } from "react"
 import Discover from "./pages/Search"
 import Layout from "./Layout"
 import Search from "./pages/Search"
-import SidebarChats from "./components/Messeging/sidebarChats"
-import ChatLayout from "./components/Messeging/ChatLayout"
+import SidebarChats from "./components/Messaging/sidebarChats"
+import ChatLayout from "./components/Messaging/ChatLayout"
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
   const [refreshUser, setRefreshUser] = useState(false)
@@ -32,10 +32,12 @@ export default function App() {
         user.profile["likedPosts"] = new Set(likedPosts[0])
       }
       setCurrentUser(user.profile)
+      console.log(user.profile, "Hello World")
     }
 
     checkLoggedIn()
   }, [setCurrentUser, refreshUser])
+
   console.log(currentUser, "Hello World")
 
   const handleRefresh = () => {
@@ -44,7 +46,7 @@ export default function App() {
   return (
     <>
       {/* <SiteHeadingAndNav /> */}
-      <main>
+      <main className="">
         <Routes>
           <Route
             path="/"
@@ -68,7 +70,7 @@ export default function App() {
           />
           <Route
             path="/feed"
-            element={<Feed />}
+            element={<Feed refresh={handleRefresh} />}
           />
           <Route
             path="/sign-up"
@@ -90,8 +92,9 @@ export default function App() {
             path="/chat/:id"
             element={
               <ChatApp
+                userId={currentUser && currentUser.id}
                 username={undefined}
-                userId={2}
+               
                 chatroomId={undefined}
               />
             }
@@ -100,7 +103,9 @@ export default function App() {
             path="/chats"
             element={
               <SidebarChats
-                userId={2}
+              userid={currentUser && currentUser.id}
+              chatRoomId={undefined}
+                refresh={handleRefresh}
                 onSelectChatroom={undefined}
               />
             }
@@ -109,7 +114,8 @@ export default function App() {
             path="/chats-Lay"
             element={
               <ChatLayout
-                userId={2}
+              refresh={handleRefresh}
+              userId={currentUser && currentUser.id}
                 username={undefined}
               />
             }

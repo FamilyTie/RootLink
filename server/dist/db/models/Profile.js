@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchInBatches = void 0;
+const MLModel_1 = require("../../micro-services/MLModel");
 const knex_1 = require("../knex");
 class Profile {
     constructor(data) {
@@ -20,6 +21,15 @@ class Profile {
         const query = `SELECT * FROM profiles`;
         const { rows } = await knex_1.knex.raw(query);
         return rows.map((profile) => new Profile(profile));
+    }
+    static async getSimilarProfiles(profile) {
+        try {
+            const similarProfiles = await (0, MLModel_1.processProfileAndFindMatches)(profile);
+            return similarProfiles;
+        }
+        catch (error) {
+            console.error('Error getting similar profiles:', error);
+        }
     }
     static async findById(id) {
         const query = `SELECT * FROM profiles WHERE id = ?`;
@@ -43,7 +53,10 @@ class Profile {
             new Date(),
         ];
         const { rows } = await knex_1.knex.raw(query, values);
-        const profile = rows[0];
+        let profile = rows[0];
+        const similarProfiles = await Profile.getSimilarProfiles({ id: profile.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio });
+        if (similarProfiles)
+            profile = { ...profile, similarProfiles };
         return profile ? new Profile(profile) : null;
     }
     static async update(id, data) {

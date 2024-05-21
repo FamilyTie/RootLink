@@ -30,7 +30,7 @@ const path = __importStar(require("path"));
 const express_1 = __importDefault(require("express"));
 const handleCookieSessions_1 = require("./middleware/handleCookieSessions");
 const logRoutes_1 = require("./middleware/logRoutes");
-const LikeRouter_1 = require("./routers/LikeRouter");
+const likeRouter_1 = require("./routers/likeRouter");
 const authRouter_1 = __importDefault(require("./routers/authRouter"));
 const userRouter_1 = __importDefault(require("./routers/userRouter"));
 const postRouter_1 = __importDefault(require("./routers/postRouter"));
@@ -41,7 +41,7 @@ const chatroomsRouter_1 = __importDefault(require("./routers/chatroomsRouter"));
 const searchRouter_1 = require("./routers/searchRouter");
 const cors_1 = __importDefault(require("cors"));
 const ChatRooms_1 = __importDefault(require("./db/models/ChatRooms"));
-// import sendDataToPythonServer from "./db/sendData/dataSender"
+const locationRouter_1 = require("./routers/locationRouter");
 const http = require("http");
 const socketIo = require("socket.io");
 const app = (0, express_1.default)();
@@ -70,8 +70,9 @@ app.use("/api/posts", postRouter_1.default);
 app.use("/api/profiles", profileRouter_1.profileRouter);
 app.use("/api/comments", commentRouter_1.default);
 app.use("/api/chatrooms", chatroomsRouter_1.default);
-app.use("/api/likes", LikeRouter_1.likeRouter);
+app.use("/api/likes", likeRouter_1.likeRouter);
 app.use("/api/search", searchRouter_1.searchRouter);
+app.use("/api/location", locationRouter_1.locationRouter);
 app.get(/^(?!\/api).*/, function (request, response) {
     response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
 });

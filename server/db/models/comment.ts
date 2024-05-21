@@ -32,6 +32,7 @@ export class Comment {
   static async listByPost(last_id: number, post_id: number) {
     const query = `
       SELECT 
+      comments.comment_id,
         comments.id, 
         comments.body, 
         profiles.username, 

@@ -16,7 +16,7 @@ function Nav2() {
     navigate("/");
   };
   return (
-    <nav className="flex px-[2%] border-b-[1px]  py-[0.5rem] w-screen bg-white absolute z-[502]  justify-between">
+    <nav className="flex px-[2%] border-b-[1px]  py-[0.5rem] w-screen bg-white fixed z-[502]  justify-between">
       <div className="flex   gap-1 ">
         <div className=" flex">
           <h3 className="text-[28px] font-semibold">RootLink</h3>
@@ -25,7 +25,7 @@ function Nav2() {
         </div>
         { pathname.startsWith("/feed") &&
           <div className="ml-20 mt-2">
-          <SearchBar />
+        
         </div>
         }
         

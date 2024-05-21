@@ -1,3 +1,4 @@
+import { processProfileAndFindMatches } from "../../micro-services/MLModel"
 import { knex } from "../knex"
 
 export interface ProfileData {
@@ -27,6 +28,7 @@ class Profile {
   createdAt: Date
   updatedAt: Date
   settings?: any
+  similarProfiles?: any
 
   constructor(data: ProfileData) {
     this.id = data.id
@@ -48,6 +50,17 @@ class Profile {
     return rows.map((profile: ProfileData) => new Profile(profile))
   }
 
+  static async getSimilarProfiles(profile) {
+    try {
+      const similarProfiles = await processProfileAndFindMatches(profile)
+      return similarProfiles
+    }
+    catch (error) {
+      console.error('Error getting similar profiles:', error);
+    }
+
+  }
+
   static async findById(id: number) {
     const query = `SELECT * FROM profiles WHERE id = ?`
     const { rows } = await knex.raw(query, [id])
@@ -55,7 +68,7 @@ class Profile {
     return profile ? new Profile(profile) : null
   }
 
-  static async create(data :Omit<ProfileData, "id">) {
+  static async create(data: Omit<ProfileData, "id">) {
     const query = `INSERT INTO profiles (img, user_id, username, full_name, bio, settings, account_type, data, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
     const values = [
@@ -71,7 +84,9 @@ class Profile {
       new Date(),
     ]
     const { rows } = await knex.raw(query, values)
-    const profile = rows[0]
+    let profile = rows[0]
+    const similarProfiles = await Profile.getSimilarProfiles({ id: profile.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio })
+    if (similarProfiles) profile = { ...profile, similarProfiles }
     return profile ? new Profile(profile) : null
   }
 

@@ -38,7 +38,7 @@ export function Post({ post, postBody }) {
       setLiked(true)
     }
   }, [currentUser])
-  console.log(post)
+
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -48,7 +48,7 @@ export function Post({ post, postBody }) {
     fetchComments()
   }, [commentsExpanded])
 
-  console.log(comments)
+
 
   const editor = useMemo(() => {
     if (initialContent) {
@@ -167,22 +167,23 @@ export function Post({ post, postBody }) {
                 ? post.profile_photo
                 : "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png"
             }
-            className="w-12 mr-2 h-12  p-1 bg-white rounded-full object-cover shadow ml-2 mt-4"
+            className="w-10 mr-2 h-10 p-[2px]   bg-white rounded-full object-cover shadow ml-2 mt-4"
             alt=""
           />
         )}
 
-        <div className="my-auto">
-          <p className="text-[25px] font-medium textshadow2 translate-y-[7.5px] my-auto">
-            {post.username && post.username}
+        <div className="my-auto  gap-1 flex">
+          <p className="text-[22px] font-semibold     translate-y-[7.5px] my-auto">
+            {post.full_name && post.full_name}
           </p>
+          <p className="text-[18px] font-medium text-gray-500   translate-y-[7.5px] my-auto">@{post.username && post.username}</p>
         </div>
       </div>
       <div
         onClick={() => setBodyExpanded((expanded) => !expanded)}
         className="flex hover:bg-gray-50 rounded-md cursor-pointer justify-between  transition-all duration-200 pl-[2%] mt-2   text-center py-2 mx-[6%] gap-3"
       >
-        <h1 className="text-[25px] textshadow2">{post.title}</h1>
+        <h1 className="text-[25px] font-medium ">{post.title}</h1>
         <img
           src="/down (1).png"
           className={`w-[1rem] h-[1rem] my-auto translate-x-[-1rem]  translate-y-[5px] transition-all duration-200 ${
@@ -255,7 +256,7 @@ export function Post({ post, postBody }) {
         <div className="w-11 mr-5 h-11  overflow-hidden rounded-full object-cover border-4 border-white  shadow ml-2 ">
           <img
             src={currentUser && (currentUser as any).img}
-            className=" w-full m-auto"
+            className=" w-full  m-auto"
             alt=""
           />
         </div>
