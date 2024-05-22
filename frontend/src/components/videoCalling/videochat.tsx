@@ -78,17 +78,66 @@ const VideoChat: React.FC<VideoChatProps> = ({ callUserId }) => {
   }, []);
 
   const startCall = async (callType: 'video' | 'audio') => {
+    if (!peerRef.current || peerRef.current.disconnected) {
+      // Re-initialize PeerJS if it's not already initialized or disconnected
+      peerRef.current = new Peer({
+        host: "localhost",
+        port: 9000,
+        path: '/peerjs',
+        debug: 3,
+        config: {
+          'iceServers': [
+            { urls: 'stun:stun1.l.google.com:19302' },
+            {
+              urls: 'turn:numb.viagenie.ca',
+              credential: 'muazkh',
+              username: 'webrtc@live.com'
+            }
+          ]
+        }
+      });
+  
+      peerRef.current.on('open', id => {
+        console.log(`My peer ID is: ${id}`);
+      });
+  
+      peerRef.current.on('call', (call: MediaConnection) => {
+        const acceptsCall = window.confirm("Videocall incoming, do you want to accept it?");
+        if (acceptsCall) {
+          navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            .then(stream => {
+              call.answer(stream); // Answer the call with the local media stream
+              call.on('stream', (remoteStream) => {
+                setRemoteStream(remoteStream);
+                if (remoteVideoRef.current) {
+                  remoteVideoRef.current.srcObject = remoteStream;
+                }
+              });
+            })
+            .catch(error => {
+              console.error('Error accessing media devices.', error);
+            });
+        } else {
+          console.log("Call denied!");
+        }
+      });
+  
+      peerRef.current.on('error', err => {
+        console.error('Peer error:', err);
+      });
+    }
+  
     const mediaConstraints = callType === 'video'
       ? { video: true, audio: true }
       : { video: false, audio: true };
-
+  
     try {
       const stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
       setLocalStream(stream);
       if (localVideoRef.current && callType === 'video') {
         localVideoRef.current.srcObject = stream;
       }
-
+  
       const call = peerRef.current!.call(callUserId, stream);
       call.on('stream', (stream: MediaStream) => {
         setRemoteStream(stream);
@@ -100,6 +149,7 @@ const VideoChat: React.FC<VideoChatProps> = ({ callUserId }) => {
       console.error('Error accessing media devices.', error);
     }
   };
+  
 
   const endCall = () => {
     console.log('Ending call');
