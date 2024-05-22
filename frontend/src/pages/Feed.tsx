@@ -39,6 +39,7 @@ function Feed() {
           <CreatePost
             refetchPosts={handleRefetch}
             onCancel={undefined}
+            onSave={undefined}
           />
           <div className="mt-5">
             <FeedPosts

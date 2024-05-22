@@ -39,9 +39,10 @@ function CreatePost({
   initialImage = null,
   postId = null,
   onCancel,
+  onSave,
 }) {
   const { currentUser } = useContext(CurrentUserContext)
-  const [img, setImg] = useState(initialImage)
+  const [img, setImg] = useState(null)
   const [thumbnail, setThumbnail] = useState(initialImage ? initialImage : null)
   const [title, setTitle] = useState(initialTitle)
   const [body, setBody] = useState(initialBody)
@@ -83,8 +84,7 @@ function CreatePost({
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    let img_url = img ? await uploadFileAndGetURL(img) : null
-    console.warn(img_url) // This is the image URL
+    let img_url = img ? await uploadFileAndGetURL(img) : initialImage
     const postData = {
       title,
       body: JSON.stringify(editor.document),
@@ -101,15 +101,14 @@ function CreatePost({
     const url = postId ? `/api/posts/${postId}` : "/api/posts"
     const [data, error] = await handleFetch(url, options)
     if (!error) {
-      console.log("Post Sent", data)
       setTitle("")
       setImg(null)
       setThumbnail(null)
       clearEditor()
       refetchPosts()
       onCancel()
+      onSave(postData)
     } else {
-      console.log("Sending Post Failed", error)
       toast.error("Failed to send post!")
     }
   }
@@ -180,10 +179,20 @@ function CreatePost({
               />
 
               {thumbnail && (
-                <div className="overflow-hidden w-[85%] rounded-lg mt-3">
+                <div className="overflow-hidden w-[85%] m-auto rounded-lg mt-3">
                   <img
                     src={thumbnail}
                     alt="Thumbnail"
+                    onClick={() =>
+                      document.getElementById("imageUpload").click()
+                    }
+                    className="cursor-pointer"
+                  />
+                  <input
+                    type="file"
+                    id="imageUpload"
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
                   />
                 </div>
               )}
@@ -238,22 +247,6 @@ function CreatePost({
               </div>
 
               <div className="flex gap-5 self-end">
-                <div className="flex gap-1 hover:bg-gray-100 rounded-md p-1 px-3 relative">
-                  <input
-                    type="file"
-                    className="absolute z-[500] inset-0 opacity-0 w-full h-full cursor-pointer"
-                    onChange={handleFileChange}
-                  />
-                  <div className="z-[400] flex gap-1">
-                    <img
-                      className="w-[1rem] m-auto translate-y-[2px] h-[1rem] opacity-30"
-                      src="image (1).png"
-                      alt="Image Upload"
-                    />
-                    <p className="text-[23px] font-medium opacity-30">Image</p>
-                  </div>
-                </div>
-
                 <button
                   className="bg-[#074979] hover:bg-white border-[2px] border-transparent hover:text-[#074979] hover:border-[#074979] transition-all duration-200 self-end text-white text-[1.2rem] p-1 w-[6rem] rounded-md"
                   type="submit"

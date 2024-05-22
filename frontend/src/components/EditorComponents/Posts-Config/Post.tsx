@@ -184,9 +184,10 @@ export function Post({
         refetchPosts={onEdit}
         initialTitle={post.title}
         initialBody={post.body}
-        initialImage={post.post_image}
+        initialImage={post.img}
         postId={post.id}
         onCancel={() => setIsEditing(false)}
+        onSave={undefined}
       />
     )
   }
@@ -259,10 +260,10 @@ export function Post({
           />
         </div>
       )}
-      {post.post_image && (
+      {(isSettingsPage ? post.img : post.post_image) && (
         <div className="overflow-hidden w-[85%] m-auto rounded-lg mt-3">
           <img
-            src={post.post_image}
+            src={isSettingsPage ? post.img : post.post_image}
             alt="post"
           />
         </div>
