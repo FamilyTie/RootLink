@@ -19,6 +19,7 @@ import Layout from "./Layout"
 import Search from "./pages/Search"
 import SidebarChats from "./components/Messeging/sidebarChats"
 import ChatLayout from "./components/Messeging/ChatLayout"
+import VideoChatWrap from "./components/videoCalling/videoChatWrapper"
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
   const [refreshUser, setRefreshUser] = useState(false)
@@ -142,6 +143,7 @@ export default function App() {
             path="*"
             element={<NotFoundPage />}
           />
+          <Route path="/video-chat/:id" element={<VideoChatWrap />} />
         </Routes>
       </main>
     </>

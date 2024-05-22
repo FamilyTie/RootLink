@@ -42,14 +42,7 @@ const chatroomsRouter_1 = __importDefault(require("./routers/chatroomsRouter"));
 const searchRouter_1 = require("./routers/searchRouter");
 const cors_1 = __importDefault(require("cors"));
 const ChatRooms_1 = __importDefault(require("./db/models/ChatRooms"));
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-const dataSender_1 = __importDefault(require("./db/sendData/dataSender"));
-=======
 // import sendDataToPythonServer from "./db/sendData/dataSender"
->>>>>>> fd776215d4f8b9e5a02a8fb3456ccf7bce2141bb
->>>>>>> 1e54db0f63d4148db9e6ccbcc834361eacc00422
 const http = require("http");
 const socketIo = require("socket.io");
 const app = (0, express_1.default)();
@@ -77,20 +70,13 @@ app.use("/api/posts", postRouter_1.default);
 app.use("/api/profiles", profileRouter_1.profileRouter);
 app.use("/api/comments", commentRouter_1.default);
 app.use("/api/chatrooms", chatroomsRouter_1.default);
-<<<<<<< HEAD
-// Serve static files for the frontend
-app.get(/^(?!\/api).*/, (request, response) => {
-=======
 app.use("/api/likes", LikeRouter_1.likeRouter);
 app.use("/api/search", searchRouter_1.searchRouter);
 app.get(/^(?!\/api).*/, function (request, response) {
->>>>>>> fd776215d4f8b9e5a02a8fb3456ccf7bce2141bb
     response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
 });
-// Socket.IO connection handling
 io.on("connection", (socket) => {
     console.log("New client connected");
-<<<<<<< HEAD
     socket.on("join", (userId) => {
         socket.userId = userId;
         console.log(`User ${userId} connected with socket ID ${socket.id}`);
@@ -113,10 +99,6 @@ io.on("connection", (socket) => {
             io.to(recipientSocketId).emit("candidate", candidate);
         }
     });
-    socket.on("message", async (message) => {
-        await ChatRooms_1.default.addMessage(message.chatroomId, message.userId, message.body);
-        io.emit("message", message);
-=======
     socket.on("joinRoom", (roomId) => {
         socket.join(roomId);
         console.log(`Client joined room ${roomId}`);
@@ -137,66 +119,13 @@ io.on("connection", (socket) => {
         catch (error) {
             console.error("Error adding message:", error);
         }
->>>>>>> fd776215d4f8b9e5a02a8fb3456ccf7bce2141bb
     });
     socket.on("disconnect", () => {
         console.log(`User ${socket.userId} disconnected`);
         delete User_1.default[socket.userId];
     });
 });
-<<<<<<< HEAD
-// sendDataToPythonServer()
-//   .then(() => {
-//     console.log('Data sent to Python server successfully');
-//     // Start the Express server
-//     app.listen(3000, () => {
-//       console.log('Express server listening on port 3000');
-//     });
-//   })
-//   .catch((error) => {
-//     console.error('Error sending data to Python server:', error);
-//     // If there was an error sending data, you might choose to start the server anyway
-//     app.listen(3000, () => {
-//       console.log('Express server listening on port 3000');
-//     });
-//   });
-=======
-<<<<<<< HEAD
-(0, dataSender_1.default)()
-    .then(() => {
-    console.log('Data sent to Python server successfully');
-    // Start the Express server
-    app.listen(3000, () => {
-        console.log('Express server listening on port 3000');
-    });
-})
-    .catch((error) => {
-    console.error('Error sending data to Python server:', error);
-    // If there was an error sending data, you might choose to start the server anyway
-    app.listen(3000, () => {
-        console.log('Express server listening on port 3000');
-    });
-});
->>>>>>> 1e54db0f63d4148db9e6ccbcc834361eacc00422
-const port = process.env.PORT || 3000;
-=======
-// function sendDataToPythonServer() {
-//   .then(() => {
-//     console.log('Data sent to Python server successfully');
-//     // Start the Express server
-//     app.listen(3000, () => {
-//       console.log('Express server listening on port 3000');
-//     });
-//   })
-//   .catch((error) => {
-//     console.error('Error sending data to Python server:', error);
-//     // If there was an error sending data, you might choose to start the server anyway
-//     app.listen(5000, () => {
-//       console.log('Express server listening on port 3000');
-//     });
-//   });
 const port = process.env.PORT || 3761;
->>>>>>> fd776215d4f8b9e5a02a8fb3456ccf7bce2141bb
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
