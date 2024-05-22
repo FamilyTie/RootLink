@@ -1,5 +1,5 @@
-import { useState, useEffect, FC, useContext } from "react"
-import UserContext from "../../contexts/current-user-context"
+import { useState, useEffect, useContext, useRef, FC } from "react"
+import CurrentUserContext from "../../contexts/current-user-context"
 import { BlockNoteView } from "@blocknote/mantine"
 import CustomSlashMenu from "./Editor-Configs/SlashMenu"
 import handleFetch from "./Editor-Configs/Fetching"
@@ -32,15 +32,24 @@ import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { uploadFileAndGetURL } from "../../utils"
 
-function CreatePost({ refetchPosts }) {
-  const { currentUser } = useContext(UserContext)
-  const [img, setImg] = useState(null)
-  const [thumbnail, setThumbnail] = useState(null)
-  const [title, setTitle] = useState("")
-  const [body, setBody] = useState("")
+function CreatePost({
+  refetchPosts,
+  initialTitle = "",
+  initialBody = "",
+  initialImage = null,
+  postId = null,
+  onCancel,
+}) {
+  const { currentUser } = useContext(CurrentUserContext)
+  const [img, setImg] = useState(initialImage)
+  const [thumbnail, setThumbnail] = useState(initialImage ? initialImage : null)
+  const [title, setTitle] = useState(initialTitle)
+  const [body, setBody] = useState(initialBody)
   const [enableSlashMenu, setEnableSlashMenu] = useState(true)
+  const [sideMenu, setSideMenu] = useState(true)
+  const [dummyState, setDummyState] = useState(false) // Dummy state for re-render
   const MAX_BLOCKS = 15
-  console.log(schema)
+  const postButtonRef = useRef(null)
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]
@@ -48,7 +57,7 @@ function CreatePost({ refetchPosts }) {
     const reader = new FileReader()
 
     reader.onload = (e) => {
-      setThumbnail(e.target.result)
+      setThumbnail(e.target.result.toString())
     }
 
     if (file) {
@@ -61,6 +70,7 @@ function CreatePost({ refetchPosts }) {
     schema,
     placeholders: placeholders,
     trailingBlock: false,
+    initialContent: body ? JSON.parse(body) : null,
   })
 
   const clearEditor = () => {
@@ -73,17 +83,23 @@ function CreatePost({ refetchPosts }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    let img_url = await uploadFileAndGetURL(img)
+    let img_url = img ? await uploadFileAndGetURL(img) : null
     console.warn(img_url) // This is the image URL
-    const postData = { title, body, profile_id: currentUser.id, img: img_url }
+    const postData = {
+      title,
+      body: JSON.stringify(editor.document),
+      profile_id: currentUser.id,
+      img: img_url,
+    }
 
     const options = {
-      method: "POST",
+      method: postId ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(postData),
     }
 
-    const [data, error] = await handleFetch("/api/posts", options)
+    const url = postId ? `/api/posts/${postId}` : "/api/posts"
+    const [data, error] = await handleFetch(url, options)
     if (!error) {
       console.log("Post Sent", data)
       setTitle("")
@@ -91,6 +107,7 @@ function CreatePost({ refetchPosts }) {
       setThumbnail(null)
       clearEditor()
       refetchPosts()
+      onCancel()
     } else {
       console.log("Sending Post Failed", error)
       toast.error("Failed to send post!")
@@ -99,27 +116,48 @@ function CreatePost({ refetchPosts }) {
 
   useEffect(() => {
     const unsubscribe = editor.onChange(() => {
-      console.log(editor.document.length)
       if (editor.document.length > MAX_BLOCKS) {
         // Remove the last added block if the limit is exceeded
         editor.removeBlocks([editor.document[editor.document.length - 1].id])
         toast.error(`Maximum limit of ${MAX_BLOCKS} blocks reached.`)
       }
-      const contentAsString = JSON.stringify(editor.document)
-      setBody(contentAsString)
-      console.log("Serialized editor content:", contentAsString)
+      setBody(JSON.stringify(editor.document))
     })
 
     return () => unsubscribe()
   }, [editor])
-  console.dir(editor)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target === postButtonRef.current) {
+            setSideMenu(entry.isIntersecting)
+            setDummyState((prev) => !prev) // Toggle dummy state to force re-render
+          }
+        })
+      },
+      { threshold: [0, 1] }
+    )
+
+    if (postButtonRef.current) {
+      observer.observe(postButtonRef.current)
+    }
+
+    return () => {
+      if (postButtonRef.current) {
+        observer.unobserve(postButtonRef.current)
+      }
+    }
+  }, [])
+
   return (
     <div className="bg-[rgb(294, 124, 204)]">
-      <div className="flex bg-white  rounded-md w-[35rem] p-5  items-start">
-        <div className="w-12 mr-5 h-12 overflow-hidden  rounded-full object-cover border-4 shadow border-white  ml-2 mt-4">
+      <div className="flex bg-white rounded-md w-[35rem] p-5 items-start">
+        <div className="w-12 mr-5 h-12 overflow-hidden rounded-full object-cover border-4 shadow border-white ml-2 mt-4">
           <img
-            src={currentUser && (currentUser as any).img}
-            className=" w-full m-auto"
+            src={currentUser && currentUser.img}
+            className="w-full m-auto"
             alt=""
           />
         </div>
@@ -128,10 +166,13 @@ function CreatePost({ refetchPosts }) {
           onSubmit={handleSubmit}
           className="flex flex-col gap-0"
         >
-          <div className="flex items-start">
+          <div
+            className="flex items-start"
+            ref={postButtonRef}
+          >
             <div className="flex flex-col gap-3 w-[25rem] m-2 mt-6">
               <input
-                className="ProseMirror text-[1.3rem] pl-3 w-[20rem]    mb-5 placeholder:text-[lightgray] bg-slate-100  m-0 rounded-md p-1 text-[rgb(157, 173, 184]"
+                className="ProseMirror text-[1.3rem] pl-3 w-[20rem] mb-5 placeholder:text-[lightgray] bg-slate-100 m-0 rounded-md p-1 text-[rgb(157, 173, 184]"
                 placeholder="Title..."
                 type="text"
                 value={title}
@@ -139,7 +180,7 @@ function CreatePost({ refetchPosts }) {
               />
 
               {thumbnail && (
-                <div className="overflow-hidden w-[85%] ] rounded-lg mt-3">
+                <div className="overflow-hidden w-[85%] rounded-lg mt-3">
                   <img
                     src={thumbnail}
                     alt="Thumbnail"
@@ -147,21 +188,23 @@ function CreatePost({ refetchPosts }) {
                 </div>
               )}
 
-              <div className="bg-slate-100 pt-1  ">
+              <div className="bg-slate-100 pt-1">
                 <div className="">
-                  {/* @ts-ignore */}
                   <BlockNoteView
+                    // @ts-ignore
+                    key={dummyState} // Use dummy state as key to force re-render
                     editor={editor}
                     theme={theme}
                     slashMenu={false}
                     data-theming-css-variables-demo
                     data-changing-font-demo
                     formattingToolbar={false}
-                    // sideMenu={false}
+                    sideMenu={sideMenu}
+                    initialContent={body ? JSON.parse(body) : []}
                   >
                     {enableSlashMenu && (
                       <SuggestionMenuController
-                        triggerCharacter={"/"}
+                        triggerCharacter="/"
                         suggestionMenuComponent={
                           CustomSlashMenu as FC<
                             SuggestionMenuProps<DefaultReactSuggestionItem>
@@ -195,7 +238,7 @@ function CreatePost({ refetchPosts }) {
               </div>
 
               <div className="flex gap-5 self-end">
-                <div className="flex gap-1 hover:bg-gray-100 rounded-md p-1  px-3 relative">
+                <div className="flex gap-1 hover:bg-gray-100 rounded-md p-1 px-3 relative">
                   <input
                     type="file"
                     className="absolute z-[500] inset-0 opacity-0 w-full h-full cursor-pointer"
@@ -212,11 +255,19 @@ function CreatePost({ refetchPosts }) {
                 </div>
 
                 <button
-                  className="bg-[#074979] hover:bg-white border-[2px] border-transparent hover:text-[#074979] hover:border-[#074979] transition-all duration-200 self-end text-white text-[1.2rem] p-1  w-[6rem] rounded-md "
+                  className="bg-[#074979] hover:bg-white border-[2px] border-transparent hover:text-[#074979] hover:border-[#074979] transition-all duration-200 self-end text-white text-[1.2rem] p-1 w-[6rem] rounded-md"
                   type="submit"
                 >
                   Post
                 </button>
+                {postId && (
+                  <button
+                    className="bg-[#F56565] hover:bg-[#e05353] border-[2px] border-transparent hover:text-white transition-all duration-200 self-end text-white text-[1.2rem] p-1 w-[6rem] rounded-md"
+                    onClick={onCancel}
+                  >
+                    Cancel
+                  </button>
+                )}
               </div>
             </div>
           </div>

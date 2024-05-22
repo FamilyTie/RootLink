@@ -18,11 +18,13 @@ class Comment {
     }
     static async listByPost(last_id, post_id) {
         const query = `
-      SELECT 
+    SELECT 
+    comments.comment_id AS parent_comment_id,
         comments.id, 
-        comments.body, 
+        comments.body,
+        comments.profile_id, 
         profiles.username, 
-        profiles.img 
+        profiles.img
       FROM comments 
       JOIN profiles ON comments.profile_id = profiles.id 
       WHERE comments.post_id = ? AND comments.id > ? 

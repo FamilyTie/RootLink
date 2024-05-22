@@ -31,18 +31,20 @@ export class Comment {
 
   static async listByPost(last_id: number, post_id: number) {
     const query = `
-      SELECT 
+    SELECT 
+    comments.comment_id AS parent_comment_id,
         comments.id, 
-        comments.body, 
+        comments.body,
+        comments.profile_id, 
         profiles.username, 
-        profiles.img 
+        profiles.img
       FROM comments 
       JOIN profiles ON comments.profile_id = profiles.id 
       WHERE comments.post_id = ? AND comments.id > ? 
       ORDER BY comments.id DESC 
-      LIMIT 20`;
-  
-    const { rows } = await knex.raw(query, [post_id, last_id]);
+      LIMIT 20`
+
+    const { rows } = await knex.raw(query, [post_id, last_id])
     return rows
   }
 
@@ -100,7 +102,7 @@ export class Comment {
     const query = `UPDATE comments SET likes = likes - 1 WHERE id = ?`
     await knex.raw(query, [id])
   }
-  
+
   static async incrementLikes(id: number) {
     const query = `UPDATE comments SET likes = likes + 1 WHERE id = ?`
     await knex.raw(query, [id])

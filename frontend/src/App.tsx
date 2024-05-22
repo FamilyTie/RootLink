@@ -19,6 +19,8 @@ import Layout from "./Layout"
 import Search from "./pages/Search"
 import SidebarChats from "./components/Messeging/sidebarChats"
 import ChatLayout from "./components/Messeging/ChatLayout"
+import Profile from "./components/ProfilePage"
+import Settings from "./components/settingsPage"
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
   const [refreshUser, setRefreshUser] = useState(false)
@@ -58,6 +60,14 @@ export default function App() {
             <Route
               path="/feed"
               element={<Feed />}
+            />
+            <Route
+              path="/profile"
+              element={<Profile />}
+            />
+            <Route
+              path="/settings"
+              element={<Settings />}
             />
           </Route>
           <Route

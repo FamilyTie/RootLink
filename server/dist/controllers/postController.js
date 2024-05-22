@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRecentPostByProfile = exports.getRecentPost = exports.getLikedPosts = exports.createPost = void 0;
+exports.updatePost = exports.getRecentPostByProfile = exports.getRecentPost = exports.getLikedPosts = exports.createPost = void 0;
 const Post_1 = __importDefault(require("../db/models/Post"));
 const createPost = async (req, res) => {
     try {
@@ -51,3 +51,20 @@ const getRecentPostByProfile = async (req, res) => {
     res.send(posts);
 };
 exports.getRecentPostByProfile = getRecentPostByProfile;
+const updatePost = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, body, img } = req.body;
+        const updatedPost = await Post_1.default.update(Number(id), { title, body, img });
+        if (!updatedPost) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+        res.status(200).json(updatedPost);
+    }
+    catch (error) {
+        res
+            .status(500)
+            .json({ message: "Failed to update post", error: error.toString() });
+    }
+};
+exports.updatePost = updatePost;

@@ -14,7 +14,16 @@ export interface ProfileReqBody {
 }
 
 export const createProfile = async (req: Request, res: Response) => {
-  const { user_id, img, username, full_name, bio, account_type, settings, data }: ProfileData = req.body
+  const {
+    user_id,
+    img,
+    username,
+    full_name,
+    bio,
+    account_type,
+    settings,
+    data,
+  }: ProfileData = req.body
 
   if (!user_id || !username || !full_name || !account_type) {
     return res.status(400).send("Required fields are missing.")
@@ -28,7 +37,7 @@ export const createProfile = async (req: Request, res: Response) => {
     account_type,
     data,
     settings,
-    img
+    img,
   })
 
   if (!profile)
@@ -56,10 +65,14 @@ export const updateProfile = async (req: Request, res: Response) => {
   const { id } = req.params
   const data: Partial<ProfileReqBody> = req.body
 
+  console.log("Profile ID:", id)
+  console.log("Update Data:", data)
+
   const updatedProfile = await Profile.update(Number(id), data as ProfileData)
   if (!updatedProfile) return res.sendStatus(404)
   res.send(updatedProfile)
 }
+
 export const deleteProfile = async (req: Request, res: Response) => {
   const { id } = req.params
 
@@ -77,5 +90,26 @@ export const deleteProfile = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Failed to delete profile:", error)
     res.status(500).send("Error deleting profile.")
+  }
+}
+export const getProfileDataByUserId = async (req: Request, res: Response) => {
+  const { user_id } = req.params
+
+  if (!user_id) {
+    return res.status(400).send("User ID is required.")
+  }
+
+  try {
+    const profileData = await Profile.getProfileDataByUserId(Number(user_id))
+    if (!profileData || profileData.length === 0) {
+      return res
+        .status(404)
+        .send("No profile data found for the given user ID.")
+    }
+
+    res.send(profileData)
+  } catch (error) {
+    console.error("Failed to fetch profile data:", error)
+    res.status(500).send("Error fetching profile data.")
   }
 }
