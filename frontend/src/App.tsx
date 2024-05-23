@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Routes, Route } from "react-router-dom"
 import Home from "./pages/Home"
 import SignUpPage from "./pages/SignUp"
@@ -13,7 +13,6 @@ import CreatePost from "./components/EditorComponents/CreatePost"
 import Feed from "./pages/Feed"
 import { fetchHandler } from "./utils"
 import ChatApp from "./components/Messeging/ChatApp"
-import { useState } from "react"
 import Discover from "./pages/Search"
 import Layout from "./Layout"
 import Search from "./pages/Search"
@@ -21,18 +20,21 @@ import SidebarChats from "./components/Messeging/sidebarChats"
 import ChatLayout from "./components/Messeging/ChatLayout"
 import Profile from "./components/ProfilePage"
 import Settings from "./components/settingsPage"
+import VideoChatWrapper from "./components/Messeging/VideoChatWrapper"
+
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
   const [refreshUser, setRefreshUser] = useState(false)
+
   useEffect(() => {
     const checkLoggedIn = async () => {
       const user = await checkForLoggedInUser()
-      if (user) {
-        const likedPosts = await fetchHandler(
-          `/api/posts/liked/${user.profile.id}`
-        )
-        user.profile["likedPosts"] = new Set(likedPosts[0])
-      }
+      // if (user) {
+      //   const likedPosts = await fetchHandler(
+      //     `/api/posts/liked/${user.profile.id}`
+      //   );
+      //   user.profile["likedPosts"] = new Set(likedPosts[0]);
+      // }
       setCurrentUser(user.profile)
     }
 
@@ -43,9 +45,9 @@ export default function App() {
   const handleRefresh = () => {
     setRefreshUser(!refreshUser)
   }
+
   return (
     <>
-      {/* <SiteHeadingAndNav /> */}
       <main>
         <Routes>
           <Route
@@ -130,18 +132,13 @@ export default function App() {
             path="/users/:id"
             element={<UserPage />}
           />
-          {/* <Route
-            path="/slack"
-            element={<SlackChat sendMessage={undefined} />}
-          /> */}
-          {/* Add the new route */}
           <Route
             path="fed"
             element={<Feed />}
           />
           <Route
-            path="*"
-            element={<NotFoundPage />}
+            path="/video-chat/:id"
+            element={<VideoChatWrapper />}
           />
           <Route
             path="*"

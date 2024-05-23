@@ -36,24 +36,24 @@ const userRouter_1 = __importDefault(require("./routers/userRouter"));
 const postRouter_1 = __importDefault(require("./routers/postRouter"));
 const profileRouter_1 = require("./routers/profileRouter");
 const commentRouter_1 = __importDefault(require("./routers/commentRouter"));
+const User_1 = __importDefault(require("./db/models/User"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const chatroomsRouter_1 = __importDefault(require("./routers/chatroomsRouter"));
 const searchRouter_1 = require("./routers/searchRouter");
 const cors_1 = __importDefault(require("cors"));
 const ChatRooms_1 = __importDefault(require("./db/models/ChatRooms"));
-// import sendDataToPythonServer from "./db/sendData/dataSender"
 const http = require("http");
-const socketIo = require("socket.io");
+const { Server } = require("socket.io");
+const { ExpressPeerServer } = require("peer");
 const app = (0, express_1.default)();
 const server = http.createServer(app);
-const io = socketIo(server, {
+const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: ["http://localhost:5173", "http://localhost:5174"],
         methods: ["GET", "POST"],
     },
 });
 // Middleware
-// Serve static assets from the dist folder of the frontend
 app.use((0, cors_1.default)({
     origin: "http://localhost:5173",
     credentials: true,
@@ -77,6 +77,28 @@ app.get(/^(?!\/api).*/, function (request, response) {
 });
 io.on("connection", (socket) => {
     console.log("New client connected");
+    socket.on("join", (userId) => {
+        socket.userId = userId;
+        console.log(`User ${userId} connected with socket ID ${socket.id}`);
+    });
+    socket.on("offer", ({ userId, offer }) => {
+        const recipientSocketId = User_1.default[userId];
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit("offer", offer);
+        }
+    });
+    socket.on("answer", ({ userId, answer }) => {
+        const recipientSocketId = User_1.default[userId];
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit("answer", answer);
+        }
+    });
+    socket.on("candidate", ({ userId, candidate }) => {
+        const recipientSocketId = User_1.default[userId];
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit("candidate", candidate);
+        }
+    });
     socket.on("joinRoom", (roomId) => {
         socket.join(roomId);
         console.log(`Client joined room ${roomId}`);
@@ -89,9 +111,7 @@ io.on("connection", (socket) => {
             return;
         }
         try {
-            // Save the message to the database
             const savedMessage = await ChatRooms_1.default.addMessage(chatroomId, userId, body);
-            // Emit the message to the specific room
             io.to(chatroomId).emit("message", savedMessage);
         }
         catch (error) {
@@ -102,21 +122,6 @@ io.on("connection", (socket) => {
         console.log("Client disconnected");
     });
 });
-// function sendDataToPythonServer() {
-//   .then(() => {
-//     console.log('Data sent to Python server successfully');
-//     // Start the Express server
-//     app.listen(3000, () => {
-//       console.log('Express server listening on port 3000');
-//     });
-//   })
-//   .catch((error) => {
-//     console.error('Error sending data to Python server:', error);
-//     // If there was an error sending data, you might choose to start the server anyway
-//     app.listen(5000, () => {
-//       console.log('Express server listening on port 3000');
-//     });
-//   });
 const port = process.env.PORT || 3761;
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);

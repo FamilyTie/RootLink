@@ -14,22 +14,20 @@ import ChatRoomRouter from "./routers/chatroomsRouter"
 import { searchRouter } from "./routers/searchRouter"
 import cors from "cors"
 import Chatrooms from "./db/models/ChatRooms"
-
-// import sendDataToPythonServer from "./db/sendData/dataSender"
 const http = require("http")
-const socketIo = require("socket.io")
+const { Server } = require("socket.io")
+const { ExpressPeerServer } = require("peer")
 
-const app = express()
+const app: Application = express()
 const server = http.createServer(app)
-const io = socketIo(server, {
+const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     methods: ["GET", "POST"],
   },
 })
 
 // Middleware
-// Serve static assets from the dist folder of the frontend
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -56,8 +54,35 @@ app.use("/api/search", searchRouter)
 app.get(/^(?!\/api).*/, function (request: Request, response: Response) {
   response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"))
 })
+
 io.on("connection", (socket) => {
   console.log("New client connected")
+
+  socket.on("join", (userId) => {
+    socket.userId = userId
+    console.log(`User ${userId} connected with socket ID ${socket.id}`)
+  })
+
+  socket.on("offer", ({ userId, offer }) => {
+    const recipientSocketId = User[userId]
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit("offer", offer)
+    }
+  })
+
+  socket.on("answer", ({ userId, answer }) => {
+    const recipientSocketId = User[userId]
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit("answer", answer)
+    }
+  })
+
+  socket.on("candidate", ({ userId, candidate }) => {
+    const recipientSocketId = User[userId]
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit("candidate", candidate)
+    }
+  })
 
   socket.on("joinRoom", (roomId) => {
     socket.join(roomId)
@@ -74,9 +99,7 @@ io.on("connection", (socket) => {
     }
 
     try {
-      // Save the message to the database
       const savedMessage = await Chatrooms.addMessage(chatroomId, userId, body)
-      // Emit the message to the specific room
       io.to(chatroomId).emit("message", savedMessage)
     } catch (error) {
       console.error("Error adding message:", error)
@@ -88,26 +111,16 @@ io.on("connection", (socket) => {
   })
 })
 
-// function sendDataToPythonServer() {
-
-//   .then(() => {
-//     console.log('Data sent to Python server successfully');
-
-//     // Start the Express server
-//     app.listen(3000, () => {
-//       console.log('Express server listening on port 3000');
-//     });
-//   })
-//   .catch((error) => {
-//     console.error('Error sending data to Python server:', error);
-
-//     // If there was an error sending data, you might choose to start the server anyway
-//     app.listen(5000, () => {
-//       console.log('Express server listening on port 3000');
-//     });
-//   });
-
 const port = process.env.PORT || 3761
 server.listen(port, () => {
   console.log(`Server running on port ${port}`)
 })
+// run command for peer in backend : npx peerjs --port 9000 --path /peerjs
+// local chat fully works
+// run 2 frontend 5173
+// http://localhost:5173/video-chat/1/?myPeerId=peer2&targetPeerId=peer1
+// http://localhost:5173/video-chat/1/?myPeerId=peer1&targetPeerId=peer2
+
+// need to make it broadcase to
+// chatroom instead of url and also give me a console log or
+// something that requeste was succesfully sent
