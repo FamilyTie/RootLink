@@ -2,7 +2,7 @@ import * as path from "path"
 import express, { Application, Request, Response } from "express"
 import { handleCookieSessions } from "./middleware/handleCookieSessions"
 import { logRoutes } from "./middleware/logRoutes"
-import {likeRouter} from "./routers/likeRouter"
+import { likeRouter } from "./routers/LikeRouter"
 import authRouter from "./routers/authRouter"
 import userRouter from "./routers/userRouter"
 import postRouter from "./routers/postRouter"
@@ -17,7 +17,8 @@ import Chatrooms from "./db/models/ChatRooms"
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { fetchAutoCompleteLocations } from "./utils/api-fetches"
 import { locationRouter } from "./routers/locationRouter"
-
+import { connectionRouter } from "./routers/connectionRouter"
+import { notificationRouter } from "./routers/notificationRouter"
 const http = require("http")
 const socketIo = require("socket.io")
 
@@ -59,7 +60,13 @@ app.use("/api/chatrooms", ChatRoomRouter)
 app.use("/api/likes", likeRouter)
 app.use("/api/search", searchRouter)
 app.use("/api/location", locationRouter)
+app.use("/api/connection", connectionRouter)
+app.use("/api/notifications", notificationRouter)
 app.get('/api/autocomplete', fetchAutoCompleteLocations)
+
+
+
+
 app.get(/^(?!\/api).*/, function (request: Request, response: Response) {
   response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"))
 })

@@ -4,8 +4,8 @@ exports.getLocationById = exports.getLocations = exports.createLocation = void 0
 const Location_1 = require("../db/models/Location");
 const createLocation = async (req, res) => {
     try {
-        const { latitude, longitude, profile_id } = req.body;
-        const newLocation = await Location_1.Location.create({ latitude, longitude, profile_id });
+        const { lat, lon, profile_id } = req.body;
+        const newLocation = await Location_1.Location.create({ lat, lon, profile_id });
         res.status(201).json(newLocation);
     }
     catch (error) {

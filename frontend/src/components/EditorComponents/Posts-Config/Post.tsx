@@ -147,7 +147,7 @@ export function Post({ post, postBody }) {
   ]
 
   return (
-    <div className="h-full transition-all duration-300 pb-7 bg-white pt-3 w-[35rem] rounded">
+    <div className="h-full transition-all duration-300 pb-7 bg-white pt-3 w-[30rem] rounded">
       <ToastContainer
         position="bottom-left"
         autoClose={5000}

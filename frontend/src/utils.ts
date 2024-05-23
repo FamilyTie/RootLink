@@ -1,6 +1,8 @@
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase-config';
 
+
+
 const basicFetchOptions = {
   method: 'GET',
   credentials: 'include',
@@ -123,4 +125,15 @@ export const profileForPost = async(id) => {
   }
   const { img, username } = profile;
   return {img, username};
+}
+
+
+
+export const requestConnection = async (profile_id1, profile_id2) => {
+  const [connection, error] = await fetchHandler('/api/connection/request', getPostOptions({ profile_id1, profile_id2 }));
+  if (error) {
+    console.error('Error requesting connection:', error);
+    return null;
+  }
+  return connection;
 }

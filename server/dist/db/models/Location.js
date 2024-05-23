@@ -5,9 +5,9 @@ const knex_1 = require("../knex");
 class Location {
     constructor(data) {
         this.id = data.id;
-        this.name = data.profile_id;
-        this.latitude = data.latitude;
-        this.longitude = data.longitude;
+        this.profile_id = data.profile_id;
+        this.lat = data.lat;
+        this.lon = data.lon;
         this.createdAt = data.created_at || new Date();
     }
     static async list() {
@@ -36,12 +36,12 @@ class Location {
     }
     static async create(data) {
         try {
-            const query = `INSERT INTO locations (profile_id, latitude, longitude, created_at)
+            const query = `INSERT INTO locations (profile_id, lat, lon, created_at)
                       VALUES (?, ?, ?, ?) RETURNING *`;
             const values = [
                 data.profile_id,
-                data.latitude,
-                data.longitude,
+                data.lat,
+                data.lon,
                 new Date()
             ];
             const { rows } = await knex_1.knex.raw(query, values);
@@ -54,11 +54,11 @@ class Location {
     }
     static async update(data) {
         try {
-            const query = `UPDATE locations SET profile_id = ?, latitude = ?, longitude = ? WHERE id = ? RETURNING *`;
+            const query = `UPDATE locations SET profile_id = ?, lat = ?, lon = ? WHERE id = ? RETURNING *`;
             const values = [
                 data.profile_id,
-                data.latitude,
-                data.longitude,
+                data.lat,
+                data.lon,
                 data.id
             ];
             const { rows } = await knex_1.knex.raw(query, values);

@@ -18,7 +18,7 @@ function FeedPosts({posts}) {
   return (
     <div className="bg-gray-100 min-h-screen pb-10">
       
-      <div className="flex flex-col ">
+      <div className="flex gap-5 flex-col ">
         
         { posts.map((post) => (
           <Post key={post.id} postBody={JSON.parse(post.body)} post={post}/>

@@ -200,7 +200,7 @@ const ChatApp = ({userId, chatroomId,  username }) => {
   }
 
   return (
-    <div className="flex flex-col pt-[4rem] z-[340] h-[93vh] over w-[88%] overflow-hidden bg-slate-100 bg-opacity-50 border-r backdrop-blur  text-[rgb(218,219,221)]">
+    <div className="flex flex-col pt-[4rem] relative  h-[93vh] over w-[88%] overflow-hidden bg-slate-100 bg-opacity-50 border-r backdrop-blur  text-[rgb(218,219,221)]">
       
       <div className="flex-1 overflow-y-auto p-4 mx-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
         {messages.map((msg, index) => renderMessage(msg, index))}

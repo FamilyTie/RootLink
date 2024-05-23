@@ -121,7 +121,7 @@ function CreatePost({ refetchPosts }) {
   console.dir(editor)
   return (
     <div className="bg-[rgb(294, 124, 204)]">
-      <div className="flex bg-white  rounded-md w-[35rem] p-5  items-start">
+      <div className="flex bg-white  rounded-md w-[30rem] p-5  items-start">
         <div className="w-12 mr-5 h-12 overflow-hidden  rounded-full object-cover border-4 shadow border-white  ml-2 mt-4">
           {user && <img
             src={user.img}
