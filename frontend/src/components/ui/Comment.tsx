@@ -81,7 +81,7 @@ function Comment({
             placeholder="Write a reply..."
           />
           <button
-            className="bg-blue-500 text-white p-2 rounded mt-2"
+            className="bg-[#074979] text-white p-2 rounded mt-2"
             onClick={handleReply}
           >
             Submit Reply
