@@ -9,6 +9,8 @@ const Profile_1 = __importDefault(require("../models/Profile"));
 const Post_1 = __importDefault(require("../models/Post"));
 const comment_1 = __importDefault(require("../models/comment"));
 const ChatRooms_1 = __importDefault(require("../models/ChatRooms"));
+const path = require("path");
+const knex = require('knex')(require('../../knexfile').production);
 async function seed(knex) {
     try {
         console.log("Cleaning up database...");
@@ -388,7 +390,7 @@ async function seed(knex) {
             await Post_1.default.create(post);
         }
         const { chatroom: chatRoom1 } = await ChatRooms_1.default.createChatRoom(seedingProfiles[0].id, seedingProfiles[1].id);
-        await ChatRooms_1.default.addMessage(chatRoom1.id, seedingProfiles[0].id, `{"8c04e81a-d751-4b4c-9ea8-af853a31bb01":{"id":"8c04e81a-d751-4b4c-9ea8-af853a31bb01","type":"NumberedList","meta":{"order":0,"depth":0},"value":[{"id":"f87bd950-060e-49cb-b5ea-c9924c54c8c1","type":"numbered-list","children":[{"text":"testing message n stuff "}],"props":{"nodeType":"block"}}]},"597fb6f2-a802-45c4-a3ae-ce5a8fc9e079":{"id":"597fb6f2-a802-45c4-a3ae-ce5a8fc9e079","value":[{"id":"46d5fa4e-ec9e-4ad8-a627-974dc2793aac","type":"numbered-list","children":[{"text":"yessir ","strike":true}],"props":{"nodeType":"block"}}],"type":"NumberedList","meta":{"order":1,"depth":0}},"1fb05d1f-197e-4ffa-bcc7-28f446605caa":{"id":"1fb05d1f-197e-4ffa-bcc7-28f446605caa","value":[{"id":"996ab609-1095-4ba2-b15a-828e687ab436","type":"numbered-list","children":[{"text":"trueeeee"},{"text":"eeeeee","bold":true}],"props":{"nodeType":"block"}}],"type":"NumberedList","meta":{"order":2,"depth":0}},"e642c019-6734-46e7-8bdb-13af2aaeebc6":{"id":"e642c019-6734-46e7-8bdb-13af2aaeebc6","type":"Blockquote","meta":{"order":3,"depth":0},"value":[{"id":"e80a2940-db9d-446c-ba38-28b6b1184069","type":"blockquote","children":[{"text":"damn"}],"props":{"nodeType":"block"}}]}}`);
+        await ChatRooms_1.default.addMessage(chatRoom1.id || 1, seedingProfiles[0].id, `{"8c04e81a-d751-4b4c-9ea8-af853a31bb01":{"id":"8c04e81a-d751-4b4c-9ea8-af853a31bb01","type":"NumberedList","meta":{"order":0,"depth":0},"value":[{"id":"f87bd950-060e-49cb-b5ea-c9924c54c8c1","type":"numbered-list","children":[{"text":"testing message n stuff "}],"props":{"nodeType":"block"}}]},"597fb6f2-a802-45c4-a3ae-ce5a8fc9e079":{"id":"597fb6f2-a802-45c4-a3ae-ce5a8fc9e079","value":[{"id":"46d5fa4e-ec9e-4ad8-a627-974dc2793aac","type":"numbered-list","children":[{"text":"yessir ","strike":true}],"props":{"nodeType":"block"}}],"type":"NumberedList","meta":{"order":1,"depth":0}},"1fb05d1f-197e-4ffa-bcc7-28f446605caa":{"id":"1fb05d1f-197e-4ffa-bcc7-28f446605caa","value":[{"id":"996ab609-1095-4ba2-b15a-828e687ab436","type":"numbered-list","children":[{"text":"trueeeee"},{"text":"eeeeee","bold":true}],"props":{"nodeType":"block"}}],"type":"NumberedList","meta":{"order":2,"depth":0}},"e642c019-6734-46e7-8bdb-13af2aaeebc6":{"id":"e642c019-6734-46e7-8bdb-13af2aaeebc6","type":"Blockquote","meta":{"order":3,"depth":0},"value":[{"id":"e80a2940-db9d-446c-ba38-28b6b1184069","type":"blockquote","children":[{"text":"damn"}],"props":{"nodeType":"block"}}]}}`);
         const comments = [
             {
                 profile_id: seedingProfiles[0].id,

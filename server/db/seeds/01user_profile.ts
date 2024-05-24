@@ -22,7 +22,7 @@ export async function seed(knex: Knex): Promise<void> {
     await knex("profiles").del()
     await knex("users").del()
 
-    await resetSequences(knex);
+
     
 
     const users = [

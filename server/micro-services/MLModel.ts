@@ -1,7 +1,7 @@
-
+require('dotenv').config();
 
 export const processProfileAndFindMatches = async(user: any) => {
-    const url  = "https://rootlinkmachinelearning.onrender.com/model/process_user";
+    const url  = `${process.env.PYTHON_URL}/model/process_user`;
     const response = await fetch(url, {
         method: "POST",
         headers: {

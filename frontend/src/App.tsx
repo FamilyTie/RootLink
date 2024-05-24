@@ -34,12 +34,12 @@ export default function App() {
   useEffect(() => {
     const checkLoggedIn = async () => {
       const user = await checkForLoggedInUser()
-      // if (user) {
-      //   const likedPosts = await fetchHandler(
-      //     `/api/posts/liked/${user.profile.id}`
-      //   );
-      //   user.profile["likedPosts"] = new Set(likedPosts[0]);
-      // }
+      if (user) {
+        const likedPosts = await fetchHandler(
+          `/api/posts/liked/${user.profile.id}`
+        );
+        user.profile["likedPosts"] = new Set(likedPosts[0]);
+      }
       setCurrentUser(user.profile)
       console.log(user.profile, "Hello World")
     }

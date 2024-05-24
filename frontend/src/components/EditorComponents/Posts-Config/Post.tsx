@@ -59,7 +59,8 @@ export function Post({
       setLiked(true);
     }
   }, [currentUser, post.id]);
-
+console.log(currentUser, 'liked'
+)
   useEffect(() => {
     if (post && post.likes_count) {
       setLikesCount(post.likes_count);

@@ -27,7 +27,7 @@ const app: Application = express()
 const server = http.createServer(app)
 const io = new Server(server, {
   cors: {
-    origin: ["https://rootlink.onrender.com"],
+    origin: ["https://rootlink.onrender.com/", "http://localhost:5173"],
     methods: ["GET", "POST"],
   },
 })
@@ -35,7 +35,7 @@ const io = new Server(server, {
 // Middleware
 app.use(
   cors({
-    origin: "https://rootlink.onrender.com",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 )

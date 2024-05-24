@@ -17,7 +17,8 @@ export default function LoginPage(refresh) {
     if (error) return setErrorText(error.message);
     setCurrentUser(user);
     
- 
+    
+    
     window.location.reload()
 
   };

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.seed = void 0;
-const Location_1 = require("../models/Location"); // Adjust the path according to your project structure
+const path = require('path');
+const Location_1 = require("../models/Location"); // Adjust the path according to your project structur
 async function seed(knex) {
     // Deletes ALL existing entries
     await knex('locations').del();

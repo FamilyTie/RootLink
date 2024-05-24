@@ -38,6 +38,12 @@ class Profile {
         const profile = rows[0];
         return profile ? new Profile(profile) : null;
     }
+    static async findByUserId(userId) {
+        const query = `SELECT * FROM profiles WHERE user_id = ?`;
+        const { rows } = await knex_1.knex.raw(query, [userId]);
+        const profile = rows[0];
+        return profile ? new Profile(profile) : null;
+    }
     static async create(data) {
         const query = `INSERT INTO profiles (img, user_id, username, full_name, bio, settings, account_type, data, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`;

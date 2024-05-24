@@ -86,12 +86,12 @@ function CreatePost({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let img_url = img ? await uploadFileAndGetURL(img) : initialImage;
+    let img_url = img ? await uploadFileAndGetURL(img) : null;
     const postData = {
       title,
       body: JSON.stringify(editor.document),
       profile_id: currentUser.id,
-      img: img_url,
+      img: img_url ,
     };
 
     const options = {

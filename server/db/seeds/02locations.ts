@@ -6,7 +6,7 @@ import { resetSequences } from '../../utils/sql_utils';
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
   await knex('locations').del();
-  resetSequences(knex);
+
 
   
   const locationsData = [
