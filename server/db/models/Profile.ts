@@ -92,8 +92,8 @@ class Profile {
     ]
     const { rows } = await knex.raw(query, values)
     let profile = rows[0]
-    // const similarProfiles = await Profile.getSimilarProfiles({ id: profile.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio })
-    // if (similarProfiles) profile = { ...profile, similarProfiles }
+    const similarProfiles = await Profile.getSimilarProfiles({ id: profile.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio })
+    if (similarProfiles) profile = { ...profile, similarProfiles }
     return profile ? new Profile(profile) : null
   }
 
