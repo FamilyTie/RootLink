@@ -4,11 +4,11 @@ exports.addMessage = exports.getMessages = exports.getChatroomsByUserId = export
 const ChatRooms_1 = require("../db/models/ChatRooms");
 const createChatroom = async (req, res) => {
     const { user1_id, user2_id } = req.body;
+    const existingChatroom = await ChatRooms_1.Chatrooms.findChatRoom(user1_id, user2_id);
+    if (existingChatroom) {
+        return res.status(200).json(existingChatroom);
+    }
     try {
-        const existingChatroom = await ChatRooms_1.Chatrooms.findChatRoom(user1_id, user2_id);
-        if (existingChatroom) {
-            return res.status(200).json(existingChatroom);
-        }
         const newChatroom = await ChatRooms_1.Chatrooms.createChatRoom(user1_id, user2_id);
         res.status(201).json(newChatroom);
     }

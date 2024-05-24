@@ -41,7 +41,10 @@ const chatroomsRouter_1 = __importDefault(require("./routers/chatroomsRouter"));
 const searchRouter_1 = require("./routers/searchRouter");
 const cors_1 = __importDefault(require("cors"));
 const ChatRooms_1 = __importDefault(require("./db/models/ChatRooms"));
-// import sendDataToPythonServer from "./db/sendData/dataSender"
+const api_fetches_1 = require("./utils/api-fetches");
+const locationRouter_1 = require("./routers/locationRouter");
+const connectionRouter_1 = require("./routers/connectionRouter");
+const notificationRouter_1 = require("./routers/notificationRouter");
 const http = require("http");
 const socketIo = require("socket.io");
 const app = (0, express_1.default)();
@@ -72,6 +75,10 @@ app.use("/api/comments", commentRouter_1.default);
 app.use("/api/chatrooms", chatroomsRouter_1.default);
 app.use("/api/likes", LikeRouter_1.likeRouter);
 app.use("/api/search", searchRouter_1.searchRouter);
+app.use("/api/location", locationRouter_1.locationRouter);
+app.use("/api/connection", connectionRouter_1.connectionRouter);
+app.use("/api/notifications", notificationRouter_1.notificationRouter);
+app.get('/api/autocomplete', api_fetches_1.fetchAutoCompleteLocations);
 app.get(/^(?!\/api).*/, function (request, response) {
     response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
 });

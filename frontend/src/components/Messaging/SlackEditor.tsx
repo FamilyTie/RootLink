@@ -122,7 +122,7 @@ const SlackChat = ({ sendMessage }) => {
       id="slack"
       className="relative"
     >
-      <div className="relative border border-gray-600 rounded-lg w-full max-w-xl mx-auto">
+      <div className="relative border-[2px] border-gray-200  rounded-lg w-full max-w-xl mx-auto">
         <div className="flex flex-col pt-10 px-4 pb-4 ">
           <YooptaEditor
             editor={editor}

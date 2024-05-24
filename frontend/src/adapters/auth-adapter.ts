@@ -9,7 +9,6 @@ export interface UserCredentials {
 }
 export const checkForLoggedInUser = async () => {
   const [data] = await fetchHandler(`${baseUrl}/me`);
-  
   return data;
 };
 

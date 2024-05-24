@@ -6,11 +6,13 @@ export function buildCommentTree(comments) {
 
   const rootComments = []
   comments.forEach((comment) => {
-    if (comment.commentId) {
-      if (commentMap[comment.commentId]) {
-        commentMap[comment.commentId].children.push(commentMap[comment.id])
+    if (comment.parent_comment_id) {
+      if (commentMap[comment.parent_comment_id]) {
+        commentMap[comment.parent_comment_id].children.push(
+          commentMap[comment.id]
+        )
       } else {
-        console.log("parent comment for comment ID:", comment.id)
+        console.log("Parent comment for comment ID:", comment.id, "not found.")
       }
     } else {
       rootComments.push(commentMap[comment.id])

@@ -14,8 +14,11 @@ import ChatRoomRouter from "./routers/chatroomsRouter"
 import { searchRouter } from "./routers/searchRouter"
 import cors from "cors"
 import Chatrooms from "./db/models/ChatRooms"
-
-// import sendDataToPythonServer from "./db/sendData/dataSender"
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import { fetchAutoCompleteLocations } from "./utils/api-fetches"
+import { locationRouter } from "./routers/locationRouter"
+import { connectionRouter } from "./routers/connectionRouter"
+import { notificationRouter } from "./routers/notificationRouter"
 const http = require("http")
 const socketIo = require("socket.io")
 
@@ -37,11 +40,15 @@ app.use(
   })
 )
 
+
+
 app.use(cookieParser())
 app.use(handleCookieSessions)
 app.use(logRoutes)
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "../frontend/dist")))
+
+
 
 // Routers
 app.use("/api", authRouter)
@@ -52,6 +59,13 @@ app.use("/api/comments", commentRouter)
 app.use("/api/chatrooms", ChatRoomRouter)
 app.use("/api/likes", likeRouter)
 app.use("/api/search", searchRouter)
+app.use("/api/location", locationRouter)
+app.use("/api/connection", connectionRouter)
+app.use("/api/notifications", notificationRouter)
+app.get('/api/autocomplete', fetchAutoCompleteLocations)
+
+
+
 
 app.get(/^(?!\/api).*/, function (request: Request, response: Response) {
   response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"))

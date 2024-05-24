@@ -8,7 +8,17 @@ export default {
       },
     },
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [
+    require("tailwind-scrollbar"),
+    function ({ addUtilities }) {
+      const newUtilities = {
+        ".stroke-2": {
+          strokeWidth: "2",
+        },
+      }
+      addUtilities(newUtilities)
+    },
+  ],
   variants: {
     scrollbar: ["rounded"],
   },

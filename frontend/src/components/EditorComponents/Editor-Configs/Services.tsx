@@ -9,6 +9,7 @@ export async function uploadFile(file) {
   return data.data.url.replace("tmpfiles.org/", "tmpfiles.org/dl/")
 }
 
+
 export function handleLocation(setLocation) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -30,14 +31,45 @@ export function handleLocation(setLocation) {
   }
 }
 // can't figure out how to change image height in the editor might add it to posts db and make it look like its in editor instead
+
 export const insertImageBlock = (editor) => {
-  const imageBlock = {
-    type: "image",
-    content: "",
-  }
-  editor.insertBlocks(
-    [imageBlock],
-    editor.document[editor.document.length - 1],
-    "after"
-  )
-}
+  return {
+    title: 'Image Block',
+    onItemClick: () => {
+      const imageBlock = {
+        type: 'image',
+        content: '',
+      };
+
+      editor.insertBlocks(
+        [imageBlock],
+        editor.document[editor.document.length - 1],
+        'after'
+      );
+    },
+    aliases: ['image', 'picture'],
+    group: 'Custom',
+    icon: <span>🖼️</span>
+  };
+};
+
+export const insertVideoBlock = (editor) => {
+  return {
+    title: 'Video',
+    onItemClick: () => {
+      const videoBlock = {
+        type: 'video',
+        content: '',
+      };
+
+      editor.insertBlocks(
+        [videoBlock],
+        editor.document[editor.document.length - 1],
+        'after'
+      );
+    },
+    aliases: ['video', 'media'],
+    group: 'Custom',
+    icon: <span>🎥</span>
+  };
+};

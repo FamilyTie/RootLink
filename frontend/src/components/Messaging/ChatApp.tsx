@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import io from "socket.io-client"
 import YooptaEditor, { createYooptaEditor } from "@yoopta/editor"
 import { SlackChat } from "./SlackEditor"
@@ -53,10 +53,10 @@ const MARKS = [Bold, Italic, CodeMark, Strike, Underline]
 
 const socket = io("http://localhost:3761")
 
-const ChatApp = ({ chatroomId, userId, username }) => {
+const ChatApp = ({userId, chatroomId, toggleChatApp,  username }) => {
   const [messages, setMessages] = useState([])
   const [messageBodies, setMessageBodies] = useState(new Set())
-
+  const scrollRef = useRef(null)
   useEffect(() => {
     if (!chatroomId) {
       console.error("No chatroomId provided")
@@ -101,6 +101,7 @@ const ChatApp = ({ chatroomId, userId, username }) => {
       }
     }
 
+
     socket.on("message", handleMessage)
 
     // Clean up
@@ -108,6 +109,7 @@ const ChatApp = ({ chatroomId, userId, username }) => {
       socket.off("message", handleMessage)
     }
   }, [chatroomId, messageBodies])
+
 
   const sendMessage = (messageContent) => {
     if (messageContent.trim()) {
@@ -149,20 +151,22 @@ const ChatApp = ({ chatroomId, userId, username }) => {
     return (
       <div
         key={index}
-        className={`relative p-4 mb-4 max-w-xs rounded-lg shadow-md ${
-          isUserMessage
-            ? "bg-blue-500 text-white self-end"
-            : "bg-gray-800 text-white self-start"
-        }`}
+       className=""
       >
-        <b className="block mb-2">{msg.username}:</b>
-        {msg.img && (
-          <img
-            src={msg.img}
-            alt="user image"
-            className="w-10 h-10 rounded-full mb-3"
-          />
-        )}
+
+          <div className="flex">
+          {!isUserMessage && <b className="block mb-2 text-black">{msg.username}:</b>}
+       
+          </div>
+        
+        <div  className={`relative gap-3 flex p-4 mb-4 max-w-xs rounded-lg shadow-md ${
+          isUserMessage?
+           "bg-[#074979] text-black translate-x-[193%] self-end"
+           : "bg-[#074979] text-black self-start" 
+        }`}>
+           
+        <div >
+
         <YooptaEditor
           editor={editor}
           // @ts-ignore
@@ -175,23 +179,30 @@ const ChatApp = ({ chatroomId, userId, username }) => {
         <div
           className={`absolute top-4 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent ${
             isUserMessage
-              ? "border-l-8 border-l-blue-500 -right-2"
-              : "border-r-8 border-r-gray-800 -left-2"
+            ?  "border-l-8 border-[#074979] -right-2"
+              : "border-r-8 border-[#074979] -left-2"
+             
           }`}
         ></div>
+
+        </div>  
+
+        
+        
+          </div>
+      
       </div>
     )
-  }
-
+  }    
+  
   return (
-    <div className="flex flex-col h-screen w-full bg-[rgb(218,219,221)]  text-[rgb(218,219,221)]">
-      <h1 className="text-center my-4 text-2xl font-bold">
-        Chat Room {chatroomId}
-      </h1>
+    <div className="flex flex-col pt-[4rem] relative  h-[93vh] over w-[88%] overflow-hidden bg-slate-100 bg-opacity-50 border-r backdrop-blur  text-[rgb(218,219,221)]">
+      
       <div className="flex-1 overflow-y-auto p-4 mx-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
         {messages.map((msg, index) => renderMessage(msg, index))}
+        <div ref={scrollRef} />
       </div>
-      <div className="p-4 bg-gray-900">
+      <div className="p-4  bg-white  bg-opacity-70 backdrop-blur shadow-lg ">
         <SlackChat sendMessage={sendMessage} />
       </div>
     </div>
@@ -199,3 +210,8 @@ const ChatApp = ({ chatroomId, userId, username }) => {
 }
 
 export default ChatApp
+
+
+
+
+

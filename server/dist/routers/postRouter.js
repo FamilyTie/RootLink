@@ -7,5 +7,6 @@ exports.postRouter = express.Router();
 exports.postRouter.get("/", postController_1.getRecentPost);
 exports.postRouter.get("/:profileId", postController_1.getRecentPostByProfile);
 exports.postRouter.post("/", postController_1.createPost);
+exports.postRouter.put("/:id", postController_1.updatePost);
 exports.postRouter.get("/liked/:profileId", postController_1.getLikedPosts);
 exports.default = exports.postRouter;

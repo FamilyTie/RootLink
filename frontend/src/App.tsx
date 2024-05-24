@@ -12,16 +12,25 @@ import GetPosts from "./components/EditorComponents/FeedPosts"
 import CreatePost from "./components/EditorComponents/CreatePost"
 import Feed from "./pages/Feed"
 import { fetchHandler } from "./utils"
-import ChatApp from "./components/Messeging/ChatApp"
+import ChatApp from "./components/Messaging/ChatApp"
 import { useState } from "react"
 import Discover from "./pages/Search"
 import Layout from "./Layout"
 import Search from "./pages/Search"
-import SidebarChats from "./components/Messeging/sidebarChats"
-import ChatLayout from "./components/Messeging/ChatLayout"
+import SidebarChats from "./components/Messaging/sidebarChats"
+import ChatLayout from "./components/Messaging/ChatLayout"
+import 'leaflet/dist/leaflet.css';
+import Map from "./components/layout/Map"
+import ConnectionsContext from "./contexts/connectionsContext"
+import {Profile} from "./components/ProfilePage"
+import Settings from "./components/settingsPage"
+import { ToastContainer } from "react-toastify"
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
+  const { connections, setConnections } = useContext(ConnectionsContext)
   const [refreshUser, setRefreshUser] = useState(false)
+  const [notifications, setNotifications] = useState({ received: [], sent: [] })
+  
   useEffect(() => {
     const checkLoggedIn = async () => {
       const user = await checkForLoggedInUser()
@@ -32,44 +41,91 @@ export default function App() {
         user.profile["likedPosts"] = new Set(likedPosts[0])
       }
       setCurrentUser(user.profile)
+      console.log(user.profile, "Hello World")
     }
 
     checkLoggedIn()
   }, [setCurrentUser, refreshUser])
-  console.log(currentUser, "Hello World")
 
+
+  useEffect(() => {
+    const getConnections = async () => {
+      if (currentUser && currentUser.id) {
+        try {
+          const connections = await fetchHandler(`/api/connection/${currentUser.id}`);
+          console.log(connections, "Hello World");
+          if (connections) {
+            setConnections(connections[0]);
+          }
+        } catch (error) {
+          console.error('Error fetching connections:', error);
+        }
+      }
+    };
+
+    getConnections();
+  }, [currentUser, setConnections]);
+
+
+ 
+
+ 
+  useEffect(() => {
+    const notifications = async () => {
+      if (!currentUser) return;
+      const received = await fetchHandler(`/api/notifications/${currentUser.id}`);
+      const sent = await fetchHandler(`/api/notifications/sent/${currentUser.id}`);
+      setNotifications({ received: received[0], sent: sent[0] });
+    }
+    notifications()
+  }, [currentUser])
+
+  console.log(notifications, 'notifications')
+  console.log(currentUser, "Hello World")
+  console.log(connections, "Hello World")
+
+
+  
   const handleRefresh = () => {
     setRefreshUser(!refreshUser)
   }
+
+
+  
   return (
     <>
       {/* <SiteHeadingAndNav /> */}
-      <main>
+      <main className="">
+      <ToastContainer position="bottom-left" autoClose={1000} />
         <Routes>
           <Route
             path="/"
             element={<Home />}
           />
-
-          <Route element={<Layout />}>
+          <Route element={<Layout notifications={notifications} setNotifications={setConnections} />}>
             <Route
               path="/search/:query?"
               element={<Search />}
             />
             <Route
               path="/feed"
-              element={<Feed />}
+              element={<Feed refresh={handleRefresh} notifications={notifications} />}
+            />
+            <Route path='/map' element={<Map />} />
+            <Route
+              path="/profile/:id"
+              element={<Profile notifications={notifications} setNotifications={setNotifications} />}
+            />
+            <Route
+              path="/settings"
+              element={<Settings />}
             />
           </Route>
-
           <Route
             path="/login"
             element={<LoginPage refresh={handleRefresh} />}
           />
-          <Route
-            path="/feed"
-            element={<Feed />}
-          />
+         
           <Route
             path="/sign-up"
             element={<SignUpPage refresh={handleRefresh} />}
@@ -83,15 +139,13 @@ export default function App() {
             element={<UserPage />}
           />
           <Route
-            path="/create-post"
-            element={<CreatePost refetchPosts={undefined} />}
-          />
-          <Route
             path="/chat/:id"
             element={
               <ChatApp
+              toggleChatApp={undefined}
+                userId={currentUser && currentUser.id}
                 username={undefined}
-                userId={2}
+               
                 chatroomId={undefined}
               />
             }
@@ -100,7 +154,10 @@ export default function App() {
             path="/chats"
             element={
               <SidebarChats
-                userId={2}
+              toggle={undefined}
+              userid={currentUser && currentUser.id}
+              chatRoomId={undefined}
+                refresh={handleRefresh}
                 onSelectChatroom={undefined}
               />
             }
@@ -109,7 +166,8 @@ export default function App() {
             path="/chats-Lay"
             element={
               <ChatLayout
-                userId={2}
+              refresh={handleRefresh}
+              userId={currentUser && currentUser.id}
                 username={undefined}
               />
             }
@@ -131,10 +189,7 @@ export default function App() {
             element={<SlackChat sendMessage={undefined} />}
           /> */}
           {/* Add the new route */}
-          <Route
-            path="fed"
-            element={<Feed />}
-          />
+         
           <Route
             path="*"
             element={<NotFoundPage />}

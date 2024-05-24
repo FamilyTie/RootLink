@@ -29,6 +29,7 @@ function Form(refresh) {
     bio: "",
     adoptionYear: "",
     ethicity: "",
+    homeTown: {}
   });
 
   const PageDisplay = () => {
@@ -56,25 +57,21 @@ function Form(refresh) {
       //   console.log(page);
       return (
         <ProfileCreation
-        
+          refresh={refresh}
           page={page}
           setPage={setPage}
           formData={formData}
           setFormData={setFormData}
         />
       );
-    } else {
-      //   console.log(page);
-
-      return <Welcome  refresh={refresh} user={currentUser} formData={formData} />;
-    }
+    } 
   };
   return (
     <main
-      className={`container absolute transition-a;ll duration-300 z-[4] overflow-hidden inset-0 top-[10%] ${
+      className={`container absolute transition-all duration-300 z-[4]   inset-0 top-[10%] ${
         page === 2 ? "w-[500px] h-[550px]" : "w-[400px]"
       } ${
-        page === 1 && "h-[600px]"
+        page === 1 && "h-[700px]"
       } border rounded bg-white m-auto h-[500px]  p-5 mt-5 rounded-3`}
     >
       <div className="progress-bar  shadow bg-secondary rounded-3">

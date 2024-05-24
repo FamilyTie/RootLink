@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateComment = exports.getCommentsByPost = exports.getAllComments = exports.createComment = void 0;
+exports.deleteCommentById = exports.updateComment = exports.getCommentsByPost = exports.getAllComments = exports.createComment = void 0;
 const comment_1 = require("../db/models/comment");
 const knex_1 = require("../db/knex");
 const createComment = async (req, res) => {
@@ -95,3 +95,14 @@ const updateComment = async (req, res) => {
     }
 };
 exports.updateComment = updateComment;
+const deleteCommentById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        await comment_1.Comment.delete(parseInt(id));
+        res.status(200).send({ message: "Comment deleted successfully." });
+    }
+    catch (error) {
+        res.status(500).send({ error: "Failed to delete comment." });
+    }
+};
+exports.deleteCommentById = deleteCommentById;

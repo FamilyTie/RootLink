@@ -5,8 +5,8 @@ import Button from "../ui/Button";
 import { FormTitle } from "../layout/ProfileForm";
 import { createUserWithProfile } from "../../adapters/user-adapter";
 
-function ProfileCreation({ page, setPage, formData, setFormData }) {
-  const handleClick = (e) => {
+function ProfileCreation({ page, setPage, formData, setFormData, refresh }) {
+  const handleClick = async(e) => {
     e.preventDefault();
     if (!formData.username) {
       window.alert("Username is required");
@@ -25,12 +25,15 @@ function ProfileCreation({ page, setPage, formData, setFormData }) {
       console.log(formData);
       window.alert("Are you done with the registration");
     } else {
-      createUserWithProfile(formData);
-      setPage((currPage) => currPage + 1);
+      console.log(formData);
+      
+      await createUserWithProfile(formData);
+      
+      window.location.reload();
     }
   };
 
-  
+  console.log(formData)
   return (
     <div>
       <div className="mt-2 ">

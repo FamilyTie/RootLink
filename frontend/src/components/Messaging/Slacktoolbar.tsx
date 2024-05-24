@@ -1,4 +1,5 @@
-import { useYooptaEditor } from "@yoopta/editor"
+import { useState } from "react"
+import { buildBlockData, generateId, useYooptaEditor } from "@yoopta/editor"
 import {
   List,
   ListOrdered,
@@ -16,34 +17,109 @@ import {
 import "./Slack.css"
 import { FiSend } from "react-icons/fi"
 import { Tooltip } from "react-tooltip"
+import { uploadFileAndGetURL } from "../../utils"
 
 const SlackTopToolbar = ({ handleMessageSubmit }) => {
   const editor = useYooptaEditor()
+  const [imageFileInput, setImageFileInput] = useState(null)
+  const [videoFileInput, setVideoFileInput] = useState(null)
 
-  // const handleImageInsert = (url: string) => {
-  //   if (url) {
-  //     editor.insertBlock({
-  //       id: `image-${Date.now()}`, // Unique id for the block
-  //       type: "image",
-  //       value: [], // URL of the image
-  //       meta: {
-  //         src: url,
-  //         order: 0,
-  //         depth: 0,
-  //       },
-  //     })
-  //   }
-  // }
+  const handleImageFileChange = async (event) => {
+    const file = event.target.files[0]
+    if (file) {
+      try {
+        const url = await uploadFileAndGetURL(file)
+        insertImage(url)
+      } catch (error) {
+        console.error("Error uploading file:", error)
+      }
+    }
+  }
 
-  // const handleVideoInsert = () => {
-  //   const url = prompt("Enter the video URL:");
-  //   if (url) {
-  //     editor.blocks.video.insert({ src: url });
-  //   }
-  // };
+  const handleVideoFileChange = async (event) => {
+    const file = event.target.files[0]
+    if (file) {
+      try {
+        const url = await uploadFileAndGetURL(file)
+        insertVideo(url)
+      } catch (error) {
+        console.error("Error uploading file:", error)
+      }
+    }
+  }
+
+  const insertImage = (url) => {
+    if (url) {
+      editor.insertBlock(
+        buildBlockData({
+          type: "Image",
+          value: [
+            {
+              id: generateId(),
+              type: "image",
+              children: [{ text: "" }],
+              props: {
+                nodeType: "void",
+                src: `${url}`,
+                alt: "alt",
+              },
+            },
+          ],
+        })
+      )
+    }
+  }
+
+  const insertVideo = (url) => {
+    if (url) {
+      editor.insertBlock(
+        buildBlockData({
+          type: "Video",
+          value: [
+            {
+              id: generateId(),
+              type: "video",
+              children: [{ text: "" }],
+              props: {
+                nodeType: "void",
+                src: `${url}`,
+                alt: "video",
+              },
+            },
+          ],
+        })
+      )
+    }
+  }
+
+  const handleImageInsert = () => {
+    if (imageFileInput) {
+      imageFileInput.click()
+    }
+  }
+
+  const handleVideoInsert = () => {
+    if (videoFileInput) {
+      videoFileInput.click()
+    }
+  }
 
   return (
     <div className="toolbar">
+      <input
+        type="file"
+        accept="image/*"
+        style={{ display: "none" }}
+        ref={(input) => setImageFileInput(input)}
+        onChange={handleImageFileChange}
+      />
+      <input
+        type="file"
+        accept="video/*"
+        style={{ display: "none" }}
+        ref={(input) => setVideoFileInput(input)}
+        onChange={handleVideoFileChange}
+      />
       <button
         className="toolbarItem"
         data-state-active={editor.formats.bold?.isActive()}
@@ -145,19 +221,25 @@ const SlackTopToolbar = ({ handleMessageSubmit }) => {
           strokeWidth={1.5}
         />
       </button>
-      {/* <span className="separator" /> */}
-      {/* <button
+      <span className="separator" />
+      <button
         className="toolbarItem"
-        // onClick={() => handleImageInsert("https://wallpapers.com/images/featured/dragon-ball-super-broly-dznz07vkati6shws.jpg")}
+        onClick={handleImageInsert}
       >
         <ImageIcon
           size={15}
           strokeWidth={1.5}
         />
-      </button> */}
-      {/* <button className="toolbarItem" onClick={handleVideoInsert}>
-        <VideoIcon size={15} strokeWidth={1.5} />
-      </button> */}
+      </button>
+      <button
+        className="toolbarItem"
+        onClick={handleVideoInsert}
+      >
+        <VideoIcon
+          size={15}
+          strokeWidth={1.5}
+        />
+      </button>
       <span className="separator" />
       <button
         className="toolbarItem"

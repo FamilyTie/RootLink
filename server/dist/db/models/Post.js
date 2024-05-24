@@ -15,32 +15,34 @@ class Post {
         try {
             const query = `
       SELECT 
-      posts.id,
-      posts.title,
-      posts.body,
-      posts.img AS post_image,
-      profiles.img AS profile_photo,
-      profiles.username,
-      posts.comments_count,
-      posts.likes_count,
-      json_agg(json_build_object('profile_id', post_likes.profile_id, 'img', liker_profiles.img) ORDER BY post_likes.id DESC) AS new_likes
-  FROM 
-      posts
-  LEFT JOIN 
-      profiles ON posts.profile_id = profiles.id
-  LEFT JOIN 
-      post_likes ON posts.id = post_likes.post_id
-  LEFT JOIN 
-      profiles AS liker_profiles ON post_likes.profile_id = liker_profiles.id
-  WHERE 
-      posts.id > ?
-  GROUP BY 
-      posts.id, profiles.id
-  ORDER BY 
-      posts.id DESC
-  LIMIT 
-      20
-  `;
+        posts.id,
+        posts.title,
+        posts.body,
+        posts.img AS post_image,
+        profiles.img AS profile_photo,
+        profiles.username,
+        profiles.id AS profile_id,
+        profiles.full_name,
+        posts.comments_count,
+        posts.likes_count,
+        json_agg(json_build_object('profile_id', post_likes.profile_id, 'img', liker_profiles.img) ORDER BY post_likes.id DESC) AS new_likes
+      FROM 
+        posts
+      LEFT JOIN 
+        profiles ON posts.profile_id = profiles.id
+      LEFT JOIN 
+        post_likes ON posts.id = post_likes.post_id
+      LEFT JOIN 
+        profiles AS liker_profiles ON post_likes.profile_id = liker_profiles.id
+      WHERE 
+        posts.id > ?
+      GROUP BY 
+        posts.id, profiles.id, profiles.full_name
+      ORDER BY 
+        posts.id DESC
+      LIMIT 
+        20
+      `;
             const { rows } = await knex_1.knex.raw(query, [lastId]);
             console.log(rows);
             console.log('hello');
@@ -76,7 +78,7 @@ class Post {
             data.body,
             data.created_at || new Date(),
             data.updated_at || new Date(),
-            data.img || null
+            data.img || null,
         ];
         const { rows } = await knex_1.knex.raw(query, values);
         return new Post(rows[0]);
@@ -86,10 +88,11 @@ class Post {
         if (!existingPost)
             return null;
         const updatedAt = new Date();
-        const query = `UPDATE posts SET title = ?, body = ?, updated_at = ? WHERE id = ? RETURNING *`;
+        const query = `UPDATE posts SET title = ?, body = ?, img = ?, updated_at = ? WHERE id = ? RETURNING *`;
         const values = [
             data.title || existingPost.title,
             data.body || existingPost.body,
+            data.img || existingPost.img, // Make sure to include the image update
             updatedAt,
             id,
         ];

@@ -8,6 +8,7 @@ export default function LoginPage(refresh) {
   const [errorText, setErrorText] = useState("");
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   if (currentUser) return <Navigate to="/feed" />;
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrorText("");
@@ -15,8 +16,9 @@ export default function LoginPage(refresh) {
     const [user, error] = await logUserIn(formData as any as UserCredentials);
     if (error) return setErrorText(error.message);
     setCurrentUser(user);
-
-   refresh
+    
+ 
+    window.location.reload()
 
   };
 

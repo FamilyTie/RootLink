@@ -4,6 +4,7 @@ import { FormTitle } from "../layout/ProfileForm";
 import StatusRadioInputGroup from "../ui/RadioInputGroup";
 import DropdownInput from "../ui/DropdownInput";
 import YearInput from "../ui/YearInput";
+import LocationIQAutocomplete from "../ui/AutoCompleteLocation";
 
 function PersonalInfo({ page, setPage, formData, setFormData }) {
   const handleClick = (e) => {
@@ -68,6 +69,8 @@ function PersonalInfo({ page, setPage, formData, setFormData }) {
           setFormData({ ...formData, adoptionYear: e.target.value })
         }
       />
+
+      <LocationIQAutocomplete setSelection={(selection) => setFormData({...formData, homeTown: selection })} />
       <div className="text-center mt-8 ">
         {page !== 0 && page !== 3 ? (
           <Button
