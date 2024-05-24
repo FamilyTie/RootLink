@@ -68,6 +68,13 @@ class Profile {
     return profile ? new Profile(profile) : null
   }
 
+  static async findByUserId(userId: number) {
+    const query = `SELECT * FROM profiles WHERE user_id = ?`
+    const { rows } = await knex.raw(query, [userId])
+    const profile = rows[0]
+    return profile ? new Profile(profile) : null
+  }
+
   static async create(data: Omit<ProfileData, "id">) {
     const query = `INSERT INTO profiles (img, user_id, username, full_name, bio, settings, account_type, data, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`

@@ -16,7 +16,7 @@ export const loginUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    let profile = await Profile.findById(user.id);
+    let profile = await Profile.findByUserId(user.id);
     if (!profile) {
       console.log("Profile not found")
       return res.status(404).json({ message: "Profile not found" });
@@ -61,7 +61,7 @@ export const showMe = async (req, res) => {
   const user = await User.findById(req.session.userId);
   if (!user) return res.status(404).send("User not found");
 
-  let profile = await Profile.findById(req.session.userId);
+  let profile = await Profile.findByUserId(req.session.userId);
   if (!profile) return res.status(404).send("Profile not found");
 
   // try {
