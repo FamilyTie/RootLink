@@ -1,10 +1,14 @@
 import { Knex } from 'knex';
-import {Location} from '../models/Location' // Adjust the path according to your project structure
+const path = require('path');
+import {Location} from '../models/Location' // Adjust the path according to your project structur
+import { resetSequences } from '../../utils/sql_utils';
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
   await knex('locations').del();
+  resetSequences(knex);
 
+  
   const locationsData = [
     { profile_id: 1, lat: 40.712776, lon: -74.005974 }, // New York City, NY
     { profile_id: 2, lat: 42.360082, lon: -71.058880 }, // Boston, MA

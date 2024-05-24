@@ -1,4 +1,4 @@
-// import { processProfileAndFindMatches } from "../../micro-services/MLModel"
+import { processProfileAndFindMatches } from "../../micro-services/MLModel"
 import { knex } from "../knex"
 console.log("hello")
 export interface ProfileData {
@@ -50,16 +50,16 @@ class Profile {
     return rows.map((profile: ProfileData) => new Profile(profile))
   }
 
-  // static async getSimilarProfiles(profile) {
-  //   try {
-  //     const similarProfiles = await processProfileAndFindMatches(profile)
-  //     return similarProfiles
-  //   }
-  //   catch (error) {
-  //     console.error('Error getting similar profiles:', error);
-  //   }
+  static async getSimilarProfiles(profile) {
+    try {
+      const similarProfiles = await processProfileAndFindMatches(profile)
+      return similarProfiles
+    }
+    catch (error) {
+      console.error('Error getting similar profiles:', error);
+    }
 
-  // }
+  }
 
   static async findById(id: number) {
     const query = `SELECT * FROM profiles WHERE id = ?`

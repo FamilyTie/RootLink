@@ -1,5 +1,6 @@
 import User from "../db/models/User"
 import Profile from "../db/models/Profile"
+
 // This controller takes the provided username and password and finds
 // the matching user in the database. If the user is found and the password
 // is valid, it adds the userId to the cookie (allowing them to stay logged in)
@@ -28,9 +29,8 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    // Uncomment and adjust the following lines if you need to fetch similar profiles
-    // const similarProfiles = await Profile.getSimilarProfiles({ id: user.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio });
-    // if (similarProfiles) profile = { ...profile, similarProfiles };
+    const similarProfiles = await Profile.getSimilarProfiles({ id: user.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio });
+    if (similarProfiles) profile = { ...profile, similarProfiles };
 
     req.session.userId = user.id;
 
@@ -64,18 +64,18 @@ export const showMe = async (req, res) => {
   let profile = await Profile.findByUserId(req.session.userId);
   if (!profile) return res.status(404).send("Profile not found");
 
-  // try {
-  //   const similarProfiles = await Profile.getSimilarProfiles({
-  //     id: profile.id,
-  //     adoption_year: profile.data.raw.adoptionYear,
-  //     ethnicity: profile.data.raw.ethnicity,
-  //     bio: profile.bio,
-  //   });
-  //   profile = { ...profile, similarProfiles };
-  // } catch (error) {
-  //   console.error("Error fetching similar profiles:", error);
-  //   return res.status(500).send("Error fetching similar profiles");
-  // }
+  try {
+    const similarProfiles = await Profile.getSimilarProfiles({
+      id: profile.id,
+      adoption_year: profile.data.raw.adoptionYear,
+      ethnicity: profile.data.raw.ethnicity,
+      bio: profile.bio,
+    });
+    profile = { ...profile, similarProfiles };
+  } catch (error) {
+    console.error("Error fetching similar profiles:", error);
+    return res.status(500).send("Error fetching similar profiles");
+  }
 
   res.send({ user, profile });
 };

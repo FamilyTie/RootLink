@@ -4,8 +4,14 @@ import Profile from "../models/Profile"
 import Post from "../models/Post"
 import Comment from "../models/comment"
 import Chatrooms from "../models/ChatRooms"
+import fs from "fs"
+const path = require("path")
+const knex = require('knex')(require('../../knexfile').production);
+import { resetSequences } from "../../utils/sql_utils"
+
 
 export async function seed(knex: Knex): Promise<void> {
+  
   try {
     console.log("Cleaning up database...")
     // Deletes ALL existing entries in the correct order
@@ -15,6 +21,9 @@ export async function seed(knex: Knex): Promise<void> {
     await knex("posts").del()
     await knex("profiles").del()
     await knex("users").del()
+
+    await resetSequences(knex);
+    
 
     const users = [
       { email: "alice@example.com", password: "password123" },
