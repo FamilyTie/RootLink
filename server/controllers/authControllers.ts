@@ -8,20 +8,23 @@ import Profile from "../db/models/Profile"
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body; // the req.body value is provided by the client
-
+  console.log("Logging in user:", email, password)
   try {
     const user = await User.findByEmail(email);
     if (!user) {
+      console.log("User not found")
       return res.status(404).json({ message: "User not found" });
     }
 
     let profile = await Profile.findById(user.id);
     if (!profile) {
+      console.log("Profile not found")
       return res.status(404).json({ message: "Profile not found" });
     }
 
     const isPasswordValid = await user.isValidPassword(password);
     if (!isPasswordValid) {
+      console.log("Invalid password")
       return res.status(401).json({ message: "Invalid password" });
     }
 
@@ -54,7 +57,7 @@ export const logoutUser = (req, res) => {
 // or returns the user based on the userId stored on the client's cookie
 export const showMe = async (req, res) => {
   if (!req.session.userId) return res.sendStatus(401);
-
+  
   const user = await User.findById(req.session.userId);
   if (!user) return res.status(404).send("User not found");
 
