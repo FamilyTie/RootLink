@@ -1,5 +1,5 @@
 import { Knex } from 'knex';
-import { Location } from '../models/Location'; // Adjust the path according to your project structure
+import {Location} from '../models/Location' // Adjust the path according to your project structure
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
