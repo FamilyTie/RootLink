@@ -4,26 +4,39 @@ import Profile from "../db/models/Profile"
 // the matching user in the database. If the user is found and the password
 // is valid, it adds the userId to the cookie (allowing them to stay logged in)
 // and sends back the user object.
+
+
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body // the req.body value is provided by the client
+  const { email, password } = req.body; // the req.body value is provided by the client
 
-  const user = await User.findByEmail(email)
-  if (!user) return res.sendStatus(404)
-  let profile = await Profile.findById(user.id)
-  if (!profile) return res.sendStatus(404)
+  try {
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  const isPasswordValid = await user.isValidPassword(password)
-  if (!isPasswordValid) return res.sendStatus(404)
+    let profile = await Profile.findById(user.id);
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
 
+    const isPasswordValid = await user.isValidPassword(password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
 
-  // const similarProfiles = await Profile.getSimilarProfiles({ id: user.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio })
-  // if (similarProfiles) profile = { ...profile, similarProfiles }
+    // Uncomment and adjust the following lines if you need to fetch similar profiles
+    // const similarProfiles = await Profile.getSimilarProfiles({ id: user.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio });
+    // if (similarProfiles) profile = { ...profile, similarProfiles };
 
+    req.session.userId = user.id;
 
-  req.session.userId = user.id
-
-  res.send({ user, profile })
-}
+    res.send({ user, profile });
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 // This controller sets `req.session` to null, destroying the cookie
 // which is the thing that keeps them logged in.
