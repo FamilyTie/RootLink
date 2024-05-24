@@ -1,6 +1,6 @@
 import { processProfileAndFindMatches } from "../../micro-services/MLModel"
 import { knex } from "../knex"
-
+console.log("hello")
 export interface ProfileData {
   img?: string
 
@@ -72,7 +72,7 @@ class Profile {
     const query = `INSERT INTO profiles (img, user_id, username, full_name, bio, settings, account_type, data, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
     const values = [
-      data.img || '',
+      data.img || "",
       data.user_id,
       data.username,
       data.full_name,
@@ -99,6 +99,10 @@ class Profile {
       .map((key) => `${key} = ?`)
       .join(", ")} WHERE id = ? RETURNING *`
     const values = [...keys.map((key) => updateFields[key]), id]
+
+    console.log("Update Query:", query)
+    console.log("Update Values:", values)
+
     const { rows } = await knex.raw(query, values)
     const profile = rows[0]
     return profile ? new Profile(profile) : null
@@ -116,28 +120,51 @@ class Profile {
       throw error
     }
   }
+
+  static async getProfileDataByUserId(userId: number) {
+    const profileQuery = `
+      SELECT p.bio, p.full_name, p.username, p.created_at, p.img
+      FROM profiles p
+      WHERE p.id = ?
+    `
+    const postsQuery = `
+      SELECT po.*
+      FROM posts po
+      WHERE po.profile_id = ?
+    `
+
+    const profileResult = await knex.raw(profileQuery, [userId])
+    const postsResult = await knex.raw(postsQuery, [userId])
+
+    const profileData = profileResult.rows[0] // Assuming userId is unique and will return a single row
+    const postsData = postsResult.rows
+
+    return { ...profileData, posts: postsData }
+  }
 }
 
+export async function fetchInBatches(
+  batchSize: number
+): Promise<ProfileData[][]> {
+  const batches: ProfileData[][] = []
 
-export async function fetchInBatches(batchSize: number): Promise<ProfileData[][]> {
-  const batches: ProfileData[][] = [];
-
-  let offset = 0;
+  let offset = 0
   while (true) {
-    const profiles = await knex.raw(`SELECT id, data FROM profiles ORDER BY id LIMIT ? OFFSET ?`, [batchSize, offset]);
-    const profileData: ProfileData[] = profiles.rows;
+    const profiles = await knex.raw(
+      `SELECT id, data FROM profiles ORDER BY id LIMIT ? OFFSET ?`,
+      [batchSize, offset]
+    )
+    const profileData: ProfileData[] = profiles.rows
 
     if (profileData.length === 0) {
-      break;
+      break
     }
 
-    batches.push(profileData);
-    offset += batchSize;
+    batches.push(profileData)
+    offset += batchSize
   }
 
-  return batches;
+  return batches
 }
-
-
 
 export default Profile

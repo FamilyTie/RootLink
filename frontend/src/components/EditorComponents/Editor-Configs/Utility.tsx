@@ -13,6 +13,7 @@ import { ChecklistItem } from "./checkToggle"
 import { Alert } from "./Alert"
 import { MdChecklist } from "react-icons/md"
 import { Font } from "./Font"
+import { insertVideoBlock } from "./Services"
 
 // customization
 
@@ -26,7 +27,7 @@ export const getCustomSlashMenuItems = (
   insertAlert(editor),
   // insertChecklistItem(editor)
   insertCommandsItem(editor),
-  
+  insertVideoBlock(editor)
 ]
 
 export const theme = {
@@ -84,3 +85,4 @@ export const defaultBlockAmount = [
     content: [{ type: "text", text: " ", styles: {} }],
   },
 ]
+

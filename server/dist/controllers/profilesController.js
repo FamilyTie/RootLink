@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProfile = exports.updateProfile = exports.showProfile = exports.listProfiles = exports.createProfile = void 0;
+exports.getProfileDataByUserId = exports.deleteProfile = exports.updateProfile = exports.showProfile = exports.listProfiles = exports.createProfile = void 0;
 const Profile_1 = __importDefault(require("../db/models/Profile"));
 const createProfile = async (req, res) => {
-    const { user_id, img, username, full_name, bio, account_type, settings, data } = req.body;
+    const { user_id, img, username, full_name, bio, account_type, settings, data, } = req.body;
     if (!user_id || !username || !full_name || !account_type) {
         return res.status(400).send("Required fields are missing.");
     }
@@ -18,7 +18,7 @@ const createProfile = async (req, res) => {
         account_type,
         data,
         settings,
-        img
+        img,
     });
     if (!profile)
         return res
@@ -44,6 +44,8 @@ exports.showProfile = showProfile;
 const updateProfile = async (req, res) => {
     const { id } = req.params;
     const data = req.body;
+    console.log("Profile ID:", id);
+    console.log("Update Data:", data);
     const updatedProfile = await Profile_1.default.update(Number(id), data);
     if (!updatedProfile)
         return res.sendStatus(404);
@@ -68,3 +70,23 @@ const deleteProfile = async (req, res) => {
     }
 };
 exports.deleteProfile = deleteProfile;
+const getProfileDataByUserId = async (req, res) => {
+    const { user_id } = req.params;
+    if (!user_id) {
+        return res.status(400).send("User ID is required.");
+    }
+    try {
+        const profileData = await Profile_1.default.getProfileDataByUserId(Number(user_id));
+        if (!profileData || profileData.length === 0) {
+            return res
+                .status(404)
+                .send("No profile data found for the given user ID.");
+        }
+        res.send(profileData);
+    }
+    catch (error) {
+        console.error("Failed to fetch profile data:", error);
+        res.status(500).send("Error fetching profile data.");
+    }
+};
+exports.getProfileDataByUserId = getProfileDataByUserId;

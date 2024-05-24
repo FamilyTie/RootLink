@@ -96,5 +96,53 @@
     width: 100%;
   }
 }
+/* Adjust the max-width and max-height for the media container */
+.yoo-image-mx-auto.yoo-image-my-0.yoo-image-flex,
+.yoo-video-mx-auto.yoo-video-my-0.yoo-video-flex {
+  max-width: 300px !important; /* Lower the max-width */
+  max-height: 203px !important; /* Lower the max-height */
+  width: 300px; /* Ensure the width is consistent */
+  height: 203px; /* Ensure the height is consistent */
+  min-width: 300px; /* Optional: Ensure the min-width */
+  box-sizing: border-box;
+  flex-shrink: 0;
+  position: relative; /* Ensure relative positioning for shadow effects */
+  overflow: hidden; /* Ensure the media doesn't overflow */
+  border-radius: 8px; /* Medium rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow */
+  border: 2px solid #eee; /* Light outline */
+}
 
+/* Ensure the image fits within the container */
+.yoo-image-w-full {
+  width: 100%;
+  height: 100%;
+}
 
+.yoo-image-w-full img,
+.yoo-video-w-full video {
+  object-fit: cover; /* Ensure the media covers the container */
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit; /* Ensure the media has the same rounded corners as the container */
+  display: block; /* Ensure no extra space around the media */
+}
+
+/* Hide the resize handles */
+.yoo-image-absolute,
+.yoo-image-pointer-events-none,
+.yoo-image-cursor-col-resize,
+.yoo-video-absolute,
+.yoo-video-pointer-events-none,
+.yoo-video-cursor-col-resize {
+  display: none !important;
+}
+
+/* Ensure the media container is not resizable */
+.yoo-image-mx-auto.yoo-image-my-0.yoo-image-flex,
+.yoo-video-mx-auto.yoo-video-my-0.yoo-video-flex {
+  user-select: none; /* Prevent user selection */
+  resize: none; /* Disable resize */
+  overflow: hidden; /* Hide overflow to prevent scroll bars */
+}

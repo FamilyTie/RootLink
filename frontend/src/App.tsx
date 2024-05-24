@@ -22,13 +22,15 @@ import ChatLayout from "./components/Messaging/ChatLayout"
 import 'leaflet/dist/leaflet.css';
 import Map from "./components/layout/Map"
 import ConnectionsContext from "./contexts/connectionsContext"
-
-
+import {Profile} from "./components/ProfilePage"
+import Settings from "./components/settingsPage"
+import { ToastContainer } from "react-toastify"
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
   const { connections, setConnections } = useContext(ConnectionsContext)
   const [refreshUser, setRefreshUser] = useState(false)
   const [notifications, setNotifications] = useState({ received: [], sent: [] })
+  
   useEffect(() => {
     const checkLoggedIn = async () => {
       const user = await checkForLoggedInUser()
@@ -43,7 +45,7 @@ export default function App() {
     }
 
     checkLoggedIn()
-  }, [setCurrentUser])
+  }, [setCurrentUser, refreshUser])
 
 
   useEffect(() => {
@@ -66,8 +68,11 @@ export default function App() {
 
 
  
+
+ 
   useEffect(() => {
     const notifications = async () => {
+      if (!currentUser) return;
       const received = await fetchHandler(`/api/notifications/${currentUser.id}`);
       const sent = await fetchHandler(`/api/notifications/sent/${currentUser.id}`);
       setNotifications({ received: received[0], sent: sent[0] });
@@ -91,12 +96,12 @@ export default function App() {
     <>
       {/* <SiteHeadingAndNav /> */}
       <main className="">
+      <ToastContainer position="bottom-left" autoClose={1000} />
         <Routes>
           <Route
             path="/"
             element={<Home />}
           />
-
           <Route element={<Layout notifications={notifications} setNotifications={setConnections} />}>
             <Route
               path="/search/:query?"
@@ -107,8 +112,15 @@ export default function App() {
               element={<Feed refresh={handleRefresh} notifications={notifications} />}
             />
             <Route path='/map' element={<Map />} />
+            <Route
+              path="/profile/:id"
+              element={<Profile notifications={notifications} setNotifications={setNotifications} />}
+            />
+            <Route
+              path="/settings"
+              element={<Settings />}
+            />
           </Route>
-
           <Route
             path="/login"
             element={<LoginPage refresh={handleRefresh} />}
@@ -127,13 +139,10 @@ export default function App() {
             element={<UserPage />}
           />
           <Route
-            path="/create-post"
-            element={<CreatePost refetchPosts={undefined} />}
-          />
-          <Route
             path="/chat/:id"
             element={
               <ChatApp
+              toggleChatApp={undefined}
                 userId={currentUser && currentUser.id}
                 username={undefined}
                
@@ -145,6 +154,7 @@ export default function App() {
             path="/chats"
             element={
               <SidebarChats
+              toggle={undefined}
               userid={currentUser && currentUser.id}
               chatRoomId={undefined}
                 refresh={handleRefresh}

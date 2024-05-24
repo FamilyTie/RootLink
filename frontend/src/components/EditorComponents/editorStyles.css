@@ -44,7 +44,7 @@
   --bn-colors-highlights-pink-text: #ad1a72;
   --bn-colors-highlights-pink-background: #f4dfeb;
 
-  /* --bn-font-family: "Chiller, cursive"; */
+
   --bn-border-radius: 6px;
 }
 
@@ -67,7 +67,7 @@ input.ProseMirror::selection {
   padding: 4px;
 }
 /* .bn-container .dark {
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+
 } */
 
 .alert[data-alert-type="warning"] {
@@ -177,6 +177,7 @@ input.ProseMirror::selection {
   /* color: rgb(157 173 184); */
   pointer-events: none;
   font-weight: 500;
+  font-family: "Darker Grotesque";
 }
 
 /* Applies to all empty blocks of a specific 'blockType' */
@@ -187,6 +188,7 @@ input.ProseMirror::selection {
   pointer-events: none;
   font-style: normal;
   font-weight: 500;
+  font-family: "Darker Grotesque";
 }
 
 /* Applies to all empty blocks of a specific 'blockType', but only when they contain the text cursor */
@@ -197,6 +199,7 @@ input.ProseMirror::selection {
   pointer-events: none;
   font-style: normal;
   font-weight: 500;
+  font-family: "Darker Grotesque";
 }
 
 .ProseMirror.bn-editor.bn-default-styles {
@@ -210,4 +213,11 @@ input.ProseMirror::selection {
 
 .b-inline-content {
   font-family: "Darker Grotesque";
+}
+
+.bn-container, .bn-block-group, .bn-block-content, .bn-inline-content {
+  font-family: 'Darker Grotesque', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 500 !important;
+  transform: translatex(-1px);
 }

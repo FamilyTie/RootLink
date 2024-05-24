@@ -6,12 +6,16 @@ import { SearchResult } from "../../../interfaces";
 import { fetchHandler, getPostOptions } from "../../utils";
 import CurrentUserContext from "../../contexts/current-user-context";
 import { requestConnection } from "../../utils";
+import ConnectionsContext from "../../contexts/connectionsContext";
+import { logUserOut } from "../../adapters/auth-adapter";
+
 function SideBar({notifications, setNotifications}) {
   const location = useLocation();
   const navigate = useNavigate();
   const pathname = location.pathname;
 
-  const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const {connections} = useContext(ConnectionsContext);
   const pathIndexes = {
     "/feed": 1,
     "/search": 2,
@@ -20,7 +24,7 @@ function SideBar({notifications, setNotifications}) {
     "/messages": 5,
     "/settings": 6,
   };
-
+console.log(connections, "connections sidebar")
   const getPathIndex = (path) => {
     // Check for exact matches first
     if (pathIndexes[path] !== undefined) {
@@ -70,7 +74,9 @@ function SideBar({notifications, setNotifications}) {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
- 
+  const [similarUsers, setSimilarUsers] = useState([]);
+
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(query);
@@ -188,6 +194,12 @@ function SideBar({notifications, setNotifications}) {
     
   };
 
+
+  const handleLogout = async () => {
+    logUserOut();
+    setCurrentUser(null);
+    navigate("/");
+  };
   
   return (
     <div className="flex  ">
@@ -226,6 +238,10 @@ function SideBar({notifications, setNotifications}) {
             </div>
           ))}
         </div>
+        <div onClick={() => handleLogout()} className="flex  pl-8 pt-8 cursor-pointer gap-3">
+          <img src='/exit.png' className="opacity-50 w-[25px]" ></img>
+          <p className="text-[20px]  opacity-50 font-medium textshadow2">Logout</p>
+        </div>
       </div>
       <div
         className={`h-full overflow-scroll z-[35]   transition-all duration-[400ms] ${
@@ -259,6 +275,7 @@ function SideBar({notifications, setNotifications}) {
                 
                 return (
                   <div className=" justify-between py-3 flex border-b">
+                    <a href={`/profile/${profile.id}`}><div>
                     <div className="flex gap-2">
                       <img
                         className="w-[3rem] bg-white p-1 shadow rounded-full h-[3rem]"
@@ -273,13 +290,33 @@ function SideBar({notifications, setNotifications}) {
                         </p>
                       </div>
                     </div>
+                    </div>
+                    </a>
+                    
                     <div>
-                      
-                    {requestedProfiles[profile.id]?.requested
-                    ? <button className="bg-white text-[#074979] p-1 px-4 rounded">Requested</button>
-                    : <button onClick={() => handleRequest(profile.id)} className="bg-[#074979] text-white p-1 px-4 rounded">Connect</button>}
+                      {connections.some(
+                        (connection) =>
+                          (connection.profile_id1 === currentUser.id &&
+                            connection.profile_id2 === profile.id) ||
+                          (connection.profile_id2 === currentUser.id &&
+                            connection.profile_id1 === profile.id)
+                      ) ? (
+                        <div></div>
+                      ) : requestedProfiles[profile.id]?.requested ? (
+                        <button className="bg-white text-[#074979] p-1 px-4 rounded" disabled>
+                          Requested
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleRequest(profile.id)}
+                          className="bg-[#074979] text-white p-1 px-4 rounded"
+                        >
+                          Connect
+                        </button>
+                      )}
                     </div>
                   </div>
+                  
                 );
               })}
           </div>

@@ -10,11 +10,7 @@ function Nav2() {
   const location = useLocation();
   const pathname = location.pathname;
 
-  const handleLogout = async () => {
-    logUserOut();
-    setCurrentUser(null);
-    navigate("/");
-  };
+
   return (
     <nav className="flex px-[2%] border-b-[1px]  py-[0.5rem] w-screen bg-white fixed z-[502]  justify-between">
       <div className="flex   gap-1 ">
@@ -32,12 +28,7 @@ function Nav2() {
       </div>
 
       <div className="flex gap-5">
-        <p
-          className="underline m-auto text-[20px] cursor-pointer"
-          onClick={handleLogout}
-        >
-          Logout
-        </p>
+      
         <p className="text-[25px]  font-medium m-auto">
           {currentUser && currentUser.username}
         </p>

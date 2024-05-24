@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchInBatches = void 0;
 const MLModel_1 = require("../../micro-services/MLModel");
 const knex_1 = require("../knex");
+console.log("hello");
 class Profile {
     constructor(data) {
         this.id = data.id;
@@ -41,7 +42,7 @@ class Profile {
         const query = `INSERT INTO profiles (img, user_id, username, full_name, bio, settings, account_type, data, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`;
         const values = [
-            data.img || '',
+            data.img || "",
             data.user_id,
             data.username,
             data.full_name,
@@ -66,6 +67,8 @@ class Profile {
             .map((key) => `${key} = ?`)
             .join(", ")} WHERE id = ? RETURNING *`;
         const values = [...keys.map((key) => updateFields[key]), id];
+        console.log("Update Query:", query);
+        console.log("Update Values:", values);
         const { rows } = await knex_1.knex.raw(query, values);
         const profile = rows[0];
         return profile ? new Profile(profile) : null;
@@ -83,6 +86,23 @@ class Profile {
             console.error("Failed to delete profile:", error);
             throw error;
         }
+    }
+    static async getProfileDataByUserId(userId) {
+        const profileQuery = `
+      SELECT p.bio, p.full_name, p.username, p.created_at, p.img
+      FROM profiles p
+      WHERE p.id = ?
+    `;
+        const postsQuery = `
+      SELECT po.*
+      FROM posts po
+      WHERE po.profile_id = ?
+    `;
+        const profileResult = await knex_1.knex.raw(profileQuery, [userId]);
+        const postsResult = await knex_1.knex.raw(postsQuery, [userId]);
+        const profileData = profileResult.rows[0]; // Assuming userId is unique and will return a single row
+        const postsData = postsResult.rows;
+        return { ...profileData, posts: postsData };
     }
 }
 async function fetchInBatches(batchSize) {

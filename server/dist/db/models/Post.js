@@ -21,6 +21,7 @@ class Post {
         posts.img AS post_image,
         profiles.img AS profile_photo,
         profiles.username,
+        profiles.id AS profile_id,
         profiles.full_name,
         posts.comments_count,
         posts.likes_count,
@@ -77,7 +78,7 @@ class Post {
             data.body,
             data.created_at || new Date(),
             data.updated_at || new Date(),
-            data.img || null
+            data.img || null,
         ];
         const { rows } = await knex_1.knex.raw(query, values);
         return new Post(rows[0]);
@@ -87,10 +88,11 @@ class Post {
         if (!existingPost)
             return null;
         const updatedAt = new Date();
-        const query = `UPDATE posts SET title = ?, body = ?, updated_at = ? WHERE id = ? RETURNING *`;
+        const query = `UPDATE posts SET title = ?, body = ?, img = ?, updated_at = ? WHERE id = ? RETURNING *`;
         const values = [
             data.title || existingPost.title,
             data.body || existingPost.body,
+            data.img || existingPost.img, // Make sure to include the image update
             updatedAt,
             id,
         ];

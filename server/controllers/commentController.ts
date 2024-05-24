@@ -93,3 +93,13 @@ export const updateComment = async (req: Request, res: Response) => {
       .json({ message: "Failed to update comment", error: error.toString() })
   }
 }
+
+export const deleteCommentById = async (req: Request, res: Response) => {
+  const { id } = req.params
+  try {
+    await Comment.delete(parseInt(id))
+    res.status(200).send({ message: "Comment deleted successfully." })
+  } catch (error) {
+    res.status(500).send({ error: "Failed to delete comment." })
+  }
+}

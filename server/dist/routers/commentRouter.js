@@ -9,4 +9,5 @@ exports.commentRouter.get("/", commentController_1.getAllComments);
 exports.commentRouter.get("/posts", commentController_1.getCommentsByPost);
 exports.commentRouter.post("/", commentController_1.createComment);
 exports.commentRouter.patch("/:id", commentController_1.updateComment);
+exports.commentRouter.delete("/:id", commentController_1.deleteCommentById);
 exports.default = exports.commentRouter;

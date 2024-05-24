@@ -22,7 +22,7 @@ function Feed({ notifications, refresh }) {
   const [user, setUser] = useState(null);
   const [similarUsers, setSimilarUsers] = useState([]);
   const [viewAll, setViewAll] = useState(false);
-
+  const [resetPost, setResetPost] = useState(false);
   useEffect(() => {
     if (!currentUser) {
       navigate("/");
@@ -116,7 +116,11 @@ function Feed({ notifications, refresh }) {
         })
       );
     });
+
+    refresh()
   };
+
+  console.log(posts, "posts")
 
   return (
     <div className="overflow-hidden">
@@ -131,16 +135,16 @@ function Feed({ notifications, refresh }) {
             }}
             className="h-full overflow-scroll"
           >
-            <CreatePost refetchPosts={handleRefetch} />
+            <CreatePost onCancel={undefined} onSave={undefined} refetchPosts={handleRefetch} />
             <div className="mt-5">
-              <FeedPosts posts={posts} />
+              <FeedPosts posts={posts} refetch={refetchFlag} view={true} />
             </div>
           </div>
         </div>
 
         <div>
           <div
-            className={`w-[24rem] h-[17rem] relative transition-all duration-200 rounded-md p-5 bg-white mt-[5rem] h-[${
+            className={`w-[24rem] h-[16rem] relative transition-all duration-200 rounded-md p-5 bg-white mt-[5rem] h-[${
               17 + 5 * (similarUsers.length - 1)
             }rem]`}
           >
@@ -160,7 +164,7 @@ function Feed({ notifications, refresh }) {
 
             {similarUsers.length > 0 ? (
               <div>
-                <div className="flex pl-10 gap-3 pt-3">
+                <div className="flex pl-10  gap-3 pt-3">
                   <img
                     src={similarUsers[0]?.img}
                     className="w-14 h-14 rounded-full p-[2px]"
@@ -225,6 +229,13 @@ function Feed({ notifications, refresh }) {
           </div>
           <div className="  ">
             <Map />
+            <div className="flex justify-between px-5 bg-white rounded py-4 mt-5 w-[24rem]">
+              <div>
+                <h1 className="text-[20px] font-semibold">Feature Suggestions?</h1>
+                <p className="w-[10rem]">Help us solve our mission by providing feedback!</p>
+              </div>
+              <img className="w-[4rem] h-[4.5rem] align-middle my-auto" src='/code.png'></img>
+            </div>
           </div>
         </div>
 
@@ -239,7 +250,7 @@ function Feed({ notifications, refresh }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Feed;
+export default Feed
