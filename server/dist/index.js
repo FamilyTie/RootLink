@@ -42,13 +42,10 @@ const chatroomsRouter_1 = __importDefault(require("./routers/chatroomsRouter"));
 const searchRouter_1 = require("./routers/searchRouter");
 const cors_1 = __importDefault(require("cors"));
 const ChatRooms_1 = __importDefault(require("./db/models/ChatRooms"));
-<<<<<<< HEAD
 const api_fetches_1 = require("./utils/api-fetches");
 const locationRouter_1 = require("./routers/locationRouter");
 const connectionRouter_1 = require("./routers/connectionRouter");
 const notificationRouter_1 = require("./routers/notificationRouter");
-=======
->>>>>>> fec4f496236f8227e38eff302fc02be359f78643
 const http = require("http");
 const { Server } = require("socket.io");
 const { ExpressPeerServer } = require("peer");
@@ -137,3 +134,11 @@ const port = process.env.PORT || 3761;
 server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+// run command for peer in backend : npx peerjs --port 9000 --path /peerjs
+// local chat fully works
+// run 2 frontend 5173
+// http://localhost:5173/video-chat/1/?myPeerId=peer2&targetPeerId=peer1
+// http://localhost:5173/video-chat/1/?myPeerId=peer1&targetPeerId=peer2
+// need to make it broadcase to
+// chatroom instead of url and also give me a console log or
+// something that requeste was succesfully sent

@@ -101,6 +101,7 @@ function Search() {
               <h1 className="text-[25px] font-bold mb-5">Recently Posted</h1>
             )}
             <Posts
+            refetch={undefined}
               posts={posts}
               view={false}
             />
