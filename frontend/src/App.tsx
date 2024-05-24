@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Routes, Route } from "react-router-dom"
 import Home from "./pages/Home"
 import SignUpPage from "./pages/SignUp"
@@ -13,7 +13,6 @@ import CreatePost from "./components/EditorComponents/CreatePost"
 import Feed from "./pages/Feed"
 import { fetchHandler } from "./utils"
 import ChatApp from "./components/Messaging/ChatApp"
-import { useState } from "react"
 import Discover from "./pages/Search"
 import Layout from "./Layout"
 import Search from "./pages/Search"
@@ -24,7 +23,8 @@ import Map from "./components/layout/Map"
 import ConnectionsContext from "./contexts/connectionsContext"
 import {Profile} from "./components/ProfilePage"
 import Settings from "./components/settingsPage"
-import { ToastContainer } from "react-toastify"
+import VideoChatWrapper from "./components/Messaging/VideoChatWrapper"
+
 export default function App() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
   const { connections, setConnections } = useContext(ConnectionsContext)
@@ -34,12 +34,12 @@ export default function App() {
   useEffect(() => {
     const checkLoggedIn = async () => {
       const user = await checkForLoggedInUser()
-      if (user) {
-        const likedPosts = await fetchHandler(
-          `/api/posts/liked/${user.profile.id}`
-        )
-        user.profile["likedPosts"] = new Set(likedPosts[0])
-      }
+      // if (user) {
+      //   const likedPosts = await fetchHandler(
+      //     `/api/posts/liked/${user.profile.id}`
+      //   );
+      //   user.profile["likedPosts"] = new Set(likedPosts[0]);
+      // }
       setCurrentUser(user.profile)
       console.log(user.profile, "Hello World")
     }
@@ -90,13 +90,9 @@ export default function App() {
     setRefreshUser(!refreshUser)
   }
 
-
-  
   return (
     <>
-      {/* <SiteHeadingAndNav /> */}
-      <main className="">
-      <ToastContainer position="bottom-left" autoClose={1000} />
+      <main>
         <Routes>
           <Route
             path="/"
@@ -191,8 +187,8 @@ export default function App() {
           {/* Add the new route */}
          
           <Route
-            path="*"
-            element={<NotFoundPage />}
+            path="/video-chat/:id"
+            element={<VideoChatWrapper />}
           />
           <Route
             path="*"
