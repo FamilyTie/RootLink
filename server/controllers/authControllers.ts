@@ -16,8 +16,8 @@ export const loginUser = async (req, res) => {
   if (!isPasswordValid) return res.sendStatus(404)
 
 
-  const similarProfiles = await Profile.getSimilarProfiles({ id: user.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio })
-  if (similarProfiles) profile = { ...profile, similarProfiles }
+  // const similarProfiles = await Profile.getSimilarProfiles({ id: user.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio })
+  // if (similarProfiles) profile = { ...profile, similarProfiles }
 
 
   req.session.userId = user.id
@@ -48,18 +48,18 @@ export const showMe = async (req, res) => {
   let profile = await Profile.findById(req.session.userId);
   if (!profile) return res.status(404).send("Profile not found");
 
-  try {
-    const similarProfiles = await Profile.getSimilarProfiles({
-      id: profile.id,
-      adoption_year: profile.data.raw.adoptionYear,
-      ethnicity: profile.data.raw.ethnicity,
-      bio: profile.bio,
-    });
-    profile = { ...profile, similarProfiles };
-  } catch (error) {
-    console.error("Error fetching similar profiles:", error);
-    return res.status(500).send("Error fetching similar profiles");
-  }
+  // try {
+  //   const similarProfiles = await Profile.getSimilarProfiles({
+  //     id: profile.id,
+  //     adoption_year: profile.data.raw.adoptionYear,
+  //     ethnicity: profile.data.raw.ethnicity,
+  //     bio: profile.bio,
+  //   });
+  //   profile = { ...profile, similarProfiles };
+  // } catch (error) {
+  //   console.error("Error fetching similar profiles:", error);
+  //   return res.status(500).send("Error fetching similar profiles");
+  // }
 
   res.send({ user, profile });
 };
