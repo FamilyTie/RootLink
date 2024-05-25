@@ -3,7 +3,7 @@
 The mission behind RootLink is to bridge gaps between separated families and foster healing through secure, informed connections. We aim to provide adoptees and their biological families with the tools and support they need to navigate the complexities of adoption reunions successfully.
 
 ## Technologies used
-The PERN stack was used, TypeScript for type checking, and Tailwind CSS was used for styling. SocketIo for real-time messaged. A secondary Flask server in Python was employed for processing profile similarity. Pandas was used to group and filter profiles, facilitating the implementation of our machine learning algorithm through the Sci-Kit Learn library. Aside from our Postgres database, Firebase was used for file uploading.
+The PERN stack was used, TypeScript for type checking, and Tailwind CSS was used for styling. SocketIO for real-time messaged. A secondary Flask server in Python was employed for processing profile similarity. Pandas was used to group and filter profiles, facilitating the implementation of our machine learning algorithm through the Sci-Kit Learn library. Aside from our Postgres database, Firebase was used for file uploading.
 
 
 
