@@ -2,11 +2,12 @@ import FormInputGroup from "../ui/FormInputGroup";
 import ImageInputGroup from "../ui/ImageInputGroup";
 import TextAreaGroup from "../ui/TextAreaGroup";
 import Button from "../ui/Button";
-import { FormTitle } from "../layout/ProfileForm";
+import { FormTitle } from "../../pages/Sign-up/ProfileForm";
 import { createUserWithProfile } from "../../adapters/user-adapter";
 
-function ProfileCreation({ page, setPage, formData, setFormData, refresh }) {
-  const handleClick = async(e) => {
+function ProfileCreation({ page, setPage, formData, setFormData, setUser }) {
+
+  const handleClick = async (e) => {
     e.preventDefault();
     if (!formData.username) {
       window.alert("Username is required");
@@ -26,14 +27,13 @@ function ProfileCreation({ page, setPage, formData, setFormData, refresh }) {
       window.alert("Are you done with the registration");
     } else {
       console.log(formData);
-      
-      await createUserWithProfile(formData);
-      
-      window.location.reload();
+
+      const newUser = await createUserWithProfile(formData);
+      setUser(newUser.profile)
     }
   };
 
-  console.log(formData)
+  console.log(formData);
   return (
     <div>
       <div className="mt-2 ">

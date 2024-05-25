@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import CurrentUserContext from "../../contexts/current-user-context";
+import { useProfile } from "../../state/store";
 import { logUserOut } from "../../adapters/auth-adapter";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../ui/SearchBar";
 import { useLocation } from "react-router-dom";
 function Nav2() {
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const currentProfile = useProfile((state) => state.currentProfile);
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
@@ -30,12 +30,12 @@ function Nav2() {
       <div className="flex gap-5">
       
         <p className="text-[25px]  font-medium m-auto">
-          {currentUser && currentUser.username}
+          {currentProfile && currentProfile.username}
         </p>
         <div className="border overflow-hidden rounded-full w-[3rem] h-[3rem]">
           <img
             className="w-full m-auto"
-            src={currentUser && (currentUser as any).img}
+            src={currentProfile && (currentProfile as any).img}
           ></img>
         </div>
       </div>

@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
-import SignUpForm from "../authentication/signUpForm";
-import Form from "../components/layout/ProfileForm";
+import { useProfile } from "../../state/store";
+import Form from "./ProfileForm";
 import { useNavigate } from "react-router-dom";
-import CurrentUserContext from "../contexts/current-user-context";
 import { useContext } from "react";
+import SignUpForm from "../../authentication/signUpForm";
 
 export default function signUpPage(refresh) {
   const navigate = useNavigate();
-  const { currentUser } = useContext(CurrentUserContext);
-  if (currentUser) {
+  const currentProfile = useProfile((state) => state.currentProfile);
+  if (currentProfile) {
     navigate("/feed");
   }
   return (

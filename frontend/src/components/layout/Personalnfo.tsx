@@ -1,6 +1,6 @@
 import FormInputGroup from "../ui/FormInputGroup";
 import Button from "../ui/Button";
-import { FormTitle } from "../layout/ProfileForm";
+import { FormTitle } from "../../pages/Sign-up/ProfileForm";
 import StatusRadioInputGroup from "../ui/RadioInputGroup";
 import DropdownInput from "../ui/DropdownInput";
 import YearInput from "../ui/YearInput";
@@ -69,8 +69,11 @@ function PersonalInfo({ page, setPage, formData, setFormData }) {
           setFormData({ ...formData, adoptionYear: e.target.value })
         }
       />
-
-      <LocationIQAutocomplete setSelection={(selection) => setFormData({...formData, homeTown: selection })} />
+      <LocationIQAutocomplete
+        setSelection={(selection) =>
+          setFormData({ ...formData, homeTown: selection })
+        }
+      />
       <div className="text-center mt-8 ">
         {page !== 0 && page !== 3 ? (
           <Button

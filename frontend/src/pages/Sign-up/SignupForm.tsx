@@ -1,6 +1,6 @@
-import FormInputGroup from "../ui/FormInputGroup";
-import Button from "../ui/Button";
-import { FormTitle } from "../layout/ProfileForm";
+import FormInputGroup from "../../components/ui/FormInputGroup";
+import Button from "../../components/ui/Button";
+import { FormTitle } from "./ProfileForm";
 
 function SingUp({ page, setPage, formData, setFormData }) {
   //Validation
@@ -79,8 +79,11 @@ function SingUp({ page, setPage, formData, setFormData }) {
           isDisabled={false}
         />
         <p className="text-center pt-5">
-           Have an account? <span className="underline"><a href='/login'>Login</a></span>
-          </p>
+          Have an account?{" "}
+          <span className="underline">
+            <a href="/login">Login</a>
+          </span>
+        </p>
       </div>
     </>
   );

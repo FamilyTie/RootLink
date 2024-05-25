@@ -4,18 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { SearchResult } from "../../../interfaces";
 import { fetchHandler, getPostOptions } from "../../utils";
-import CurrentUserContext from "../../contexts/current-user-context";
+import {useProfile, useConnections, useNotifications} from "../../state/store";
 import { requestConnection } from "../../utils";
-import ConnectionsContext from "../../contexts/connectionsContext";
 import { logUserOut } from "../../adapters/auth-adapter";
 
-function SideBar({notifications, setNotifications}) {
+function SideBar() {
   const location = useLocation();
   const navigate = useNavigate();
   const pathname = location.pathname;
 
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
-  const {connections} = useContext(ConnectionsContext);
+  const [currentProfile, setCurrentProfile] = useProfile((state) => [state.currentProfile, state.setCurrentProfile]);
+  const [connections, setConnections] = useConnections((state) => [state.connections, state.setConnections]);
+  const [notifications, setNotifications] =  useNotifications((state) => [state.notifications, state.setNotifications]);
+  
   const pathIndexes = {
     "/feed": 1,
     "/search": 2,
@@ -97,7 +98,7 @@ console.log(connections, "connections sidebar")
         const results: SearchResult = response[0];
         console.log(results, "results");
         setSearchResults(
-          results.profiles.filter((profile) => profile.id !== currentUser.id)
+          results.profiles.filter((profile) => profile.id !== currentProfile.id)
         );
       };
       fetchQuery();
@@ -137,13 +138,13 @@ console.log(connections, "connections sidebar")
       ...prev,
       [noti_id]: { ...prev[noti_id], accepted: true },
     }));
-   const response = await fetchHandler(`api/connection`, getPostOptions({ profile_id1: currentUser.id, profile_id2: profile_id }));
+   const response = await fetchHandler(`api/connection`, getPostOptions({ profile_id1: currentProfile.id, profile_id2: profile_id }));
     if (response) {
       const deleted = await fetchHandler(`api/notifications/${noti_id}`, { method: "DELETE" });
   
  
         console.log("Connection request successful")
-        setNotifications(notifications.filter((noti) => noti.id !== noti_id))
+        setNotifications({ ...notifications, received: notifications.received.filter(noti => noti.id !== noti_id) })
       
     } else {
       console.log("Connection request failed")
@@ -157,10 +158,10 @@ console.log(connections, "connections sidebar")
 
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentProfile) return;
     const processedResults = searchResults.map((profile) => {
       const hasSentNotification = notifications.sent.some(notification =>
-        notification.profile_id_sent === currentUser.id &&
+        notification.profile_id_sent === currentProfile.id &&
         notification.profile_id_received === profile.id
       );
       return { ...profile, requested: hasSentNotification };
@@ -171,13 +172,13 @@ console.log(connections, "connections sidebar")
       acc[profile.id] = profile;
       return acc;
     }, {}));
-  }, [query, searchResults, notifications, currentUser]);
+  }, [query, searchResults, notifications, currentProfile]);
 
   console.log(requestedProfiles, 'searchResults')
 
   const handleRequest = async (profileId) => {
-    if (currentUser) {
-      const connection = await requestConnection(currentUser.id, profileId);
+    if (currentProfile) {
+      const connection = await requestConnection(currentProfile.id, profileId);
       if (connection) {
         setNotifications((prev) => ({
           ...prev,
@@ -197,7 +198,7 @@ console.log(connections, "connections sidebar")
 
   const handleLogout = async () => {
     logUserOut();
-    setCurrentUser(null);
+    setCurrentProfile(null);
     navigate("/");
   };
   
@@ -296,9 +297,9 @@ console.log(connections, "connections sidebar")
                     <div>
                       {connections.some(
                         (connection) =>
-                          (connection.profile_id1 === currentUser.id &&
+                          (connection.profile_id1 === currentProfile.id &&
                             connection.profile_id2 === profile.id) ||
-                          (connection.profile_id2 === currentUser.id &&
+                          (connection.profile_id2 === currentProfile.id &&
                             connection.profile_id1 === profile.id)
                       ) ? (
                         <div></div>

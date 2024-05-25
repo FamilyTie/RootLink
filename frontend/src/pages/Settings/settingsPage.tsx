@@ -1,86 +1,86 @@
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useContext } from "react";
 import {
   fetchProfileDataByUserId,
   fetchHandler,
   uploadFileAndGetURL,
-} from "../utils"
-import CurrentUserContext from "../contexts/current-user-context"
-import "./EditorComponents/editorStyles.css"
-import { toast } from "react-toastify"
-import { Post } from "./EditorComponents/Posts-Config/Post"
+} from "../../utils";
+import { useProfile } from "../../state/store";
+import '../../components/EditorComponents/editorStyles.css'
+import { toast } from "react-toastify";
+import { Post } from "../../components/EditorComponents/Posts-Config/Post";
 
 const Settings = () => {
-  const { currentUser } = useContext(CurrentUserContext)
-  const [profile, setProfile] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [posts, setPosts] = useState([])
-  const [isEditingProfile, setIsEditingProfile] = useState(false)
+  const currentProfile = useProfile((state) => state.currentProfile);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [editableProfile, setEditableProfile] = useState({
     full_name: "",
     username: "",
     bio: "",
     img: "",
-  })
-  const [profileImage, setProfileImage] = useState(null)
+  });
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchProfileDataByUserId(1)
+        const response = await fetchProfileDataByUserId(1);
         if (response) {
-          setProfile(response)
-          setPosts(response.posts)
+          setProfile(response);
+          setPosts(response.posts);
           setEditableProfile({
             full_name: response.full_name,
             username: response.username,
             bio: response.bio,
             img: response.img,
-          })
-          setLoading(false)
+          });
+          setLoading(false);
         } else {
-          setError("Failed to fetch profile data")
-          setLoading(false)
+          setError("Failed to fetch profile data");
+          setLoading(false);
         }
       } catch (err) {
-        console.error("Error fetching profile data:", err)
-        setError("Failed to fetch profile data")
-        setLoading(false)
+        console.error("Error fetching profile data:", err);
+        setError("Failed to fetch profile data");
+        setLoading(false);
       }
-    }
-    fetchData()
-  }, [])
+    };
+    fetchData();
+  }, []);
 
   const handleProfileEdit = () => {
-    setIsEditingProfile(true)
-  }
+    setIsEditingProfile(true);
+  };
 
   const handleProfileSave = async () => {
-    let img_url = editableProfile.img
+    let img_url = editableProfile.img;
     if (profileImage) {
-      img_url = await uploadFileAndGetURL(profileImage)
+      img_url = await uploadFileAndGetURL(profileImage);
     }
     try {
       const [response, error] = await fetchHandler(
-        `/api/profiles/${currentUser.id}`,
+        `/api/profiles/${currentProfile.id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ...editableProfile, img: img_url }),
         }
-      )
+      );
       if (response) {
-        setProfile(response)
-        setIsEditingProfile(false)
-        toast.success("Profile updated successfully")
+        setProfile(response);
+        setIsEditingProfile(false);
+        toast.success("Profile updated successfully");
       } else {
-        toast.error("Failed to update profile")
+        toast.error("Failed to update profile");
       }
     } catch (error) {
-      console.error("Error updating profile:", error)
-      toast.error("Failed to update profile")
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile");
     }
-  }
+  };
 
   const handleProfileCancel = () => {
     setEditableProfile({
@@ -88,28 +88,28 @@ const Settings = () => {
       username: profile.username,
       bio: profile.bio,
       img: profile.img,
-    })
-    setIsEditingProfile(false)
-    setProfileImage(null)
-  }
+    });
+    setIsEditingProfile(false);
+    setProfileImage(null);
+  };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     if (file) {
-      setProfileImage(file)
+      setProfileImage(file);
       setEditableProfile((prev) => ({
         ...prev,
         img: URL.createObjectURL(file),
-      }))
+      }));
     }
-  }
+  };
 
   const handlePostEdit = async (updatedPost) => {
-    console.log("post updated", updatedPost)
-  }
+    console.log("post updated", updatedPost);
+  };
 
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error: {error}</div>
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -279,7 +279,7 @@ const Settings = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Settings
+export default Settings;

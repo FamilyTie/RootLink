@@ -1,12 +1,7 @@
-interface Feature {
-  number: string;
-  title: string;
-  description: string;
-}
+import { Feature } from "../../../../types";
+import { FeatureCardProps } from "../../../../interfaces";
 
-type FeatureCardProps = {
-  feature: Feature;
-};
+
 function FeatureCard({ feature }: FeatureCardProps) {
   return (
     <div className="w-[555px] card-shadow bg-white p-12">

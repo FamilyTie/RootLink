@@ -1,9 +1,8 @@
 import { useState, useEffect, useContext } from "react";
-import { fetchProfileDataByUserId, requestConnection } from "../utils";
-import FeedPosts from "./EditorComponents/FeedPosts";
+import { fetchProfileDataByUserId, requestConnection } from "../../utils";
+import FeedPosts from "../../components/EditorComponents/FeedPosts";
 import { useLocation } from "react-router-dom";
-import ConnectionsContext from "../contexts/connectionsContext";
-import CurrentUserContext from "../contexts/current-user-context";
+import {useProfile, useConnections} from "../../state/store";
 
 export const Profile = ({ notifications, setNotifications }) => {
   const [profile, setProfile] = useState(null);
@@ -14,34 +13,36 @@ export const Profile = ({ notifications, setNotifications }) => {
   const [posts, setPosts] = useState([]);
   const [requested, setRequested] = useState(false);
   const [connected, setConnected] = useState(null);
-  const { currentUser } = useContext(CurrentUserContext);
-  const { connections } = useContext(ConnectionsContext);
+  const [currentProfile, setCurrentProfile] = useProfile((state) => [state.currentProfile, state.setCurrentProfile]);
+  
+  const [connections, setConnections] = useConnections((state) => [state.connections, state.setConnections]);
   const [userNow, setUserNow] = useState(null);
   const location = useLocation();
   const userId = location.pathname.split("/")[2];
 
-
   useEffect(() => {
-    if (!currentUser) return;
-    setUserNow(currentUser);
-  }, [currentUser])
+    if (!currentProfile) return;
+    setUserNow(currentProfile);
+  }, [currentProfile]);
 
   useEffect(() => {
     if (!userNow || !connections) return;
-    const isConnection = connections.some(connection =>{
-       return (connection.profile_id1 === userNow.id && connection.profile_id2 === Number(userId)) || (connection.profile_id2 === userNow.id && connection.profile_id1 === Number(userId))
-    } ) 
-    setConnected(isConnection)
+    const isConnection = connections.some((connection) => {
+      return (
+        (connection.profile_id1 === userNow.id &&
+          connection.profile_id2 === Number(userId)) ||
+        (connection.profile_id2 === userNow.id &&
+          connection.profile_id1 === Number(userId))
+      );
+    });
+    setConnected(isConnection);
+  }, [userNow, connections]);
 
-  }, [userNow, connections])
+  console.log(connected, "Connected");
+  console.log(userNow, userId, "Current User");
 
+  console.log(notifications, "hello");
 
-
-console.log(connected, "Connected")
-console.log(userNow, userId,"Current User")
-
-console.log(notifications, "hello", )
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,10 +52,16 @@ console.log(notifications, "hello", )
           console.log("Response received:", response);
           const likes = response.posts.reduce(
             (sum, post) =>
-              sum + (Number.isNaN(parseInt(post.likes_count, 10)) ? 0 : parseInt(post.likes_count, 10)),
+              sum +
+              (Number.isNaN(parseInt(post.likes_count, 10))
+                ? 0
+                : parseInt(post.likes_count, 10)),
             0
           );
-          const comments = response.posts.reduce((sum, post) => sum + post.comments_count, 0);
+          const comments = response.posts.reduce(
+            (sum, post) => sum + post.comments_count,
+            0
+          );
           setTotalLikes(likes);
           setTotalComments(comments);
           setLoading(false);
@@ -80,21 +87,18 @@ console.log(notifications, "hello", )
   //   );
   //   setRequested(hasSentNotification);
   // }, [notifications, currentUser, profile]);
-console.log(notifications, "Notifications")
+  console.log(notifications, "Notifications");
   const handleRequest = async (profileId) => {
     if (userNow) {
       console.log("Requesting connection");
       const connection = await requestConnection(userNow.id, Number(userId));
-      
-     
-        setNotifications((prev) => ({
-          ...prev,
-          sent: [...prev.sent, connection],
-        }));
-        setRequested(true);
-      
-    }
 
+      setNotifications((prev) => ({
+        ...prev,
+        sent: [...prev.sent, connection],
+      }));
+      setRequested(true);
+    }
   };
 
   useEffect(() => {
@@ -122,8 +126,10 @@ console.log(notifications, "Notifications")
 
   const isConnected = connections.some(
     (connection) =>
-      (connection.profile_id1 === currentUser.id && connection.profile_id2 === profile.id) ||
-      (connection.profile_id2 === currentUser.id && connection.profile_id1 === profile.id)
+      (connection.profile_id1 === currentProfile.id &&
+        connection.profile_id2 === profile.id) ||
+      (connection.profile_id2 === currentProfile.id &&
+        connection.profile_id1 === profile.id)
   );
 
   return (
@@ -168,7 +174,10 @@ console.log(notifications, "Notifications")
           <div className="flex-shrink-0 mt-4">
             {!connected ? (
               requested ? (
-                <button className="bg-white text-[#074979] py-2 px-4 rounded shadow" disabled>
+                <button
+                  className="bg-white text-[#074979] py-2 px-4 rounded shadow"
+                  disabled
+                >
                   Requested
                 </button>
               ) : (

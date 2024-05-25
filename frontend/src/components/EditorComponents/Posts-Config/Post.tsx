@@ -13,7 +13,7 @@ import {
   getPostOptions,
   deleteCommentById,
 } from "../../../utils";
-import CurrentUserContext from "../../../contexts/current-user-context";
+import {useProfile} from "../../../state/store";
 import Comments from "../../layout/Comments";
 import { buildCommentTree } from "./CommentTree";
 import CreatePost from "../CreatePost";
@@ -27,7 +27,7 @@ export function Post({
   onEdit,
   isSettingsPage = false,
 }) {
-  const { currentUser } = useContext(CurrentUserContext);
+  const currentProfile = useProfile((state) => state.currentProfile);
   const [initialContent, setInitialContent] = useState(postBody);
   const [likesCount, setLikesCount] = useState(post.likes_count ? post.likes_count : 0);
   const [profilePhoto, setProfilePhoto] = useState(post.profile_photo);
@@ -52,14 +52,14 @@ export function Post({
 
   useEffect(() => {
     if (
-      currentUser &&
-      currentUser.likedPosts &&
-      currentUser.likedPosts.has(post.id)
+      currentProfile &&
+      currentProfile.likedPosts &&
+      currentProfile.likedPosts.has(post.id)
     ) {
       setLiked(true);
     }
-  }, [currentUser, post.id]);
-console.log(currentUser, 'liked'
+  }, [currentProfile, post.id]);
+console.log(currentProfile, 'liked'
 )
   useEffect(() => {
     if (post && post.likes_count) {
@@ -86,7 +86,7 @@ console.log(currentUser, 'liked'
 
   const handleCommentSubmit = async () => {
     const comment = {
-      profile_id: currentUser.id,
+      profile_id: currentProfile.id,
       post_id: post.id,
       body: newCommentText,
     };
@@ -107,7 +107,7 @@ console.log(currentUser, 'liked'
   const addReply = async (parentCommentId, replyText) => {
     try {
       const reply = {
-        profile_id: currentUser.id,
+        profile_id: currentProfile.id,
         post_id: post.id,
         body: replyText,
         comment_id: parentCommentId,
@@ -131,7 +131,7 @@ console.log(currentUser, 'liked'
   const handleLike = () => {
     if (!liked) {
       const like = {
-        profile_id: currentUser.id,
+        profile_id: currentProfile.id,
         post_id: post.id,
       };
       handleFetch("/api/likes/post", getPostOptions(like))
@@ -140,7 +140,7 @@ console.log(currentUser, 'liked'
             setLiked(true);
             setLikes((likes) => [
               ...likes,
-              { profile_id: currentUser.id, img: currentUser.img },
+              { profile_id: currentProfile.id, img: currentProfile.img },
             ]);
             setLikesCount((count) => count + 1);
           } else {
@@ -152,7 +152,7 @@ console.log(currentUser, 'liked'
         });
     } else {
       handleFetch(
-        `/api/likes/post?profile_id=${currentUser.id}&post_id=${post.id}`,
+        `/api/likes/post?profile_id=${currentProfile.id}&post_id=${post.id}`,
         deleteOptions
       )
         .then((response) => {
@@ -160,7 +160,7 @@ console.log(currentUser, 'liked'
             setLiked(false);
             setLikesCount((count) => count - 1);
             setLikes((likes) =>
-              likes.filter((like) => like.profile_id !== currentUser.id)
+              likes.filter((like) => like.profile_id !== currentProfile.id)
             );
           } else {
             toast.error("Failed to unlike post");
@@ -343,7 +343,7 @@ console.log(currentUser, 'liked'
       <div className="flex translate-x-[-8px]  mt-3 pl-[5%]">
         <div className="w-11 mr-5 h-11 translate-x-[8px]  overflow-hidden rounded-full object-cover border-4 border-white  shadow ml-2 ">
           <img
-            src={currentUser && (currentUser as any).img}
+            src={currentProfile && (currentProfile as any).img}
             className=" w-full  m-auto"
             alt=""
           />

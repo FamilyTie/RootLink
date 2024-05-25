@@ -1,20 +1,19 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CurrentUserContext from "../contexts/current-user-context";
-import ConnectionsContext from "../contexts/connectionsContext";
-import SideBar from "../components/layout/SideBar";
-import HomeNav from "../components/layout/HomeNav";
-import Nav2 from "../components/layout/Nav2";
-import CreatePost from "../components/EditorComponents/CreatePost";
-import FeedPosts from "../components/EditorComponents/FeedPosts";
-import handleFetch from "../components/EditorComponents/Editor-Configs/Fetching";
-import ChatLayout from "../components/Messaging/ChatLayout";
-import Map from "../components/layout/Map";
-import { requestConnection } from "../utils";
+import { useProfile, useConnections } from "../../state/store";
+import SideBar from "../../components/layout/SideBar";
+import HomeNav from "../Home/HomeNav";
+import Nav2 from "../../components/layout/Nav2";
+import CreatePost from "../../components/EditorComponents/CreatePost";
+import FeedPosts from "../../components/EditorComponents/FeedPosts";
+import handleFetch from "../../components/EditorComponents/Editor-Configs/Fetching";
+import ChatLayout from "../../components/Messaging/ChatLayout";
+import Map from "../../components/layout/Map";
+import { requestConnection } from "../../utils";
 
 function Feed({ notifications, refresh }) {
-  const { currentUser } = useContext(CurrentUserContext);
-  const { connections } = useContext(ConnectionsContext);
+  const [currentProfile, setCurrentProfile] = [useProfile((state) => state.currentProfile), useProfile((state) => state.setCurrentProfile)];
+  const [connections, setConnections] = [useConnections((state) => state.connections), useConnections((state) => state.setConnections)];
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [refetchFlag, setRefetchFlag] = useState(false);
@@ -23,15 +22,16 @@ function Feed({ notifications, refresh }) {
   const [similarUsers, setSimilarUsers] = useState([]);
   const [viewAll, setViewAll] = useState(false);
   const [resetPost, setResetPost] = useState(false);
+  
   useEffect(() => {
-    if (!currentUser) {
+    if (!currentProfile) {
       navigate("/");
     } else {
-      setUser(currentUser);
+      setUser(currentProfile);
       setLoading(false);
     }
     4;
-  }, [currentUser, navigate]);
+  }, [currentProfile, navigate]);
 
   useEffect(() => {
     if (user && user.similarProfiles) {
@@ -40,47 +40,55 @@ function Feed({ notifications, refresh }) {
         try {
           const res = await Promise.all(
             similarData.map(async (profile) => {
-              const response = await fetch(`/api/profiles/${profile.profile_id}`);
+              const response = await fetch(
+                `/api/profiles/${profile.profile_id}`
+              );
               if (!response.ok) {
-                throw new Error(`Failed to fetch profile with id ${profile.profile_id}`);
+                throw new Error(
+                  `Failed to fetch profile with id ${profile.profile_id}`
+                );
               }
               const data = await response.json();
               return { ...data, similarity: profile.similarity };
             })
           );
-  
-          const filteredSimilarUsers = res.filter(
-            (similarUser) =>
-              !connections.some(
-                (connection) =>
-                  connection.profile_id1 === similarUser.id ||
-                  connection.profile_id2 === similarUser.id
-              )
-          ).map((similarUser) => {
-            const hasSentNotification =
-              notifications.sent.some(
+
+          const filteredSimilarUsers = res
+            .filter(
+              (similarUser) =>
+                !connections.some(
+                  (connection) =>
+                    connection.profile_id1 === similarUser.id ||
+                    connection.profile_id2 === similarUser.id
+                )
+            )
+            .map((similarUser) => {
+              const hasSentNotification = notifications.sent.some(
                 (notification) =>
                   notification.profile_id_sent === user.id &&
                   notification.profile_id_received === similarUser.id
-              ) 
-            const hasReceivedNotification = notifications.received.some(
-              (notification) =>
-                notification.profile_id_sent === similarUser.id &&
-                notification.profile_id_received === user.id
-            );
-            return { ...similarUser, requested: hasSentNotification, received: hasReceivedNotification};
-          });
-  
+              );
+              const hasReceivedNotification = notifications.received.some(
+                (notification) =>
+                  notification.profile_id_sent === similarUser.id &&
+                  notification.profile_id_received === user.id
+              );
+              return {
+                ...similarUser,
+                requested: hasSentNotification,
+                received: hasReceivedNotification,
+              };
+            });
+
           setSimilarUsers(filteredSimilarUsers);
         } catch (error) {
-          console.error('Error fetching similar profiles:', error);
+          console.error("Error fetching similar profiles:", error);
         }
       };
-  
+
       fetchSimilarProfiles();
     }
   }, [user, connections, notifications]);
-
 
   console.log(similarUsers, "similarUsers");
   console.log(notifications, "notifications");
@@ -117,12 +125,12 @@ function Feed({ notifications, refresh }) {
       );
     });
 
-    refresh()
+    refresh();
   };
 
-  console.log(posts, "posts")
+  console.log(posts, "posts");
 
-  return (
+  return currentProfile &&  (
     <div className="overflow-hidden">
       <div className="flex overflow-hidden  bg-slate-100">
         <div className="w-[48rem] flex pl-[15rem] pt-[5rem] bg-slate-100 h-screen overflow-hidden rounded-tl-[3rem]">
@@ -135,7 +143,11 @@ function Feed({ notifications, refresh }) {
             }}
             className="h-full overflow-scroll"
           >
-            <CreatePost onCancel={undefined} onSave={undefined} refetchPosts={handleRefetch} />
+            <CreatePost
+              onCancel={undefined}
+              onSave={undefined}
+              refetchPosts={handleRefetch}
+            />
             <div className="mt-5">
               <FeedPosts posts={posts} refetch={refetchFlag} view={true} />
             </div>
@@ -144,8 +156,8 @@ function Feed({ notifications, refresh }) {
 
         <div>
           <div
-            className={`w-[24rem] h-[16rem] relative transition-all duration-200 overflow-hidden rounded-md p-5 bg-white mt-[5rem] h-[${ viewAll && 
-              17 + 5 * (similarUsers.length - 1)
+            className={`w-[24rem] h-[16rem] relative transition-all duration-200 overflow-hidden rounded-md p-5 bg-white mt-[5rem] h-[${
+              viewAll && 17 + 5 * (similarUsers.length - 1)
             }rem]`}
           >
             <div className="flex border-b pb-2 justify-between">
@@ -195,13 +207,15 @@ function Feed({ notifications, refresh }) {
                       Ignore
                     </button>
                   </div>
-                ) :  !similarUsers[0].received &&  (
-                  <button
-                    className="  m-auto flex justify-center bg-white border-[2px] text-[#074979] border-[#074979] transition-all duration-200 self-end text-[1.1rem] p-1 w-[8rem] rounded-md"
-                    type="submit"
-                  >
-                    Requested
-                  </button>
+                ) : (
+                  !similarUsers[0].received && (
+                    <button
+                      className="  m-auto flex justify-center bg-white border-[2px] text-[#074979] border-[#074979] transition-all duration-200 self-end text-[1.1rem] p-1 w-[8rem] rounded-md"
+                      type="submit"
+                    >
+                      Requested
+                    </button>
+                  )
                 )}
 
                 {viewAll &&
@@ -231,26 +245,33 @@ function Feed({ notifications, refresh }) {
             <Map />
             <div className="flex justify-between px-5 bg-white rounded py-4 mt-5 w-[24rem]">
               <div>
-                <h1 className="text-[20px] font-semibold">Feature Suggestions?</h1>
-                <p className="w-[10rem]">Help us solve our mission by providing feedback!</p>
+                <h1 className="text-[20px] font-semibold">
+                  Feature Suggestions?
+                </h1>
+                <p className="w-[10rem]">
+                  Help us solve our mission by providing feedback!
+                </p>
               </div>
-              <img className="w-[4rem] h-[4.5rem] align-middle my-auto" src='/code.png'></img>
+              <img
+                className="w-[4rem] h-[4.5rem] align-middle my-auto"
+                src="/code.png"
+              ></img>
             </div>
           </div>
         </div>
 
         <div className="bg-slate-100 h-full overflow-hidden">
-          {currentUser && (
+          {currentProfile && (
             <ChatLayout
               refresh={refresh}
-              userId={currentUser.id}
-              username={currentUser.username}
+              userId={currentProfile.id}
+              username={currentProfile.username}
             />
           )}
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Feed
+export default Feed;

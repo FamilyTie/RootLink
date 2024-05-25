@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiMessageCircle } from "react-icons/fi";
-import CurrentUserContext from "../../contexts/current-user-context";
+import {useProfile} from "../../state/store";
 import { fetchHandler } from "../../utils";
 import { SearchResult } from "../../../interfaces";
 const SidebarChats = ({
@@ -14,7 +14,7 @@ const SidebarChats = ({
   const [users, setUsers] = useState([]);
 
   const [initialUsers, setInitialUsers] = useState([]);
-  const { currentUser } = React.useContext(CurrentUserContext);
+  const currentProfile = useProfile((state) => state.currentProfile);
   const [reload, setReload] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState("");
@@ -59,7 +59,7 @@ const SidebarChats = ({
         const results: SearchResult = response[0];
         console.log(results, "results");
         setSearchResults(
-          results.profiles.filter((profile) => profile.id !== currentUser.id).slice(0, 4)
+          results.profiles.filter((profile) => profile.id !== currentProfile.id).slice(0, 4)
         );
       };
       fetchQuery();

@@ -1,6 +1,6 @@
 function HeroSection() {
   return (
-    <div className="px-[8%] ">
+    <section className="px-[8%] ">
       <div className="flex ">
         <div>
           <h1 className="w-[700px] text-[#074979]  text-shadow text-[110px]  pt-[6rem] leading-none">
@@ -20,7 +20,7 @@ function HeroSection() {
           src="/father-son.png"
         ></img>
       </div>
-    </div>
+    </section>
   );
 }
 

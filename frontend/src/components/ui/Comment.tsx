@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react"
 import Comments from "../layout/Comments" // Ensure you have this import for rendering child comments
-import CurrentUserContext from "../../contexts/current-user-context" // Import the user context
+import { useProfile } from "../../state/store"
 import { GoTrash } from "react-icons/go"
 
 function Comment({
@@ -14,7 +14,7 @@ function Comment({
   profileId, // Add profileId to props
   deleteComment, // Add deleteComment function to props
 }) {
-  const { currentUser } = useContext(CurrentUserContext) // Get the current user context
+  const currentProfile = useProfile((state) => state.currentProfile)
   const [liked, setLiked] = useState(false)
   const [showReplyForm, setShowReplyForm] = useState(false)
   const [replyText, setReplyText] = useState("")
@@ -41,7 +41,7 @@ function Comment({
         <div className="my-auto">
           <p className="text-[22px] my-auto">{username}</p>
         </div>
-        {currentUser && currentUser.id === profileId && (
+        {currentProfile && currentProfile.id === profileId && (
           <button
             onClick={() => deleteComment(id)}
             className="absolute top-0 right-0 mt-4 mr-4 text-red-500"

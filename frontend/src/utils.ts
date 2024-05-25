@@ -182,3 +182,16 @@ export const deleteCommentById = async (id) => {
   }
   return result
 }
+
+
+export const getNotificationsForCurrentProfile = async (profileId, setNotifications) => {
+  if (!profileId) return;
+  const received = await fetchHandler(
+    `/api/notifications/${profileId}`
+  );
+  const sent = await fetchHandler(
+    `/api/notifications/sent/${profileId}`
+  );
+  setNotifications({ received: received[0], sent: sent[0]});
+}
+

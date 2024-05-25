@@ -1,11 +1,11 @@
 import { useState } from "react";
-import SingUp from "./Signup";
-import PersonalInfo from "./Personalnfo";
-import Address from "./ProfileCreation";
-import Button from "../ui/Button";
-import Welcome from "./Welcome";
-import ProfileCreation from "./ProfileCreation";
-import CurrentUserContext from "../../contexts/current-user-context";
+import SingUp from "./SignupForm";
+import PersonalInfo from "../../components/layout/Personalnfo";
+import Address from "../../components/layout/ProfileCreation";
+import Button from "../../components/ui/Button";
+import Welcome from "../../components/layout/Welcome";
+import ProfileCreation from "../../components/layout/ProfileCreation";
+import { useProfile } from "../../state/store";
 import { useContext } from "react";
 export const FormTitle = [
   "Sign Up",
@@ -13,10 +13,10 @@ export const FormTitle = [
   "Profile Creation",
   "Done",
 ];
-function Form(refresh) {
-  const { currentUser } = useContext(CurrentUserContext);
-  
+function Form(refreshUser) {
+  const [currentProfile, setCurrentProfile] = [useProfile((state) => state.currentProfile), useProfile((state) => state.setCurrentProfile)];
   const [page, setPage] = useState(0);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -29,10 +29,10 @@ function Form(refresh) {
     bio: "",
     adoptionYear: "",
     ethicity: "",
-    homeTown: {}
+    homeTown: {},
   });
 
-  const PageDisplay = () => {
+   const PageDisplay = () => {
     if (page === 0) {
       //   console.log(page);
       return (
@@ -57,15 +57,16 @@ function Form(refresh) {
       //   console.log(page);
       return (
         <ProfileCreation
-          refresh={refresh}
+          setUser={setCurrentProfile}
           page={page}
           setPage={setPage}
           formData={formData}
           setFormData={setFormData}
         />
       );
-    } 
+    }
   };
+
   return (
     <main
       className={`container absolute transition-all duration-300 z-[4]   inset-0 top-[10%] ${

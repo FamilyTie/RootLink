@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useRef, FC } from "react";
-import CurrentUserContext from "../../contexts/current-user-context";
+import { useProfile } from "../../state/store";
 import { BlockNoteView } from "@blocknote/mantine";
 import CustomSlashMenu from "./Editor-Configs/SlashMenu";
 import handleFetch from "./Editor-Configs/Fetching";
@@ -41,7 +41,7 @@ function CreatePost({
   onCancel,
   onSave,
 }) {
-  const { currentUser } = useContext(CurrentUserContext);
+  const currentProfile = useProfile((state) => state.currentProfile);
   const [img, setImg] = useState(null);
   const [thumbnail, setThumbnail] = useState(initialImage ? initialImage : null);
   const [title, setTitle] = useState(initialTitle);
@@ -90,7 +90,7 @@ function CreatePost({
     const postData = {
       title,
       body: JSON.stringify(editor.document),
-      profile_id: currentUser.id,
+      profile_id: currentProfile.id,
       img: img_url ,
     };
 
@@ -156,8 +156,8 @@ function CreatePost({
     <div className="bg-[rgb(294, 124, 204)]">
       <div className="flex bg-white  relative rounded-md w-[30rem] p-5  items-start">
         <div className="w-12 h-12 overflow-hidden absolute  rounded-full object-cover border-4 shadow border-white  ml-2 mt-4">
-          {currentUser && (
-            <img src={currentUser.img} className=" m-auto" alt="" />
+          {currentProfile && (
+            <img src={currentProfile.img} className=" m-auto" alt="" />
           )}
         </div>
 

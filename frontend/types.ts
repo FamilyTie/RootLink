@@ -1,4 +1,9 @@
-
+export type Feature =  {
+    number: string;
+    title: string;
+    description: string;
+  }
+  
 
 export type Post = {
     body: string

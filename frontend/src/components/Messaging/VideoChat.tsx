@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState, useContext } from "react"
 import { io, Socket } from "socket.io-client"
 import Peer, { MediaConnection } from "peerjs"
-import CurrentUserContext from "../../contexts/current-user-context"
+import { useProfile } from "../../state/store"
 
 const VideoChat: React.FC = () => {
-  const { currentUser } = useContext(CurrentUserContext)
+  const currentProfile = useProfile((state) => state.currentProfile)
   const [localStream, setLocalStream] = useState<MediaStream | null>(null)
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null)
   const [isMuted, setIsMuted] = useState(false)
