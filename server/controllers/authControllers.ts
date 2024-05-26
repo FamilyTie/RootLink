@@ -1,13 +1,10 @@
 import User from "../db/models/User"
 import Profile from "../db/models/Profile"
-
-// This controller takes the provided username and password and finds
-// the matching user in the database. If the user is found and the password
-// is valid, it adds the userId to the cookie (allowing them to stay logged in)
-// and sends back the user object.
+import { Request, Response } from "express"
 
 
-export const loginUser = async (req, res) => {
+
+export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body; // the req.body value is provided by the client
   console.log("Logging in user:", email, password)
   try {
@@ -32,7 +29,7 @@ export const loginUser = async (req, res) => {
     const similarProfiles = await Profile.getSimilarProfiles({ id: user.id, adoption_year: profile.data.raw.adoptionYear, ethnicity: profile.data.raw.ethnicity, bio: profile.bio });
     if (similarProfiles) profile = { ...profile, similarProfiles };
 
-    req.session.userId = user.id;
+    (req as any).session.userId = user.id;
 
     res.send({ user, profile });
   } catch (error) {
@@ -43,7 +40,7 @@ export const loginUser = async (req, res) => {
 
 // This controller sets `req.session` to null, destroying the cookie
 // which is the thing that keeps them logged in.
-export const logoutUser = (req, res) => {
+export const logoutUser = (req: Request, res: Response) => {
   req.session = null; // This clears the session
 
   for (const cookieName in req.cookies) {
@@ -55,13 +52,13 @@ export const logoutUser = (req, res) => {
 
 // This controller returns 401 if the client is NOT logged in (doesn't have a cookie)
 // or returns the user based on the userId stored on the client's cookie
-export const showMe = async (req, res) => {
-  if (!req.session.userId) return res.sendStatus(401);
+export const showMe = async (req : Request, res: Response) => {
+  if (!(req as any).session.userId) return res.sendStatus(401);
   
-  const user = await User.findById(req.session.userId);
+  const user = await User.findById((req as any).session.userId);
   if (!user) return res.status(404).send("User not found");
 
-  let profile = await Profile.findByUserId(req.session.userId);
+  let profile = await Profile.findByUserId((req as any).session.userId);
   if (!profile) return res.status(404).send("Profile not found");
 
   try {

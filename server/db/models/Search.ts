@@ -2,7 +2,7 @@ import {knex} from '../knex';
 
 
 class SearchService {
-  static async search(query) {
+  static async search(query: string) {
     try {
       const postsQuery = `
       SELECT 
