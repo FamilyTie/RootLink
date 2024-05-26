@@ -6,7 +6,7 @@ import LoginPage from "./pages/Login/Login";
 import NotFoundPage from "./pages/NotFound";
 import { checkForLoggedInUser } from "./adapters/auth-adapter";
 import Feed from "./pages/Feed/Feed";
-import { fetchHandler, getNotificationsForCurrentProfile } from "./utils";
+import { fetchHandler, getCurrentUserProfile, getNotificationsForCurrentProfile , getConnectionsForCurrentProfile} from "./utils";
 import ChatApp from "./components/Messaging/ChatApp";
 import Layout from "./Layout";
 import SidebarChats from "./components/Messaging/sidebarChats";
@@ -18,6 +18,7 @@ import { Profile } from "./pages/Profile/ProfilePage";
 import Settings from "./pages/Settings/settingsPage";
 import VideoChatWrapper from "./components/Messaging/VideoChatWrapper";
 
+
 export default function App() {
   const [currentProfile, setCurrentProfile] = [useProfile((state) => state.currentProfile), useProfile((state) => state.setCurrentProfile)];
   const [connections, setConnections] = [useConnections((state) => state.connections), useConnections((state) => state.setConnections)];
@@ -26,53 +27,34 @@ export default function App() {
 
   //populating currentProfile state 
   useEffect(() => {
-    const checkLoggedIn = async () => {
-      
-      const user = await checkForLoggedInUser();
-      if (user) {
-        const likedPosts = await fetchHandler(
-          `/api/posts/liked/${user.profile.id}`
-        );
-        user.profile["likedPosts"] = new Set(likedPosts[0]);
-      }
-      setCurrentProfile(user.profile);
-      console.log(user.profile, "Hello World");
+    const saveCurrentUserProfile = async () => {
+      await getCurrentUserProfile(setCurrentProfile);
     };
 
-    checkLoggedIn();
+    saveCurrentUserProfile();
   }, [setCurrentProfile, refreshUser]);
 
 
 
   //populating connections state with connections of user signed in
   useEffect(() => {
-    const getConnections = async () => {
-      if (currentProfile && currentProfile.id) {
-        try {
-          const connections = await fetchHandler(
-            `/api/connection/${currentProfile.id}`
-          );
-          console.log(connections, "Hello World");
-          if (connections) {
-            setConnections(connections[0]);
-          }
-        } catch (error) {
-          console.error("Error fetching connections:", error);
-        }
-      }
+    if (!currentProfile) return;
+    const saveCurrentProfilesConnections = async () => {
+      await getConnectionsForCurrentProfile(currentProfile.id, setNotifications);
     };
 
-    getConnections();
+    saveCurrentProfilesConnections();
   }, [currentProfile, setConnections]);
 
 
 
   //populating notifications state with notifications of user signed in
   useEffect(() => {
-    const notifications = async () => {
+    if (!currentProfile) return;
+    const saveCurrentProfilesNotifications = async () => {
       await getNotificationsForCurrentProfile(currentProfile.id, setNotifications);
     };
-    notifications();
+    saveCurrentProfilesNotifications();
   }, [currentProfile]);
 
 
@@ -96,7 +78,7 @@ export default function App() {
             <Route
               path="/feed"
               element={
-                <Feed refresh={handleRefresh} notifications={notifications} />
+                <Feed refresh={handleRefresh}  />
               }
             />
             <Route path="/map" element={<Map />} />

@@ -1,8 +1,7 @@
-import FeatureCard from "./FeatureCard"
-import { FeatureSectionProps } from "../../../../interfaces";
+import FeatureCard from "./FeatureCard";
+import { FeatureSectionProps } from "../../../../Interfaces&Types/interfaces";
 
-
-function FeaturesSection({features} : FeatureSectionProps) {
+function FeaturesSection({ features }: FeatureSectionProps) {
   return (
     <section className="h-[110vh] mt-10  back-blue1">
       <div className="relative pl-[17rem] flex flex-col items-center  py-[5rem]">
@@ -28,7 +27,6 @@ function FeaturesSection({features} : FeatureSectionProps) {
         </div>
         <p className="text-center text-[25px] mt-10">&copy; 2024 RootLink</p>
       </div>
-      
     </section>
   );
 }

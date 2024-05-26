@@ -1,6 +1,5 @@
-import { Feature } from "../../../../types";
-import { FeatureCardProps } from "../../../../interfaces";
-
+import { Feature } from "../../../../Interfaces&Types/types";
+import { FeatureCardProps } from "../../../../Interfaces&Types/interfaces";
 
 function FeatureCard({ feature }: FeatureCardProps) {
   return (

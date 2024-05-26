@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FiMessageCircle } from "react-icons/fi";
-import {useProfile} from "../../state/store";
+import { useProfile } from "../../state/store";
 import { fetchHandler } from "../../utils";
-import { SearchResult } from "../../../interfaces";
+import { SearchResult } from "../../../Interfaces&Types/interfaces";
 const SidebarChats = ({
   onSelectChatroom,
   refresh,
@@ -12,7 +12,6 @@ const SidebarChats = ({
 }) => {
   const [chatrooms, setChatrooms] = useState([]);
   const [users, setUsers] = useState([]);
-
   const [initialUsers, setInitialUsers] = useState([]);
   const currentProfile = useProfile((state) => state.currentProfile);
   const [reload, setReload] = useState(false);
@@ -37,7 +36,7 @@ const SidebarChats = ({
     fetchInitialProfiles();
   }, []);
 
-  console.log(initialUsers, "initialUsers");
+
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -59,7 +58,9 @@ const SidebarChats = ({
         const results: SearchResult = response[0];
         console.log(results, "results");
         setSearchResults(
-          results.profiles.filter((profile) => profile.id !== currentProfile.id).slice(0, 4)
+          results.profiles
+            .filter((profile) => profile.id !== currentProfile.id)
+            .slice(0, 4)
         );
       };
       fetchQuery();
@@ -67,7 +68,7 @@ const SidebarChats = ({
       console.log(error);
     }
   }, [debouncedQuery]);
-  console.log(users, "fetched")
+  console.log(users, "fetched");
 
   useEffect(() => {
     const getChatrooms = async () => {
@@ -90,7 +91,6 @@ const SidebarChats = ({
 
     getChatrooms();
   }, [reload]);
-
 
   console.log(searchResults, "searchResults");
 
@@ -137,20 +137,24 @@ const SidebarChats = ({
         className="w-[95%] placeholder:font-semibold  border p-2 bg-slate-100 rounded mb-4"
       />
       <div className="flex justify-center mb-10 overflow-scroll">
-        {(searchResults.length > 0? searchResults : initialUsers ).map((user) => {
-          return (
-            <div onClick={() => newChat(user.id)} className="cursor-pointer">
-              <img
-                src={searchResults.length > 0? user.profile_photo : user.img}
-                alt={user.username}
-                className="w-16 h-16 shadow p-[2px] bg-[#A0D9FF] rounded-full mr-3"
-              />
-              <p className="font-semibold text-gray-500 text-center r">
-                {searchResults.length > 0?  user.full_name.split(" ")[0]:  user.fullName.split(" ")[0]}
-              </p>
-            </div>
-          );
-        })}
+        {(searchResults.length > 0 ? searchResults : initialUsers).map(
+          (user) => {
+            return (
+              <div onClick={() => newChat(user.id)} className="cursor-pointer">
+                <img
+                  src={searchResults.length > 0 ? user.profile_photo : user.img}
+                  alt={user.username}
+                  className="w-16 h-16 shadow p-[2px] bg-[#A0D9FF] rounded-full mr-3"
+                />
+                <p className="font-semibold text-gray-500 text-center r">
+                  {searchResults.length > 0
+                    ? user.full_name.split(" ")[0]
+                    : user.fullName.split(" ")[0]}
+                </p>
+              </div>
+            );
+          }
+        )}
       </div>
       <div className="flex justify-between">
         <h2 className="text-[20px]  pl-3   font-bold mb-4">Recent Chats</h2>

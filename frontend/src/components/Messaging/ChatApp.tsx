@@ -12,6 +12,8 @@ import Link from "@yoopta/link"
 import Video from "@yoopta/video"
 import File from "@yoopta/file"
 import Code from "@yoopta/code"
+import { Message } from "./Message"
+import { ChatAppProps } from "../../../Interfaces&Types/interfaces"
 
 const plugins = [
   Paragraph.extend({
@@ -48,15 +50,13 @@ const plugins = [
   Link,
   Code,
 ]
-
 const MARKS = [Bold, Italic, CodeMark, Strike, Underline]
-
 const socket = io("http://localhost:3761")
 
-const ChatApp = ({userId, chatroomId, toggleChatApp,  username }) => {
+const ChatApp = ({userId, chatroomId,  username, toggleChatApp}: ChatAppProps) => {
   const [messages, setMessages] = useState([])
   const [messageBodies, setMessageBodies] = useState(new Set())
-  const scrollRef = useRef(null)
+
   useEffect(() => {
     if (!chatroomId) {
       console.error("No chatroomId provided")
@@ -101,7 +101,6 @@ const ChatApp = ({userId, chatroomId, toggleChatApp,  username }) => {
       }
     }
 
-
     socket.on("message", handleMessage)
 
     // Clean up
@@ -109,7 +108,6 @@ const ChatApp = ({userId, chatroomId, toggleChatApp,  username }) => {
       socket.off("message", handleMessage)
     }
   }, [chatroomId, messageBodies])
-
 
   const sendMessage = (messageContent) => {
     if (messageContent.trim()) {
@@ -144,63 +142,14 @@ const ChatApp = ({userId, chatroomId, toggleChatApp,  username }) => {
     }
   }
 
-  const renderMessage = (msg, index) => {
-    const editor = createYooptaEditor()
-    const isUserMessage = msg.user_sent === userId
-
-    return (
-      <div
-        key={index}
-       className=""
-      >
-
-          <div className="flex">
-          {!isUserMessage && <b className="block mb-2 text-black">{msg.username}:</b>}
-       
-          </div>
-        
-        <div  className={`relative gap-3 flex p-4 mb-4 max-w-xs rounded-lg shadow-md ${
-          isUserMessage?
-           "bg-[#074979] text-black translate-x-[193%] self-end"
-           : "bg-[#074979] text-black self-start" 
-        }`}>
-           
-        <div >
-
-        <YooptaEditor
-          editor={editor}
-          // @ts-ignore
-          plugins={plugins}
-          marks={MARKS}
-          readOnly
-          value={JSON.parse(msg.body)}
-          className="editor"
-        />
-        <div
-          className={`absolute top-4 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent ${
-            isUserMessage
-            ?  "border-l-8 border-[#074979] -right-2"
-              : "border-r-8 border-[#074979] -left-2"
-             
-          }`}
-        ></div>
-
-        </div>  
-
-        
-        
-          </div>
-      
-      </div>
-    )
-  }    
+ 
   
   return (
     <div className="flex flex-col pt-[4rem] relative  h-[93vh] over w-[88%] overflow-hidden bg-slate-100 bg-opacity-50 border-r backdrop-blur  text-[rgb(218,219,221)]">
       
       <div className="flex-1 overflow-y-auto p-4 mx-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
-        {messages.map((msg, index) => renderMessage(msg, index))}
-        <div ref={scrollRef} />
+        {messages.map((msg, index) => <Message index={index} msg={msg} userId={userId} plugins={plugins} />)}
+        <div  />
       </div>
       <div className="p-4  bg-white  bg-opacity-70 backdrop-blur shadow-lg ">
         <SlackChat sendMessage={sendMessage} />

@@ -3,22 +3,16 @@ import { useProfile } from "../../state/store";
 import { BlockNoteView } from "@blocknote/mantine";
 import CustomSlashMenu from "./Editor-Configs/SlashMenu";
 import handleFetch from "./Editor-Configs/Fetching";
-import {
-  uploadFile,
-  handleLocation,
-  insertImageBlock,
-} from "./Editor-Configs/Services";
+import { uploadFile } from "./Editor-Configs/Services";
 import {
   getCustomSlashMenuItems,
   theme,
   schema,
   placeholders,
-  defaultBlockAmount,
 } from "./Editor-Configs/Utility";
 import {
   DefaultReactSuggestionItem,
   SuggestionMenuController,
-  getDefaultReactSlashMenuItems,
   SuggestionMenuProps,
   useCreateBlockNote,
   BlockTypeSelectItem,
@@ -31,6 +25,7 @@ import { RiAlertFill } from "react-icons/ri";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { uploadFileAndGetURL } from "../../utils";
+import { CreatePostProps } from "../../../Interfaces&Types/interfaces";
 
 function CreatePost({
   refetchPosts,
@@ -40,10 +35,12 @@ function CreatePost({
   postId = null,
   onCancel,
   onSave,
-}) {
+}: CreatePostProps) {
   const currentProfile = useProfile((state) => state.currentProfile);
   const [img, setImg] = useState(null);
-  const [thumbnail, setThumbnail] = useState(initialImage ? initialImage : null);
+  const [thumbnail, setThumbnail] = useState(
+    initialImage ? initialImage : null
+  );
   const [title, setTitle] = useState(initialTitle);
   const [body, setBody] = useState(initialBody);
   const [enableSlashMenu, setEnableSlashMenu] = useState(true);
@@ -51,8 +48,6 @@ function CreatePost({
   const [dummyState, setDummyState] = useState(false); // Dummy state for re-render
   const MAX_BLOCKS = 15;
   const postButtonRef = useRef(null);
-
- 
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -91,7 +86,7 @@ function CreatePost({
       title,
       body: JSON.stringify(editor.document),
       profile_id: currentProfile.id,
-      img: img_url ,
+      img: img_url,
     };
 
     const options = {

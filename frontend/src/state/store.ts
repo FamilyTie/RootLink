@@ -1,11 +1,11 @@
 import create from 'zustand';
-import { ProfileState, ConnectionsState, NotificationsState } from '../../interfaces';
+import { ProfileState, ConnectionsState, NotificationsState } from '../../Interfaces&Types/interfaces';
 
 
 
 export const useProfile = create<ProfileState>(set => ({
     currentProfile: null,
-    setCurrentProfile: (profile : any) => set({ currentProfile: profile }),
+    setCurrentProfile: (profile: any) => set({ currentProfile: profile }),
 }));
 
 export const useConnections = create<ConnectionsState>(set => ({

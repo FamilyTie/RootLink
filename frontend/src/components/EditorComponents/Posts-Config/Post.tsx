@@ -17,31 +17,21 @@ import {useProfile} from "../../../state/store";
 import Comments from "../../layout/Comments";
 import { buildCommentTree } from "./CommentTree";
 import CreatePost from "../CreatePost";
+import { PostProps } from "../../../../Interfaces&Types/interfaces";
+import { fetchAndSetComments } from "./postUtils";
 
-export function Post({
-  
-  refetch,
-  post,
-  postBody,
-  view = false,
-  onEdit,
-  isSettingsPage = false,
-}) {
+export function Post({refetch,post,postBody,view = false,onEdit,isSettingsPage = false}: PostProps) {
   const currentProfile = useProfile((state) => state.currentProfile);
   const [initialContent, setInitialContent] = useState(postBody);
   const [likesCount, setLikesCount] = useState(post.likes_count ? post.likes_count : 0);
-  const [profilePhoto, setProfilePhoto] = useState(post.profile_photo);
   const [commentsCount, setCommentsCount] = useState(post.comments_count);
   const [likes, setLikes] = useState(post.new_likes || []);
   const [comments, setComments] = useState([]);
-  const [bodyExpanded, setBodyExpanded] = useState(false);
   const [commentsExpanded, setCommentsExpanded] = useState(false);
   const [liked, setLiked] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
-
-  
   useEffect(() => {
     if (post && post.new_likes) {
       setLikes(post.new_likes);
@@ -78,11 +68,6 @@ console.log(currentProfile, 'liked'
     }
   }, [commentsExpanded, post.id]);
 
-  const fetchAndSetComments = async () => {
-    const fetchedComments = await fetchPostComments(post.id);
-    const commentTree = buildCommentTree(fetchedComments);
-    setComments(commentTree);
-  };
 
   const handleCommentSubmit = async () => {
     const comment = {
@@ -97,14 +82,14 @@ console.log(currentProfile, 'liked'
     if (response && response.length > 0) {
       toast.success("Comment submitted");
       setNewCommentText("");
-      fetchAndSetComments(); // Refetch comments
+      fetchAndSetComments(setComments, post.id); // Refetch comments
       setCommentsCount((count) => count + 1);
     } else {
       toast.error("Failed to submit comment");
     }
   };
 
-  const addReply = async (parentCommentId, replyText) => {
+  const addReply = async (parentCommentId: any, replyText: any) => {
     try {
       const reply = {
         profile_id: currentProfile.id,
@@ -118,7 +103,7 @@ console.log(currentProfile, 'liked'
       );
       if (response && response.length > 0) {
         toast.success("Reply submitted");
-        fetchAndSetComments(); // Refetch comments
+        fetchAndSetComments(setComments, post.id); // Refetch comments
       } else {
         toast.error("Failed to submit reply");
       }
@@ -127,6 +112,7 @@ console.log(currentProfile, 'liked'
       toast.error("Failed to submit reply");
     }
   };
+
 
   const handleLike = () => {
     if (!liked) {
@@ -179,7 +165,7 @@ console.log(currentProfile, 'liked'
   const deleteComment = async (id) => {
     await deleteCommentById(id);
     toast.success("Comment deleted");
-    fetchAndSetComments(); // Refetch comments
+    fetchAndSetComments(setComments, post.id); // Refetch comments
   };
 
   const handleEditToggle = () => {

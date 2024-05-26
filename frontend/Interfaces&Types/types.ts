@@ -43,3 +43,6 @@ export type SearchProfile = {
 }
 
 
+export type PathIndex = { [x: string]: any; "/feed"?: number; "/search"?: number; "/discover"?: number; "/notifications"?: number; "/messages"?: number; "/settings"?: number }
+
+
