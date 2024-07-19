@@ -49,6 +49,7 @@ const notificationRouter_1 = require("./routers/notificationRouter");
 const http = require("http");
 const { Server } = require("socket.io");
 const { ExpressPeerServer } = require("peer");
+const { v4: uuidv4 } = require('uuid');
 const app = (0, express_1.default)();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -80,6 +81,13 @@ app.use("/api/location", locationRouter_1.locationRouter);
 app.use("/api/connection", connectionRouter_1.connectionRouter);
 app.use("/api/notifications", notificationRouter_1.notificationRouter);
 app.get('/api/autocomplete', api_fetches_1.fetchAutoCompleteLocations);
+app.post('/create-room', (req, res) => {
+    const roomId = uuidv4();
+    const room = { id: roomId, participants: [] };
+    // Store the meeting room in the database
+    // ...
+    res.json(room);
+});
 app.get(/^(?!\/api).*/, function (request, response) {
     response.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
 });

@@ -6,10 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.showMe = exports.logoutUser = exports.loginUser = void 0;
 const User_1 = __importDefault(require("../db/models/User"));
 const Profile_1 = __importDefault(require("../db/models/Profile"));
-// This controller takes the provided username and password and finds
-// the matching user in the database. If the user is found and the password
-// is valid, it adds the userId to the cookie (allowing them to stay logged in)
-// and sends back the user object.
 const loginUser = async (req, res) => {
     const { email, password } = req.body; // the req.body value is provided by the client
     console.log("Logging in user:", email, password);

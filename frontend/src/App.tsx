@@ -17,9 +17,11 @@ import { useConnections, useProfile, useNotifications } from "./state/store";
 import { Profile } from "./pages/Profile/ProfilePage";
 import Settings from "./pages/Settings/settingsPage";
 import VideoChatWrapper from "./components/Messaging/VideoChatWrapper";
+// import { VideoCall } from "./videoCall";
 
 
 export default function App() {
+  
   const [currentProfile, setCurrentProfile] = [useProfile((state) => state.currentProfile), useProfile((state) => state.setCurrentProfile)];
   const [connections, setConnections] = [useConnections((state) => state.connections), useConnections((state) => state.setConnections)];
   const [refreshUser, setRefreshUser] = useState(false);
@@ -148,6 +150,7 @@ export default function App() {
 
           <Route path="/video-chat/:id" element={<VideoChatWrapper />} />
           <Route path="*" element={<NotFoundPage />} />
+          {/* <Route path='/video' element={<VideoCall />} /> */}
         </Routes>
       </main>
     </>

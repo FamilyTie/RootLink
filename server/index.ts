@@ -19,10 +19,11 @@ import { fetchAutoCompleteLocations } from "./utils/api-fetches"
 import { locationRouter } from "./routers/locationRouter"
 import { connectionRouter } from "./routers/connectionRouter"
 import { notificationRouter } from "./routers/notificationRouter"
+const compression = require('compression');
 const http = require("http")
 const { Server } = require("socket.io")
 const { ExpressPeerServer } = require("peer")
-
+const { v4: uuidv4 } = require('uuid');
 const app: Application = express()
 const server = http.createServer(app)
 const io = new Server(server, {
@@ -32,6 +33,8 @@ const io = new Server(server, {
   },
 })
 
+
+
 // Middleware
 app.use(
   cors({
@@ -40,7 +43,7 @@ app.use(
   })
 )
 
-
+app.use(compression());
 
 app.use(cookieParser())
 app.use(handleCookieSessions)
@@ -64,6 +67,13 @@ app.use("/api/connection", connectionRouter)
 app.use("/api/notifications", notificationRouter)
 app.get('/api/autocomplete', fetchAutoCompleteLocations)
 
+app.post('/create-room', (req, res) => {
+  const roomId = uuidv4();
+  const room = { id: roomId, participants: [] };
+  // Store the meeting room in the database
+  // ...
+  res.json(room);
+});
 
 
 

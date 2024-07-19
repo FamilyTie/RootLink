@@ -1,0 +1,14 @@
+# Allow all web crawlers to access all content except the restricted areas
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /auth/
+
+# Allow access to the following important directories
+Allow: /public/
+Allow: /static/
+Allow: /images/
+
+# Sitemap location
+Sitemap: https://yourdomain.com/sitemap.xml

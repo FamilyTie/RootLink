@@ -16,6 +16,9 @@ function HeroSection() {
           </button>
         </div>
         <img
+        alt="Father and Son"
+         width="600" height="400"
+          loading="lazy"
           className=" mt-[7rem] translate-x-[-15rem] w-[834px]"
           src="/father-son.png"
         ></img>
