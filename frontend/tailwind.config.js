@@ -13,6 +13,7 @@ export default {
         'tablet-sm': '1175px',
         'tablet-xs': '930px',
         'phone-lg': '540px',
+        'phone-sm': '410px'
 
       }
     },

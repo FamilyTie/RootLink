@@ -208,7 +208,7 @@ console.log(currentProfile, 'liked'
   
 
   return (
-    <div className="h-full transition-all duration-300 pb-7 bg-white pt-3 w-[25rem] tablet-sm:w-[30rem] rounded">
+    <div className="h-full transition-all duration-300 pb-7 bg-white pt-3 w-[95%]   tablet-xs:w-[25rem] tablet-sm:w-[30rem] rounded">
       <div className="bg-none pointer-events-none">
       <ToastContainer
         position="bottom-left"

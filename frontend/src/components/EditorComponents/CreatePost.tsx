@@ -149,18 +149,18 @@ function CreatePost({
 
   return (
     <div className="bg-[rgb(294, 124, 204)]">
-      <div className="flex bg-white  relative rounded-md w-[25rem] tablet-sm:w-[30rem] p-5  items-start">
-        <div className="w-12 h-12 overflow-hidden absolute  rounded-full object-cover border-4 shadow border-white  ml-2 mt-4">
+      <div className="flex bg-white  relative rounded-md  w-[95%]  tablet-xs:w-[25rem] tablet-sm:w-[30rem] p-5  ">
+        <div className="w-12 h-12  overflow-hidden absolute  rounded-full object-cover border-4 shadow border-white  ml-2 mt-4">
           {currentProfile && (
             <img src={currentProfile.img} className=" m-auto" alt="" />
           )}
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-0">
+        <form onSubmit={handleSubmit}  className="flex flex-col gap-0">
           <div className="flex items-start" ref={postButtonRef}>
-            <div className="flex flex-col gap-3 w-[20rem] tablet-sm:w-[25rem] pl-14 m-2 mt-6">
+            <div className="flex flex-col gap-3 w-[16rem] phone-xs:w-[20rem]   tablet-xs:w-[20rem] tablet-sm:w-[25rem] pl-14 m-2 mt-6">
               <input
-                className="ProseMirror text-[1.3rem] pl-3 w-[15rem] tablet-sm:w-[20rem] tablet mb-5 placeholder:text-[lightgray] bg-slate-100 m-0 rounded-md p-1 text-[rgb(157, 173, 184]"
+                className="ProseMirror text-[1.3rem] pl-3  w-[60vw]  phone-lg:w-[40vw] md:w-full  tablet-sm:w-[20rem] tablet mb-5 placeholder:text-[lightgray] bg-slate-100 m-0 rounded-md p-1 text-[rgb(157, 173, 184]"
                 placeholder="Title..."
                 type="text"
                 value={title}
@@ -186,7 +186,7 @@ function CreatePost({
                 </div>
               )}
 
-              <div className="bg-slate-100 pt-1">
+              <div className="bg-slate-100  phone-lg:w-[60vw]  md:w-[40vw] tablet-xs:w-full w-[60vw] pt-1">
                 <div className="">
                   <BlockNoteView
                     // @ts-ignore
