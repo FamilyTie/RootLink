@@ -41,7 +41,7 @@ const ChatLayout = ({ userId, username, refresh }) => {
   };
 
   return (
-    <div className="chat-layout z-[420] pt-[4rem] flex h-[95vh] overflow-hidden ">
+    <div className=" z-[420] pt-[4rem]  flex h-screen ">
       <div
         className={`chat-content overflow-hidden transform transition-all duration-300 ${
           isChatAppVisible ? "translate-x-[18%]" : "translate-x-[110%]"
@@ -62,7 +62,7 @@ const ChatLayout = ({ userId, username, refresh }) => {
           {isChatAppVisible && "Close Messages"}
         </button>
       </div>
-      <div className="sidebar w-[20rem] bg-white text-black absolute right-0">
+      <div className=" w-[22rem] bg-white text-black ">
         <SidebarChats
           userid={userId}
           toggle={toggleChatApp}

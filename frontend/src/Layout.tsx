@@ -4,13 +4,16 @@ import SideBar from "./components/layout/SideBar/SideBar"; // Your Sidebar compo
 
 const Layout = () => {
   return (
-    <div>
+    <div className="w-screen overflow-hidden">
       <Nav2 />
-      <div className="main-content">
+      <div className="main-content overflow-auto flex">
+      
         <SideBar />
-        <div className="content">
+        <div className="content overflow-hidden w-screen">
           <Outlet /> {/* This will render the matched child route */}
         </div>
+
+        
       </div>
     </div>
   );

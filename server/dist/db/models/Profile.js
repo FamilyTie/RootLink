@@ -26,6 +26,7 @@ class Profile {
     static async getSimilarProfiles(profile) {
         try {
             const similarProfiles = await (0, MLModel_1.processProfileAndFindMatches)(profile);
+            console.log('similarProfiles:', similarProfiles);
             return similarProfiles;
         }
         catch (error) {

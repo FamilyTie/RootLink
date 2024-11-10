@@ -53,6 +53,7 @@ class Profile {
   static async getSimilarProfiles(profile) {
     try {
       const similarProfiles = await processProfileAndFindMatches(profile)
+      console.log('similarProfiles:', similarProfiles)
       return similarProfiles
     }
     catch (error) {

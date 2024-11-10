@@ -6,6 +6,15 @@ export default {
       transitionProperty: {
         width: "width",
       },
+      screens: {
+        'laptop' : '1495px',
+        'laptop-sm': '1390px',
+        'tablet': '1390px',
+        'tablet-sm': '1175px',
+        'tablet-xs': '930px',
+        'phone-lg': '540px',
+
+      }
     },
   },
   plugins: [

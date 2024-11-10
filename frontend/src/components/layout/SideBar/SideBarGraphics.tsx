@@ -44,7 +44,7 @@ function SideBarGraphics({ setNotificationsOpen, setSearchOpen }) {
 
   return (
     <div
-      className={`  z-[501] w-[14%]      h-full fixed bg-white   backdrop-blur-md   overflow-hidden  flex flex-col  pt-[5rem]   transition-all duration-200  `}
+      className={` hidden phone-lg:flex  z-[501] md:w-[14rem] tablet-xs:w-[4.3rem]  tablet-sm:w-[14rem]  laptop-sm:w-[4.3rem]  w-[4.3rem]       bg-white   backdrop-blur-md   overflow-hidden  flex-col  pt-[5rem]   transition-all duration-200  `}
     >
       <div className="border-b border-dashed pb-5">
         {images.map((image) => (
@@ -53,8 +53,8 @@ function SideBarGraphics({ setNotificationsOpen, setSearchOpen }) {
             onClick={() => handleClick(image.link)}
             className={`py-5   ${
               clicked === image.id
-                ? " border-l-[5px] pl-8   bg-gray-50  border-[#074979]"
-                : " pl-6 border-l-[5px] border-transparent"
+                ? " border-l-[5px]  pl-5    bg-gray-50  border-[#074979]"
+                : "pl-[1.15rem] border-l-[5px] border-transparent"
             } cursor-pointer transition-all duration-300  gap-5 flex`}
           >
             <img

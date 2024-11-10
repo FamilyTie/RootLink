@@ -38,7 +38,7 @@ function SideBar() {
   };
 
   return (
-    <div className="flex  ">
+    <div className="flex   ">
       <SideBarGraphics
         setSearchOpen={setSearchOpen}
         setNotificationsOpen={setNotificationsOpen}

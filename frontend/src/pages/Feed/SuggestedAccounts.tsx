@@ -62,7 +62,7 @@ function SuggestedAccounts() {
 
   return (
     <div
-      className={`w-[24rem] h-[16rem] relative transition-all duration-200 overflow-hidden rounded-md p-5 bg-white mt-[5rem] h-[${
+      className={`w-[24rem]  relative transition-all duration-200 overflow-hidden rounded-md p-5 bg-white mt-[5rem] h-[${
         viewAll && 17 + 5 * (similarUsers.length - 1)
       }rem]`}
     >

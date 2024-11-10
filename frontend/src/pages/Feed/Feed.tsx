@@ -29,9 +29,9 @@ function Feed({ refresh }: { refresh: () => void }){
 
 
   return (
-    <div className="overflow-hidden">
-      <div className="flex overflow-hidden  bg-slate-100">
-        <div className="w-[48rem] flex pl-[15rem] pt-[5rem] bg-slate-100 h-screen overflow-hidden rounded-tl-[3rem]">
+    <div className="">
+      <div className="flex  overflow-hidden  justify-around tablet:justify-between  bg-slate-100">
+        <div className=" flex pl-[2rem] pt-[5rem] bg-slate-100 h-screen overflow-hidden rounded-tl-[3rem]">
           <div
             style={{
               height: "100%",
@@ -52,16 +52,16 @@ function Feed({ refresh }: { refresh: () => void }){
           </div>
         </div>
 
-        <div>
+        <div className="overflow-hidden hidden  tablet-xs:flex-col tablet-xs:flex ">
           <SuggestedAccounts />
          
-          <div className="  ">
+          <div className=" overflow-hidden  ">
             <Map />
             <Feedback />
           </div>
         </div>
 
-        <div className="bg-slate-100 h-full overflow-hidden">
+        <div className="h-full hidden tablet:flex overflow-hidden">
           {currentProfile && (
             <ChatLayout
               refresh={refresh}

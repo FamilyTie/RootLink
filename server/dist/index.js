@@ -46,6 +46,7 @@ const api_fetches_1 = require("./utils/api-fetches");
 const locationRouter_1 = require("./routers/locationRouter");
 const connectionRouter_1 = require("./routers/connectionRouter");
 const notificationRouter_1 = require("./routers/notificationRouter");
+const compression = require('compression');
 const http = require("http");
 const { Server } = require("socket.io");
 const { ExpressPeerServer } = require("peer");
@@ -63,6 +64,7 @@ app.use((0, cors_1.default)({
     origin: "http://localhost:5173",
     credentials: true,
 }));
+app.use(compression());
 app.use((0, cookie_parser_1.default)());
 app.use(handleCookieSessions_1.handleCookieSessions);
 app.use(logRoutes_1.logRoutes);
