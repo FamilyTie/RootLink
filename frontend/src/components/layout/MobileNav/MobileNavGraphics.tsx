@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import { getPathIndex } from "../../../utils";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { pathIndexes, images } from "./data";
+import { pathIndexes, images } from "../SideBar/data";
 import { logUserOut } from "../../../adapters/auth-adapter";
 import { useProfile } from "../../../state/store";
-function SideBarGraphics({ setNotificationsOpen, setSearchOpen }) {
+function MobileNavGraphics({ setNotificationsOpen, setSearchOpen }) {
   const location = useLocation();
   const navigate = useNavigate();
   const pathname = location.pathname;
@@ -44,17 +44,17 @@ function SideBarGraphics({ setNotificationsOpen, setSearchOpen }) {
 
   return (
     <div
-      className={`  phone-lg:flex  z-[501] md:w-[14rem] tablet-xs:w-[4.3rem]  tablet-sm:w-[14rem]  laptop-sm:w-[4.3rem]  w-[0rem]       bg-white   backdrop-blur-md   overflow-hidden  flex-col  pt-[5rem]   transition-all duration-200  `}
+      className={`  flex h-[5rem]     w-screen fixed bottom-[0]  bg-white   backdrop-blur-md   overflow-hidden    pt-[5rem]   transition-all duration-200  `}
     >
-      <div className="border-b border-dashed pb-5">
+      <div className=" flex justify-around w-screen translate-y-[-4.5rem] pb-5">
         {images.map((image) => (
           <div
             key={image.id}
             onClick={() => handleClick(image.link)}
             className={`py-5   ${
               clicked === image.id
-                ? " border-l-[5px]  pl-5    bg-gray-50  border-[#074979]"
-                : "pl-[1.15rem] border-l-[5px] border-transparent"
+                ? " border-b-[5px]  pb-7    bg-gray-50  border-[#074979]"
+                : "pb-[1.15rem] border-l-[5px] border-transparent"
             } cursor-pointer transition-all duration-300  gap-5 flex`}
           >
             <img
@@ -66,15 +66,7 @@ function SideBarGraphics({ setNotificationsOpen, setSearchOpen }) {
                   : "text-black  opacity-50 "
               }`}
             />
-            <p
-              className={`text-[20px] transition-all   translate-y-[-3px] my-auto textshadow2 ${
-                clicked === image.id
-                  ? "text-[#074979] "
-                  : "text-black opacity-50"
-              } font-medium `}
-            >
-              {image.text}
-            </p>
+        
           </div>
         ))}
       </div>
@@ -83,13 +75,13 @@ function SideBarGraphics({ setNotificationsOpen, setSearchOpen }) {
         onClick={() => handleLogout()}
         className="flex  pl-8 pt-8 cursor-pointer gap-3"
       >
-        <img src="/exit.png" className="opacity-50 w-[25px]"></img>
+        {/* <img src="/exit.png" className="opacity-50 w-[25px]"></img>
         <p className="text-[20px]  opacity-50 font-medium textshadow2">
           Logout
-        </p>
+        </p> */}
       </div>
     </div>
   );
 }
 
-export default SideBarGraphics;
+export default MobileNavGraphics;
