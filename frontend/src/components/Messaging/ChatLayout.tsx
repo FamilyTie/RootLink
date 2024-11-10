@@ -43,7 +43,7 @@ const ChatLayout = ({ userId, username, refresh }) => {
   return (
     <div className=" z-[420] pt-[4rem]  flex h-screen ">
       <div
-        className={`chat-content overflow-hidden transform transition-all duration-300 ${
+        className={`chat-content overflow-hidden  transform transition-all duration-300 ${
           isChatAppVisible ? "translate-x-[18%]" : "translate-x-[110%]"
         } w-3/4 absolute left-0`}
       >
@@ -56,7 +56,7 @@ const ChatLayout = ({ userId, username, refresh }) => {
           />
         )}
         <button
-          className="absolute top-0 right-[10rem] mt-4 mr-4 p-2 font-medium text-[#074979] bg-white border-[2px] h-[2.8rem] border-[#074979] shadow rounded"
+          className="absolute top-0 right-[10rem]  mt-4 mr-4 p-2 font-medium text-[#074979] bg-white border-[2px] h-[2.8rem] border-[#074979] shadow rounded"
           onClick={toggleChatApp}
         >
           {isChatAppVisible && "Close Messages"}

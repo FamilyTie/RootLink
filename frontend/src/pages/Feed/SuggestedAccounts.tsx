@@ -62,13 +62,13 @@ function SuggestedAccounts() {
 
   return (
     <div
-      className={`w-[24rem]  relative transition-all duration-200 overflow-hidden rounded-md p-5 bg-white mt-[5rem] h-[${
+      className={` w-[95%] mt-5 mb-5 tablet-xs:mt-0 tablet-xs:mb-0  tablet-xs:w-[24rem]  relative transition-all duration-200 overflow-hidden rounded-md p-5 bg-white  h-[${
         viewAll && 17 + 5 * (similarUsers.length - 1)
       }rem]`}
     >
       <div className="flex border-b pb-2 justify-between">
         <p className="text-[22px] font-medium text-gray-500">
-          Suggested Account
+          Suggested Accounts
         </p>
         {similarUsers.length > 1 && (
           <p

@@ -19,7 +19,6 @@ export const images = [
         link: "/notifications",
     },
 
-    { id: 4, src: ["/setting.png", "/setting (1).png"], text: "Settings" },
 ];
 
 export const pathIndexes = {
@@ -28,5 +27,5 @@ export const pathIndexes = {
     "/discover": 3,
     "/notifications": 4,
     "/messages": 5,
-    "/settings": 6,
+
 };

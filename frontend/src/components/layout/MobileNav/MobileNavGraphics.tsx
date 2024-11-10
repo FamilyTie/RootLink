@@ -6,6 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { pathIndexes, images } from "../SideBar/data";
 import { logUserOut } from "../../../adapters/auth-adapter";
 import { useProfile } from "../../../state/store";
+
+const createPostPath = {
+    id: 4,
+    src: ["/create-post.png", "/create-post1.png"],
+    link: "/feed/#create-post",
+}
+
 function MobileNavGraphics({ setNotificationsOpen, setSearchOpen }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,9 +33,19 @@ function MobileNavGraphics({ setNotificationsOpen, setSearchOpen }) {
       setNotificationsOpen(true);
       setSearchOpen(false);
       setClicked(3);
+    }else if (link ==='/feed/#create-post') {
+        setSearchOpen(false);
+        setNotificationsOpen(false);
+        setClicked(1)
+        window.location.hash = 'create-post';
+        setTimeout(() => {
+            window.location.hash = '';
+        }, 1)
+        
+       
     } else {
-      setSearchOpen(false);
-      setNotificationsOpen(false);
+        setSearchOpen(false);
+        setNotificationsOpen(false);
 
       navigate(link);
       setClicked(getPathIndex(link, pathIndexes));
@@ -43,11 +60,12 @@ function MobileNavGraphics({ setNotificationsOpen, setSearchOpen }) {
   };
 
   return (
-    <div
+    <div 
+   
       className={`  flex h-[5rem]  z-[650]    w-screen fixed bottom-[0]  bg-white   backdrop-blur-md   overflow-hidden    pt-[5rem]   transition-all duration-200  `}
     >
-      <div className=" flex justify-around w-screen translate-y-[-4.5rem] pb-5">
-        {images.map((image) => (
+      <div className="  flex justify-around w-screen translate-y-[-4.5rem] pb-5">
+        {[...images, createPostPath].map((image) => (
           <div
             key={image.id}
             onClick={() => handleClick(image.link)}

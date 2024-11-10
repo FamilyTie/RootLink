@@ -148,8 +148,8 @@ function CreatePost({
   }, []);
 
   return (
-    <div className="bg-[rgb(294, 124, 204)]">
-      <div className="flex bg-white  relative rounded-md  w-[95%]  tablet-xs:w-[25rem] tablet-sm:w-[30rem] p-5  ">
+    <div  id='create-post'  className="bg-[rgb(294, 124, 204)] " >
+      <div  className="flex bg-white  relative rounded-md  w-[95%]  tablet-xs:w-[25rem] tablet-sm:w-[30rem] p-5  ">
         <div className="w-12 h-12  overflow-hidden absolute  rounded-full object-cover border-4 shadow border-white  ml-2 mt-4">
           {currentProfile && (
             <img src={currentProfile.img} className=" m-auto" alt="" />

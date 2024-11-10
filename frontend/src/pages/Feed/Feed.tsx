@@ -29,8 +29,8 @@ function Feed({ refresh }: { refresh: () => void }){
 
 
   return (
-    <div className="">
-      <div className="flex  overflow-hidden  justify-around tablet:justify-between  bg-slate-100">
+    <div   className="">
+      <div  className="flex  overflow-hidden  justify-around tablet:justify-between  bg-slate-100">
         <div className=" flex pl-[2rem] pt-[5rem] bg-slate-100 h-screen overflow-hidden rounded-tl-[3rem]">
           <div
             style={{
@@ -39,20 +39,26 @@ function Feed({ refresh }: { refresh: () => void }){
               scrollbarWidth: "none",
               msOverflowStyle: "none",
             }}
+            
             className="h-full overflow-scroll"
           >
+           
             <CreatePost
               onCancel={undefined}
               onSave={undefined}
               refetchPosts={handleRefetch}
             />
+             <div className='tablet-xs:hidden'>
+                <SuggestedAccounts />
+                </div>
             <div className=" overflow-hidden mt-5">
+              
               <FeedPosts posts={posts} refetch={refetchFlag} view={true} />
             </div>
           </div>
         </div>
 
-        <div className="overflow-hidden hidden  tablet-xs:flex-col tablet-xs:flex ">
+        <div className="overflow-hidden hidden mt-[5rem]  tablet-xs:flex-col tablet-xs:flex ">
           <SuggestedAccounts />
          
           <div className=" overflow-hidden  ">
