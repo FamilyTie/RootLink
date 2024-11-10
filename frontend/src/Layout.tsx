@@ -14,7 +14,10 @@ const Layout = () => {
         </div>
         
       </div>
+      <div className="md:hidden">
       <MobileNav />
+      </div>
+      
     </div>
   );
 };

@@ -15,7 +15,7 @@ function FeedPosts({ posts, view, refetch }) {
   console.log(posts)
 
   return (
-    <div className="bg-gray-100 min-h-screen pb-10">
+    <div className="bg-gray-100 min-h-screen overflow-hidden pb-10">
       <div className="flex gap-5 flex-col ">
         {posts.map((post) => (
           <Post

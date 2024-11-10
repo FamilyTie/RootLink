@@ -1,22 +1,11 @@
-import { text } from "express";
 import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { SearchResult } from "../../../../Interfaces&Types/interfaces";
-import { fetchHandler, getPostOptions } from "../../../utils";
-import {
-  useProfile,
-  useConnections,
-  useNotifications,
-} from "../../../state/store";
-import { requestConnection } from "../../../utils";
+
+import { useProfile, useNotifications } from "../../../state/store";
 import { logUserOut } from "../../../adapters/auth-adapter";
-import { getPathIndex } from "../../../utils";
-import { images, pathIndexes } from "../SideBar/data";
-import SideBarGraphics from "../SideBar/SideBarGraphics";
-import SideBarSearch from "../SideBar/SideBarSearch";
-import SideBarNotifications from "../SideBar/SideBarNotifications";
 import MobileNavGraphics from "./MobileNavGraphics";
+import MobileNavSearch from "./MobileNavSearch";
+import MobileNavNotifications from "./MobileNavNotifications";
 
 function MobileNav() {
   const setCurrentProfile = useProfile((state) => state.setCurrentProfile);
@@ -39,13 +28,13 @@ function MobileNav() {
   };
 
   return (
-    <div className="flex   ">
+    <div className="h-[5rem]    ">
       <MobileNavGraphics
         setSearchOpen={setSearchOpen}
         setNotificationsOpen={setNotificationsOpen}
       />
-      <SideBarSearch searchOpen={searchOpen} />
-      <SideBarNotifications notificationsOpen={notificationsOpen} />
+      <MobileNavSearch searchOpen={searchOpen} />
+      <MobileNavNotifications notificationsOpen={notificationsOpen} />
 
       <div></div>
     </div>

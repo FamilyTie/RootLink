@@ -46,7 +46,7 @@ function Feed({ refresh }: { refresh: () => void }){
               onSave={undefined}
               refetchPosts={handleRefetch}
             />
-            <div className="mt-5">
+            <div className=" overflow-hidden mt-5">
               <FeedPosts posts={posts} refetch={refetchFlag} view={true} />
             </div>
           </div>

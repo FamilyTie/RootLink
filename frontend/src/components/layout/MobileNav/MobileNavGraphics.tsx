@@ -44,7 +44,7 @@ function MobileNavGraphics({ setNotificationsOpen, setSearchOpen }) {
 
   return (
     <div
-      className={`  flex h-[5rem]     w-screen fixed bottom-[0]  bg-white   backdrop-blur-md   overflow-hidden    pt-[5rem]   transition-all duration-200  `}
+      className={`  flex h-[5rem]  z-[650]    w-screen fixed bottom-[0]  bg-white   backdrop-blur-md   overflow-hidden    pt-[5rem]   transition-all duration-200  `}
     >
       <div className=" flex justify-around w-screen translate-y-[-4.5rem] pb-5">
         {images.map((image) => (
@@ -53,8 +53,8 @@ function MobileNavGraphics({ setNotificationsOpen, setSearchOpen }) {
             onClick={() => handleClick(image.link)}
             className={`py-5   ${
               clicked === image.id
-                ? " border-b-[5px]  pb-7    bg-gray-50  border-[#074979]"
-                : "pb-[1.15rem] border-l-[5px] border-transparent"
+                ? " border-b-[5px]  pb-7     border-[#074979]"
+                : "pb-[1.15rem]  border-transparent"
             } cursor-pointer transition-all duration-300  gap-5 flex`}
           >
             <img
